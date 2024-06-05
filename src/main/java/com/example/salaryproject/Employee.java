@@ -1,2 +1,4 @@
-package com.example.salaryproject;public class Employee {
+package com.example.salaryproject;
+
+public class Employee {
 }

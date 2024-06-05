@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="$CONTROLLER_NAME$"
-            prefHeight="400.0" prefWidth="600.0" >
+<VBox alignment="center" spacing="10" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21" fx:controller="com.example.salaryproject.DepartmentPageController">
+    <Label text="Department: " />
+    <Label fx:id="departmentNameLabel" />
 
-</AnchorPane>
+    <Button onAction="#handleAddEmployee" text="Add Employee" />
+    <Button onAction="#handleRemoveEmployee" text="Remove Employee" />
+    <Button onAction="#handleGetEmployees" text="Get Employees" />
+    <Button onAction="#handleGetEmployeeByNationalId" text="Get Employee by National ID" />
+    <Button onAction="#handleMergeInto" text="Merge Into" />
+    <Button onAction="#handleSplitInto" text="Split Into" />
+    <Button onAction="#handleActivate" text="Activate" />
+    <Button onAction="#handleDeactivate" text="Deactivate" />
+</VBox>

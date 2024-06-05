@@ -1,11 +1,21 @@
-<?xml version="1.0" encoding="UTF-8"?>
+package com.example.salaryproject;
 
-        <?import javafx.scene.control.*?>
-        <?import javafx.scene.layout.*?>
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
-<VBox xmlns:fx="http://javafx.com/fxml" alignment="center" spacing="10">
-<Button text="Register New Admin" onAction="#handleRegisterAdmin" />
-<Button text="Register New Organization" onAction="#handleRegisterOrganization" />
-<Button text="Enter Organization" onAction="#handleEnterOrganization" />
-<Button text="Reports" onAction="#handleReports" />
-</VBox>
+public class Main extends Application {
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        Parent root = FXMLLoader.load(getClass().getResource("LoginPage.fxml"));
+        primaryStage.setTitle("Organization Management System");
+        primaryStage.setScene(new Scene(root));
+        primaryStage.show();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+}
