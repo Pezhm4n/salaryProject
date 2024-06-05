@@ -1,14 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="$CONTROLLER_NAME$"
-            prefHeight="400.0" prefWidth="600.0" >
+<VBox alignment="CENTER" spacing="20" stylesheets="@report.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.salaryproject.ReportPageController" prefHeight="600.0" prefWidth="800.0">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
 
-</AnchorPane>
+    <Label text="Reports" styleClass="title">
+        <font>
+            <Font name="System Bold" size="24.0" />
+        </font>
+    </Label>
+
+    <Button onAction="#generateOrganizationFinancialSummaryReport" text="Organization Financial Summary Report" styleClass="report-button" />
+    <Button onAction="#generateDepartmentFinancialSummaryReport" text="Department Financial Summary Report" styleClass="report-button" />
+    <Button onAction="#generateDepartmentPerformanceReport" text="Department Performance Report" styleClass="report-button" />
+    <Button onAction="#generateDepartmentActionReport" text="Department Action Report" styleClass="report-button" />
+    <Button onAction="#generateManagersReport" text="Managers Report" styleClass="report-button" />
+    <Button onAction="#generateEmployeePerformanceReport" text="Employee Performance Report" styleClass="report-button" />
+    <Button onAction="#employeeSalaryRecordsReport" text="Employee Salary Records Report" styleClass="report-button" />
+    <Button onAction="#generateEmployeeTypeReport" text="Employee Type Report" styleClass="report-button" />
+    <Button onAction="#generateEmplyeeTypeChangeReport" text="Employee Type Change Report" styleClass="report-button" />
+    <Button onAction="#generateEmployeeStatusReport" text="Employee Status Report" styleClass="report-button" />
+    <Button onAction="#generateEmployeeStatusChangeReport" text="Employee Status Change Report" styleClass="report-button" />
+    <Button onAction="#generateEmployeePromotionReport" text="Employee Promotion Report" styleClass="report-button" />
+
+    <Button fx:id="backButton" onAction="#handleBack" text="Back" styleClass="back-button" />
+</VBox>

@@ -1,0 +1,39 @@
+.root {
+    -fx-background-color: #00bfa5;
+}
+
+.title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.organization-name {
+    -fx-font-size: 18px;
+    -fx-text-fill: white;
+}
+
+.action-button {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #00bfa5;
+    -fx-font-size: 16px;
+    -fx-padding: 10px;
+    -fx-pref-width: 300px;
+    -fx-background-radius: 25px;
+    -fx-border-radius: 25px;
+    -fx-border-color: #ffffff;
+    -fx-border-width: 2px;
+}
+
+.back-button {
+    -fx-background-color: #2196F3;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-padding: 10px 20px;
+    -fx-pref-width: 300px;
+    -fx-cursor: hand;
+}
+
+.back-button:hover {
+    -fx-background-color: #1976D2;
+}

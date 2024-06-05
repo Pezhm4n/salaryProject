@@ -4,10 +4,11 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="center" spacing="10" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21" fx:controller="com.example.salaryproject.OrganizationPageController">
-    <Label text="Organization: " />
-    <Label fx:id="organizationNameLabel" />
+<VBox alignment="CENTER" spacing="20" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.salaryproject.OrganizationPageController" stylesheets="@organization.css">
+    <Label text="Organization" styleClass="title"/>
+    <Label fx:id="organizationNameLabel" styleClass="organization-name"/>
 
-    <Button onAction="#handleRegisterDepartment" text="Register New Department" />
-    <Button onAction="#handleEnterDepartment" text="Enter Department" />
+    <Button onAction="#handleRegisterDepartment" text="Register New Department" styleClass="action-button"/>
+    <Button onAction="#handleEnterDepartment" text="Enter Department" styleClass="action-button"/>
+    <Button onAction="#handleBack" text="Back" styleClass="back-button" />
 </VBox>

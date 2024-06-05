@@ -1,2 +1,4 @@
-package com.example.salaryproject;public class Department {
+package com.example.salaryproject;
+
+public class Department {
 }

@@ -1,0 +1,55 @@
+.root {
+    -fx-background-color: #f4f4f4;
+}
+
+.title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+.list-view {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #cccccc;
+    -fx-border-width: 1px;
+    -fx-border-radius: 5px;
+    -fx-padding: 10px;
+}
+
+.list-cell {
+    -fx-font-size: 16px;
+    -fx-padding: 10px;
+}
+
+.list-cell:hover {
+    -fx-background-color: #e0e0e0;
+}
+
+.list-cell:selected {
+    -fx-background-color: #b3d9ff;
+}
+
+.select-button {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-padding: 10px 20px;
+    -fx-pref-width: 200px;
+    -fx-cursor: hand;
+}
+
+.select-button:hover {
+    -fx-background-color: #45a049;
+}
+.back-button {
+    -fx-background-color: #2196F3;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-padding: 10px 20px;
+    -fx-pref-width: 300px;
+    -fx-cursor: hand;
+}
+
+.back-button:hover {
+    -fx-background-color: #1976D2;
+}

@@ -2,10 +2,16 @@ package com.example.salaryproject;
 
 import com.example.salaryproject.Employee;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-
 import javafx.event.ActionEvent;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class RegisterDepartmentPageController {
     @FXML
@@ -15,8 +21,12 @@ public class RegisterDepartmentPageController {
     private ComboBox<Employee> managerComboBox;
 
     @FXML
+    private Label messageLabel;
+
+    @FXML
     private void initialize() {
         // Populate manager combo box with employees
+        // ...
     }
 
     @FXML
@@ -24,8 +34,34 @@ public class RegisterDepartmentPageController {
         String name = nameField.getText();
         Employee manager = managerComboBox.getValue();
 
-        // Create new Department object
-        // Save department to file or database
-        // Show success message and navigate back to OrganizationPage.fxml
+        if (name.isEmpty() || manager == null) {
+            messageLabel.setText("Please fill in all fields!");
+            messageLabel.setStyle("-fx-text-fill: red;");
+        } else {
+            // Create new Department object
+            // Save department to file or database
+            messageLabel.setText("Department registered successfully!");
+            messageLabel.setStyle("-fx-text-fill: green;");
+            clearFields();
+        }
+    }
+    @FXML
+    private void handleBack(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("OrganizationPage.fxml"));
+            Scene scene = new Scene(loader.load());
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private void clearFields() {
+        nameField.clear();
+        managerComboBox.getSelectionModel().clearSelection();
     }
 }

@@ -7,11 +7,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
-import java.awt.event.ActionEvent;
+import javafx.event.ActionEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class Report {
+public class ReportPageController {
     private Organization organization;
     private ArrayList<Department> departments;
     private ArrayList<Employee> employees;

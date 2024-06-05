@@ -1,29 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox alignment="center" spacing="10" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21" fx:controller="com.example.salaryproject.AddEmployeePageController">
+<VBox alignment="center" spacing="20" stylesheets="@add-employee.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21" fx:controller="com.example.salaryproject.AddEmployeePageController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+
+    <Label text="Add New Employee" styleClass="title">
+        <font>
+            <Font name="System Bold" size="24.0" />
+        </font>
+    </Label>
+
     <Label text="First Name:" />
-    <TextField fx:id="firstNameField" />
+    <TextField fx:id="firstNameField" promptText="Enter first name" styleClass="text-field" />
 
     <Label text="Last Name:" />
-    <TextField fx:id="lastNameField" />
+    <TextField fx:id="lastNameField" promptText="Enter last name" styleClass="text-field" />
 
     <Label text="National ID:" />
-    <TextField fx:id="nationalIdField" />
+    <TextField fx:id="nationalIdField" promptText="Enter national ID" styleClass="text-field" />
 
     <Label text="Date of Birth:" />
-    <DatePicker fx:id="dateOfBirthPicker" />
+    <DatePicker fx:id="dateOfBirthPicker" promptText="Select date of birth" styleClass="date-picker" />
 
     <Label text="Email:" />
-    <TextField fx:id="emailField" />
+    <TextField fx:id="emailField" promptText="Enter email" styleClass="text-field" />
 
     <Label text="Phone Number:" />
-    <TextField fx:id="phoneNumberField" />
+    <TextField fx:id="phoneNumberField" promptText="Enter phone number" styleClass="text-field" />
 
-    <Button onAction="#handleAddEmployee" text="Add Employee" />
+    <Button onAction="#handleAddEmployee" text="Add Employee" styleClass="add-button" />
+    <Button onAction="#handleBack" text="Back" styleClass="back-button" />
+
+    <Label fx:id="messageLabel" styleClass="message-label" />
 </VBox>
