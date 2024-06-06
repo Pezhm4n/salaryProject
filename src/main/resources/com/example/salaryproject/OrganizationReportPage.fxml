@@ -3,22 +3,27 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" spacing="20" stylesheets="@report.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.salaryproject.OrganizationReportPageController" prefHeight="600.0" prefWidth="800.0">
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-    </padding>
+<ScrollPane fitToWidth="true" prefHeight="555.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.salaryproject.OrganizationReportPageController">
+    <content>
+        <VBox alignment="CENTER" prefHeight="552.0" prefWidth="398.0" spacing="20" stylesheets="@report.css">
+            <padding>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </padding>
 
-    <Label text="Organization Reports" styleClass="title">
-        <font>
-            <Font name="System Bold" size="24.0" />
-        </font>
-    </Label>
+            <Label alignment="CENTER" styleClass="title" text="Organization Reports">
+                <font>
+                    <Font name="System Bold" size="24.0" />
+                </font>
+            </Label>
 
-    <Button onAction="#generateOrganizationFinancialSummaryReport" text="Organization Financial Summary Report" styleClass="report-button" />
-    <!-- Add more organization report buttons as needed -->
+            <Button maxWidth="Infinity" onAction="#generateOrganizationFinancialSummaryReport" styleClass="report-button" text="Organization Financial Summary Report" />
+            <!-- Add more organization report buttons as needed -->
 
-    <Button fx:id="backButton" onAction="#handleBack" text="Back" styleClass="back-button" />
-</VBox>
+            <Button fx:id="backButton" maxWidth="Infinity" onAction="#handleBack" styleClass="back-button" text="Back" />
+        </VBox>
+    </content>
+</ScrollPane>

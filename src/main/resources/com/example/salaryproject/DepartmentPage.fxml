@@ -3,30 +3,35 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="center" spacing="20" stylesheets="@department-page.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21" fx:controller="com.example.salaryproject.DepartmentPageController">
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-    </padding>
+<ScrollPane prefWidth="400.0" prefHeight="555.0" fitToWidth="true" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21" fx:controller="com.example.salaryproject.DepartmentPageController">
+    <content>
+        <VBox alignment="CENTER" spacing="20" stylesheets="@department-page.css">
+            <padding>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </padding>
 
-    <Label text="Department" styleClass="title">
-        <font>
-            <Font name="System Bold" size="24.0" />
-        </font>
-    </Label>
+            <Label text="Department" styleClass="title" alignment="CENTER">
+                <font>
+                    <Font name="System Bold" size="24.0" />
+                </font>
+            </Label>
 
-    <Label text="Department: " />
-    <Label fx:id="departmentNameLabel" styleClass="department-name" />
+            <Label text="Department: " alignment="CENTER" />
+            <Label fx:id="departmentNameLabel" styleClass="department-name" alignment="CENTER" />
 
-    <Button onAction="#handleAddEmployee" text="Add Employee" styleClass="action-button" />
-    <Button onAction="#handleRemoveEmployee" text="Remove Employee" styleClass="action-button" />
-    <Button onAction="#handleGetEmployees" text="Get Employees" styleClass="action-button" />
-    <Button onAction="#handleGetEmployeeByNationalId" text="Get Employee by National ID" styleClass="action-button" />
-    <Button onAction="#handleMergeInto" text="Merge Into" styleClass="action-button" />
-    <Button onAction="#handleSplitInto" text="Split Into" styleClass="action-button" />
-    <Button onAction="#handleActivate" text="Activate" styleClass="action-button" />
-    <Button onAction="#handleDeactivate" text="Deactivate" styleClass="action-button" />
-    <Button onAction="#handleBack" text="Back" styleClass="back-button" />
-</VBox>
+            <Button onAction="#handleAddEmployee" text="Add Employee" styleClass="action-button" maxWidth="Infinity" />
+            <Button onAction="#handleRemoveEmployee" text="Remove Employee" styleClass="action-button" maxWidth="Infinity" />
+            <Button onAction="#handleGetEmployees" text="Get Employees" styleClass="action-button" maxWidth="Infinity" />
+            <Button onAction="#handleGetEmployeeByNationalId" text="Get Employee by National ID" styleClass="action-button" maxWidth="Infinity" />
+            <Button onAction="#handleMergeInto" text="Merge Into" styleClass="action-button" maxWidth="Infinity" />
+            <Button onAction="#handleSplitInto" text="Split Into" styleClass="action-button" maxWidth="Infinity" />
+            <Button onAction="#handleActivate" text="Activate" styleClass="action-button" maxWidth="Infinity" />
+            <Button onAction="#handleDeactivate" text="Deactivate" styleClass="action-button" maxWidth="Infinity" />
+            <Button onAction="#handleBack" text="Back" styleClass="back-button" maxWidth="Infinity" />
+        </VBox>
+    </content>
+</ScrollPane>

@@ -26,9 +26,10 @@ public class DepartmentPageController {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("OrganizationSelectionPage.fxml"));
-            Scene scene = new Scene(loader.load());
+            Scene scene = new Scene(loader.load(), 400, 555);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);
+            stage.setResizable(false);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -38,7 +39,7 @@ public class DepartmentPageController {
     @FXML
     private void handleAddEmployee(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("AddEmployeePage.fxml"));
-        Scene scene = new Scene(root);
+        Scene scene = new Scene(root , 400 ,555);
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();

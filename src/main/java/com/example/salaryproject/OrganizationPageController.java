@@ -23,7 +23,7 @@ public class OrganizationPageController {
     @FXML
     private void handleRegisterDepartment(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("RegisterDepartmentPage.fxml"));
-        Scene scene = new Scene(root);
+        Scene scene = new Scene(root , 400 , 555);
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();

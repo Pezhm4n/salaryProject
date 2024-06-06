@@ -9,9 +9,11 @@ import javafx.stage.Stage;
 public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("LoginPage.fxml"));
-        primaryStage.setTitle("Organization Management System");
-        primaryStage.setScene(new Scene(root));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginPage.fxml"));
+        Parent root = loader.load();
+        primaryStage.setTitle("Salary Management System");
+        primaryStage.setScene(new Scene(root, 400, 555));
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 

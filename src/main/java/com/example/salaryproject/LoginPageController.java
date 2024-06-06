@@ -34,9 +34,10 @@ public class LoginPageController {
             messageLabel.setStyle("-fx-text-fill: green;");
 
             Parent root = FXMLLoader.load(getClass().getResource("MainPage.fxml"));
-            Scene scene = new Scene(root);
+            Scene scene = new Scene(root , 400 , 555);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);
+            stage.setResizable(false);
             stage.show();
         } else {
             messageLabel.setText("Invalid username or password!");

@@ -13,7 +13,7 @@ public class MainPageController {
 
     private void loadPage(ActionEvent event, String fxmlFile) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource(fxmlFile));
-        Scene scene = new Scene(root);
+        Scene scene = new Scene(root , 400, 555);
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
@@ -24,7 +24,7 @@ public class MainPageController {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource(  "LoginPage.fxml"));
-            Scene scene = new Scene(loader.load());
+            Scene scene = new Scene(loader.load(), 400, 555);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);
             stage.show();

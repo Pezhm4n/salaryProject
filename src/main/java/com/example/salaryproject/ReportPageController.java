@@ -36,7 +36,7 @@ public class ReportPageController {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("MainPage.fxml"));
-            Scene scene = new Scene(loader.load());
+            Scene scene = new Scene(loader.load(), 400, 555);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);
             stage.show();
@@ -50,7 +50,7 @@ public class ReportPageController {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("OrganizationReportPage.fxml"));
-            Scene scene = new Scene(loader.load());
+            Scene scene = new Scene(loader.load(), 400, 555);
             OrganizationReportPageController controller = loader.getController();
             controller.setOrganization(organization);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -66,7 +66,7 @@ public class ReportPageController {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("DepartmentReportPage.fxml"));
-            Scene scene = new Scene(loader.load());
+            Scene scene = new Scene(loader.load(), 400, 555);
             DepartmentReportPageController controller = loader.getController();
             controller.setDepartments(departments);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -82,7 +82,7 @@ public class ReportPageController {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("EmployeeReportPage.fxml"));
-            Scene scene = new Scene(loader.load());
+            Scene scene = new Scene(loader.load(), 400, 555);
             EmployeeReportPageController controller = loader.getController();
             controller.setEmployees(employees);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
