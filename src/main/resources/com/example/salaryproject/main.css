@@ -4,24 +4,24 @@
 
 .button {
     -fx-background-color: #ffffff;
-    -fx-text-fill: #00bfa5;
-    -fx-font-size: 16px;
+    -fx-text-fill: #111111;
+    -fx-font-size: 17px;
     -fx-padding: 10px;
     -fx-pref-width: 300px;
     -fx-background-radius: 25px;
     -fx-border-radius: 25px;
-    -fx-border-color: #ffffff;
+    -fx-border-color: transparent;
     -fx-border-width: 2px;
 }
 
 .title {
-    -fx-font-size: 24px;
+    -fx-font-size: 26px;
     -fx-font-weight: bold;
     -fx-text-fill: white;
 }
 .logout-button {
     -fx-background-color: #2196F3;
-    -fx-text-fill: white;
+    -fx-text-fill: #fffafa;
     -fx-font-size: 14px;
     -fx-padding: 8px 16px;
     -fx-cursor: hand;
@@ -29,4 +29,12 @@
 
 .logout-button:hover {
     -fx-background-color: #1976D2;
+}
+
+.button:hover {
+    -fx-border-color: #19bfff;
+}
+
+.button:focused {
+    -fx-border-color: #19bfff;
 }

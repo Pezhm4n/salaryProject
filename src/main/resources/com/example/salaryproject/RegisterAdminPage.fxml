@@ -28,8 +28,8 @@
     <Label text="Confirm Password:" />
     <PasswordField fx:id="confirmPasswordField" promptText="Confirm password" styleClass="text-field" />
 
-    <Button onAction="#handleRegister" text="Register" styleClass="register-button" />
-    <Button onAction="#handleBack" text="Back" styleClass="back-button" />
+    <Button onAction="#handleRegister" text="Register" styleClass="register-button" focusTraversable="true"/>
+    <Button onAction="#handleBack" text="Back" styleClass="back-button" focusTraversable="true"/>
 
 
     <Label fx:id="messageLabel" styleClass="message-label" />

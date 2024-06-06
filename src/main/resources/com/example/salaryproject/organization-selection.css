@@ -38,7 +38,7 @@
     -fx-cursor: hand;
 }
 
-.select-button:hover {
+.select-button:hover , .select-button:focused{
     -fx-background-color: #45a049;
 }
 .back-button {
@@ -50,6 +50,6 @@
     -fx-cursor: hand;
 }
 
-.back-button:hover {
+.back-button:hover , .back-button:focused{
     -fx-background-color: #1976D2;
 }

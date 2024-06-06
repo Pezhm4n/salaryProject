@@ -33,8 +33,8 @@
             <Label text="Current Share Price:" alignment="CENTER" />
             <TextField fx:id="sharePriceField" promptText="Enter share price" styleClass="text-field" maxWidth="Infinity" />
 
-            <Button onAction="#handleRegister" text="Register" styleClass="register-button" maxWidth="Infinity" />
-            <Button onAction="#handleBack" text="Back" styleClass="back-button" maxWidth="Infinity" />
+            <Button onAction="#handleRegister" text="Register" styleClass="register-button" maxWidth="Infinity" focusTraversable="true"/>
+            <Button onAction="#handleBack" text="Back" styleClass="back-button" maxWidth="Infinity" focusTraversable="true"/>
 
             <Label fx:id="messageLabel" styleClass="message-label" alignment="CENTER" />
         </VBox>

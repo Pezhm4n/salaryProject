@@ -20,10 +20,10 @@
                 </font>
             </Label>
 
-            <Button maxWidth="Infinity" onAction="#generateOrganizationFinancialSummaryReport" styleClass="report-button" text="Organization Financial Summary Report" />
+            <Button maxWidth="Infinity" onAction="#generateOrganizationFinancialSummaryReport" styleClass="report-button" text="Organization Financial Summary Report" focusTraversable="true"/>
             <!-- Add more organization report buttons as needed -->
 
-            <Button fx:id="backButton" maxWidth="Infinity" onAction="#handleBack" styleClass="back-button" text="Back" />
+            <Button fx:id="backButton" maxWidth="Infinity" onAction="#handleBack" styleClass="back-button" text="Back" focusTraversable="true"/>
         </VBox>
     </content>
 </ScrollPane>

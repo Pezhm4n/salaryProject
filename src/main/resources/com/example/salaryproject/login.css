@@ -17,19 +17,7 @@
     -fx-border-width: 2px;
 }
 
-.login-button {
-    -fx-background-color: #ffffff;
-    -fx-text-fill: #00bfa5;
-    -fx-font-size: 16px;
-    -fx-padding: 10px;
-    -fx-pref-width: 300px;
-    -fx-background-radius: 25px;
-    -fx-border-radius: 25px;
-    -fx-border-color: #ffffff;
-    -fx-border-width: 2px;
-}
-
-.exit-button {
+.login-button, .exit-button {
     -fx-background-color: #ff5722;
     -fx-text-fill: #ffffff;
     -fx-font-size: 16px;
@@ -37,8 +25,13 @@
     -fx-pref-width: 300px;
     -fx-background-radius: 25px;
     -fx-border-radius: 25px;
-    -fx-border-color: #ffffff;
+    -fx-border-color: transparent;
     -fx-border-width: 2px;
+}
+
+.login-button:hover, .exit-button:hover,
+.login-button:focused, .exit-button:focused {
+    -fx-border-color: white;
 }
 
 .forgot-password {

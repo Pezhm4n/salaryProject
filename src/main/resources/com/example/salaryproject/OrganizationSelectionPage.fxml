@@ -8,6 +8,6 @@
 <VBox alignment="CENTER" spacing="20" stylesheets="@organization-selection.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.salaryproject.OrganizationSelectionController">
     <Label styleClass="title" text="Select Organization" />
     <ListView fx:id="organizationListView" prefHeight="200.0" prefWidth="200.0" styleClass="list-view" />
-    <Button onAction="#handleOrganizationSelection" text="Select Organization" styleClass="select-button" />
-    <Button onAction="#handleBack" text="Back" styleClass="back-button" />
+    <Button onAction="#handleOrganizationSelection" text="Select Organization" styleClass="select-button" focusTraversable="true"/>
+    <Button onAction="#handleBack" text="Back" styleClass="back-button" focusTraversable="true"/>
 </VBox>

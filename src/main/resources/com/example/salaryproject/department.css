@@ -52,3 +52,9 @@
 .back-button:hover {
     -fx-background-color: #1976D2;
 }
+.register-button:hover {
+    -fx-background-color: #388E3C ;
+}
+.exit-button:focused {
+    -fx-border-color: white;
+}

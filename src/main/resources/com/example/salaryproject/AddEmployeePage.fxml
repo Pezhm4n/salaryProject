@@ -40,8 +40,8 @@
             <Label text="Phone Number:" alignment="CENTER" />
             <TextField fx:id="phoneNumberField" promptText="Enter phone number" styleClass="text-field" maxWidth="Infinity" />
 
-            <Button onAction="#handleAddEmployee" text="Add Employee" styleClass="add-button" maxWidth="Infinity" />
-            <Button onAction="#handleBack" text="Back" styleClass="back-button" maxWidth="Infinity" />
+            <Button onAction="#handleAddEmployee" text="Add Employee" styleClass="add-button" maxWidth="Infinity" focusTraversable="true" />
+            <Button onAction="#handleBack" text="Back" styleClass="back-button" maxWidth="Infinity" focusTraversable="true" />
 
             <Label fx:id="messageLabel" styleClass="message-label" alignment="CENTER" />
         </VBox>

@@ -15,7 +15,7 @@
 }
 
 .action-button {
-    -fx-background-color: #00bfa5;
+    -fx-background-color: #4CAF50;
     -fx-text-fill: white;
     -fx-font-size: 16px;
     -fx-padding: 10px 20px;
@@ -25,11 +25,14 @@
 .back-button {
     -fx-background-color: #2196F3;
     -fx-text-fill: white;
-    -fx-font-size: 14px;
-    -fx-padding: 8px 16px;
+    -fx-font-size: 16px;
+    -fx-padding: 10px 20px;
     -fx-cursor: hand;
 }
 
 .back-button:hover {
     -fx-background-color: #1976D2;
+}
+.action-button:hover {
+    -fx-background-color: #388E3C ;
 }

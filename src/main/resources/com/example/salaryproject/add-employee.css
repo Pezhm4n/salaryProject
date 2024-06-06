@@ -52,3 +52,6 @@
     -fx-background-color: #1976D2;
 }
 
+.add-button:hover {
+    -fx-background-color: #388E3C ;
+}

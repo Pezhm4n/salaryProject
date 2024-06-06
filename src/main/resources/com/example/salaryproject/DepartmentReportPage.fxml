@@ -17,11 +17,11 @@
         </font>
     </Label>
 
-    <Button onAction="#generateDepartmentFinancialSummaryReport" text="Department Financial Summary Report" styleClass="report-button" />
-    <Button onAction="#generateDepartmentPerformanceReport" text="Department Performance Report" styleClass="report-button" />
-    <Button onAction="#generateDepartmentActionReport" text="Department Action Report" styleClass="report-button" />
-    <Button onAction="#generateManagersReport" text="Managers Report" styleClass="report-button" />
+    <Button onAction="#generateDepartmentFinancialSummaryReport" text="Department Financial Summary Report" styleClass="report-button" focusTraversable="true" />
+    <Button onAction="#generateDepartmentPerformanceReport" text="Department Performance Report" styleClass="report-button" focusTraversable="true" />
+    <Button onAction="#generateDepartmentActionReport" text="Department Action Report" styleClass="report-button" focusTraversable="true" />
+    <Button onAction="#generateManagersReport" text="Managers Report" styleClass="report-button" focusTraversable="true"/>
     <!-- Add more department report buttons as needed -->
 
-    <Button fx:id="backButton" onAction="#handleBack" text="Back" styleClass="back-button" />
+    <Button fx:id="backButton" onAction="#handleBack" text="Back" styleClass="back-button" focusTraversable="true" />
 </VBox>

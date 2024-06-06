@@ -8,7 +8,7 @@
     <Label text="Organization" styleClass="title"/>
     <Label fx:id="organizationNameLabel" styleClass="organization-name"/>
 
-    <Button onAction="#handleRegisterDepartment" text="Register New Department" styleClass="action-button"/>
-    <Button onAction="#handleEnterDepartment" text="Enter Department" styleClass="action-button"/>
-    <Button onAction="#handleBack" text="Back" styleClass="back-button" />
+    <Button onAction="#handleRegisterDepartment" text="Register New Department" styleClass="action-button" focusTraversable="true"/>
+    <Button onAction="#handleEnterDepartment" text="Enter Department" styleClass="action-button" focusTraversable="true"/>
+    <Button onAction="#handleBack" text="Back" styleClass="back-button" focusTraversable="true"/>
 </VBox>

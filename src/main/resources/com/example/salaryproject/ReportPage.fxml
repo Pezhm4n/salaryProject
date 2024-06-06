@@ -17,9 +17,9 @@
         </font>
     </Label>
 
-    <Button onAction="#generateOrganizationReports" styleClass="report-button" text="Organization Reports" />
-    <Button onAction="#generateDepartmentReports" styleClass="report-button" text="Department Reports" />
-    <Button onAction="#generateEmployeeReports" styleClass="report-button" text="Employee Reports" />
+    <Button onAction="#generateOrganizationReports" styleClass="report-button" text="Organization Reports" focusTraversable="true"/>
+    <Button onAction="#generateDepartmentReports" styleClass="report-button" text="Department Reports" focusTraversable="true"/>
+    <Button onAction="#generateEmployeeReports" styleClass="report-button" text="Employee Reports" focusTraversable="true"/>
 
     <Button fx:id="backButton" onAction="#handleBack" styleClass="back-button" text="Back" />
 </VBox>

@@ -33,9 +33,9 @@
 
     <PasswordField fx:id="passwordField" promptText="Password" styleClass="text-field" />
 
-    <Button text="LOGIN" onAction="#handleLogin" styleClass="login-button"/>
+    <Button text="LOGIN" onAction="#handleLogin" styleClass="login-button" focusTraversable="true" />
 
-    <Button text="Exit" onAction="#handleExit" styleClass="exit-button"/>
+    <Button text="Exit" onAction="#handleExit" styleClass="exit-button" focusTraversable="true" />
 
     <Label fx:id="messageLabel" styleClass="message-label"/>
 

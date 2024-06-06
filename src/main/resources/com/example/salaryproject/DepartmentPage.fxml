@@ -23,15 +23,15 @@
             <Label text="Department: " alignment="CENTER" />
             <Label fx:id="departmentNameLabel" styleClass="department-name" alignment="CENTER" />
 
-            <Button onAction="#handleAddEmployee" text="Add Employee" styleClass="action-button" maxWidth="Infinity" />
-            <Button onAction="#handleRemoveEmployee" text="Remove Employee" styleClass="action-button" maxWidth="Infinity" />
-            <Button onAction="#handleGetEmployees" text="Get Employees" styleClass="action-button" maxWidth="Infinity" />
-            <Button onAction="#handleGetEmployeeByNationalId" text="Get Employee by National ID" styleClass="action-button" maxWidth="Infinity" />
-            <Button onAction="#handleMergeInto" text="Merge Into" styleClass="action-button" maxWidth="Infinity" />
-            <Button onAction="#handleSplitInto" text="Split Into" styleClass="action-button" maxWidth="Infinity" />
-            <Button onAction="#handleActivate" text="Activate" styleClass="action-button" maxWidth="Infinity" />
-            <Button onAction="#handleDeactivate" text="Deactivate" styleClass="action-button" maxWidth="Infinity" />
-            <Button onAction="#handleBack" text="Back" styleClass="back-button" maxWidth="Infinity" />
+            <Button onAction="#handleAddEmployee" text="Add Employee" styleClass="action-button" maxWidth="Infinity" focusTraversable="true"/>
+            <Button onAction="#handleRemoveEmployee" text="Remove Employee" styleClass="action-button" maxWidth="Infinity" focusTraversable="true"/>
+            <Button onAction="#handleGetEmployees" text="Get Employees" styleClass="action-button" maxWidth="Infinity" focusTraversable="true"/>
+            <Button onAction="#handleGetEmployeeByNationalId" text="Get Employee by National ID" styleClass="action-button" maxWidth="Infinity" focusTraversable="true"/>
+            <Button onAction="#handleMergeInto" text="Merge Into" styleClass="action-button" maxWidth="Infinity" focusTraversable="true"/>
+            <Button onAction="#handleSplitInto" text="Split Into" styleClass="action-button" maxWidth="Infinity" focusTraversable="true"/>
+            <Button onAction="#handleActivate" text="Activate" styleClass="action-button" maxWidth="Infinity" focusTraversable="true"/>
+            <Button onAction="#handleDeactivate" text="Deactivate" styleClass="action-button" maxWidth="Infinity" focusTraversable="true"/>
+            <Button onAction="#handleBack" text="Back" styleClass="back-button" maxWidth="Infinity" focusTraversable="true"/>
         </VBox>
     </content>
 </ScrollPane>

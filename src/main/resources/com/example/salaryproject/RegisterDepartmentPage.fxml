@@ -25,9 +25,9 @@
     <Label text="Current Manager:" />
     <ComboBox fx:id="managerComboBox" promptText="Select manager" styleClass="combo-box" />
 
-    <Button onAction="#handleRegister" text="Register" styleClass="register-button" />
+    <Button onAction="#handleRegister" text="Register" styleClass="register-button" focusTraversable="true"/>
 
-    <Button onAction="#handleBack" text="Back" styleClass="back-button" />
+    <Button onAction="#handleBack" text="Back" styleClass="back-button" focusTraversable="true"/>
 
     <Label fx:id="messageLabel" styleClass="message-label" />
 </VBox>

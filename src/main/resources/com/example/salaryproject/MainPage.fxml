@@ -19,13 +19,13 @@
         </font>
     </Label>
 
-    <Button onAction="#handleRegisterAdmin" text="Register New Admin" styleClass="menu-button" />
+    <Button onAction="#handleRegisterAdmin" text="Register New Admin" styleClass="menu-button" focusTraversable="true" />
 
-    <Button onAction="#handleRegisterOrganization" text="Register New Organization" styleClass="menu-button" />
+    <Button onAction="#handleRegisterOrganization" text="Register New Organization" styleClass="menu-button" focusTraversable="true" />
 
-    <Button onAction="#handleEnterOrganization" text="Enter Organization" styleClass="menu-button" />
+    <Button onAction="#handleEnterOrganization" text="Enter Organization" styleClass="menu-button" focusTraversable="true" />
 
-    <Button onAction="#handleReports" text="Reports" styleClass="menu-button" />
+    <Button onAction="#handleReports" text="Reports" styleClass="menu-button" focusTraversable="true" />
 
-    <Button fx:id="logoutButton" onAction="#handleLogout" text="Logout" styleClass="menu-button" />
+    <Button fx:id="logoutButton" onAction="#handleLogout" text="Logout" styleClass="menu-button" focusTraversable="true" />
 </VBox>
