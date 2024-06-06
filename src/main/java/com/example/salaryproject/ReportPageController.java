@@ -46,62 +46,50 @@ public class ReportPageController {
     }
 
     @FXML
-    private void generateOrganizationFinancialSummaryReport() {
-        // Implement the logic to generate the organization financial summary report
+    private void generateOrganizationReports(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("OrganizationReportPage.fxml"));
+            Scene scene = new Scene(loader.load());
+            OrganizationReportPageController controller = loader.getController();
+            controller.setOrganization(organization);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
-    private void generateDepartmentFinancialSummaryReport() {
-        // Implement the logic to generate the department financial summary report
+    private void generateDepartmentReports(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("DepartmentReportPage.fxml"));
+            Scene scene = new Scene(loader.load());
+            DepartmentReportPageController controller = loader.getController();
+            controller.setDepartments(departments);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
-    private void generateDepartmentPerformanceReport() {
-        // Implement the logic to generate the department performance report
-    }
-
-    @FXML
-    private void generateDepartmentActionReport() {
-        // Implement the logic to generate the department action report
-    }
-
-    @FXML
-    private void generateManagersReport() {
-        // Implement the logic to generate the managers report
-    }
-
-    @FXML
-    private void generateEmployeePerformanceReport() {
-        // Implement the logic to generate the employee performance report
-    }
-
-    @FXML
-    private void employeeSalaryRecordsReport() {
-        // Implement the logic to generate the employee salary records report
-    }
-
-    @FXML
-    private void generateEmployeeTypeReport() {
-        // Implement the logic to generate the employee type report
-    }
-
-    @FXML
-    private void generateEmplyeeTypeChangeReport() {
-        // Implement the logic to generate the employee type change report
-    }
-
-    @FXML
-    private void generateEmployeeStatusReport() {
-        // Implement the logic to generate the employee status report
-    }
-
-    @FXML
-    private void generateEmployeeStatusChangeReport() {
-        // Implement the logic to generate the employee status change report
-    }
-
-    @FXML
-    private void generateEmployeePromotionReport() {
-        // Implement the logic to generate the employee promotion report
+    private void generateEmployeeReports(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("EmployeeReportPage.fxml"));
+            Scene scene = new Scene(loader.load());
+            EmployeeReportPageController controller = loader.getController();
+            controller.setEmployees(employees);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
