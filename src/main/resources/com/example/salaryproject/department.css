@@ -49,10 +49,10 @@
     -fx-cursor: hand;
 }
 
-.back-button:hover {
+.back-button:hover ,.back-button:focused{
     -fx-background-color: #1976D2;
 }
-.register-button:hover {
+.register-button:hover ,.register-button:focused{
     -fx-background-color: #388E3C ;
 }
 .exit-button:focused {

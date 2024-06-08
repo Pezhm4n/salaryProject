@@ -30,9 +30,9 @@
     -fx-cursor: hand;
 }
 
-.back-button:hover {
+.back-button:hover , .back-button:focused{
     -fx-background-color: #1976D2;
 }
-.action-button:hover {
+.action-button:hover , .action-button:focused{
     -fx-background-color: #388E3C ;
 }

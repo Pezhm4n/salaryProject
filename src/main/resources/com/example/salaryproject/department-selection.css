@@ -30,19 +30,20 @@
 }
 
 .select-button {
-    -fx-background-color: #4CAF50;
+    -fx-background-color: #388E3C;
     -fx-text-fill: white;
     -fx-font-size: 16px;
     -fx-padding: 10px 20px;
-    -fx-pref-width: 280px;
+    -fx-pref-width: 200px;
     -fx-cursor: hand;
 }
 
-.select-button:hover , .select-button:focused{
-    -fx-background-color: #45a049;
+.select-button:hover, .select-button:focused {
+    -fx-background-color: #2E7D32;
 }
+
 .back-button {
-    -fx-background-color: #2196F3;
+    -fx-background-color: #1976D2;
     -fx-text-fill: white;
     -fx-font-size: 16px;
     -fx-padding: 10px 20px;
@@ -50,6 +51,6 @@
     -fx-cursor: hand;
 }
 
-.back-button:hover , .back-button:focused{
-    -fx-background-color: #1976D2;
+.back-button:hover, .back-button:focused {
+    -fx-background-color: #1565C0;
 }

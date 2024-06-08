@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.regex.Pattern;
 
 public class AddEmployeePageController {
     @FXML
@@ -47,10 +48,25 @@ public class AddEmployeePageController {
         if (firstName.isEmpty() || lastName.isEmpty() || nationalIdText.isEmpty() || dateOfBirth == null || email.isEmpty() || phoneNumberText.isEmpty()) {
             messageLabel.setText("Please fill in all fields!");
             messageLabel.setStyle("-fx-text-fill: red;");
+        } else if (!isValidName(firstName)) {
+            messageLabel.setText("Invalid first name format!\nIt should not contain numbers\nand be less than 30 characters.");
+            messageLabel.setStyle("-fx-text-fill: red;");
+        } else if (!isValidName(lastName)) {
+            messageLabel.setText("Invalid last name format!\nIt should not contain numbers\nand be less than 30 characters.");
+            messageLabel.setStyle("-fx-text-fill: red;");
+        } else if (!isValidNationalId(nationalIdText)) {
+            messageLabel.setText("Invalid national ID format!\nIt should be a 10-digit number.");
+            messageLabel.setStyle("-fx-text-fill: red;");
+        } else if (!isValidPhoneNumber(phoneNumberText)) {
+            messageLabel.setText("Invalid phone number format!\nIt should be in the format 09123456789.");
+            messageLabel.setStyle("-fx-text-fill: red;");
+        } else if (!isValidEmail(email)) {
+            messageLabel.setText("Invalid email format!");
+            messageLabel.setStyle("-fx-text-fill: red;");
         } else {
             try {
-                int nationalId = Integer.parseInt(nationalIdText);
-                int phoneNumber = Integer.parseInt(phoneNumberText);
+                long nationalId = Long.parseLong(nationalIdText);
+                long phoneNumber = Long.parseLong(phoneNumberText);
 
                 // Create new Employee object
                 Employee newEmployee = new Employee(firstName, lastName, nationalId, dateOfBirth, email, phoneNumber);
@@ -61,9 +77,28 @@ public class AddEmployeePageController {
                 clearFields();
             } catch (NumberFormatException e) {
                 messageLabel.setText("Invalid input format!");
+                System.out.println(e.getMessage());
                 messageLabel.setStyle("-fx-text-fill: red;");
             }
         }
+    }
+
+    private boolean isValidName(String name) {
+        return name.matches("[a-zA-Z\\s]{1,30}");
+    }
+
+    private boolean isValidNationalId(String nationalId) {
+        return nationalId.matches("\\d{10}");
+    }
+
+    private boolean isValidPhoneNumber(String phoneNumber) {
+        return phoneNumber.matches("09\\d{9}");
+    }
+
+    private boolean isValidEmail(String email) {
+        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+        Pattern pattern = Pattern.compile(emailRegex);
+        return pattern.matcher(email).matches();
     }
 
     @FXML
@@ -81,6 +116,10 @@ public class AddEmployeePageController {
         }
     }
 
+    @FXML
+    private void handleClear(ActionEvent event) {
+        clearFields();
+    }
 
     private void clearFields() {
         firstNameField.clear();
@@ -89,5 +128,6 @@ public class AddEmployeePageController {
         dateOfBirthPicker.setValue(null);
         emailField.clear();
         phoneNumberField.clear();
+        messageLabel.setText("");
     }
 }
