@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -58,13 +59,19 @@ public class RegisterDepartmentPageController {
 
             // Create new Department object
             Department newDepartment = new Department(name, capacity, description);
+            newDepartment.setOrganization(selectedOrganization); // Set the organization for the department
 
             // Ensure selectedOrganization is not null
             if (selectedOrganization != null) {
                 // Add department to the organization
                 selectedOrganization.addDepartment(newDepartment);
                 // Update the department list in the DepartmentSelectionPage
-                departmentSelectionController.refreshDepartmentList();
+                if (departmentSelectionController != null) {
+                    departmentSelectionController.refreshDepartmentList();
+                } else {
+                    messageLabel.setText("Department selection controller is null!");
+                    messageLabel.setStyle("-fx-text-fill: red;");
+                }
                 messageLabel.setText("Department registered successfully!");
                 messageLabel.setStyle("-fx-text-fill: green;");
                 clearFields();
@@ -77,7 +84,6 @@ public class RegisterDepartmentPageController {
             }
         }
     }
-
 
     private boolean isValidName(String name) {
         return name.matches("[a-zA-Z\\s]{1,30}");
@@ -100,8 +106,11 @@ public class RegisterDepartmentPageController {
     private void handleBack(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("OrganizationPage.fxml"));
-            Scene scene = new Scene(loader.load(), 400, 555);
+            loader.setLocation(getClass().getResource("DepartmentSelectionPage.fxml"));
+            Parent root = loader.load();
+            DepartmentSelectionController controller = loader.getController();
+            controller.setOrganization(selectedOrganization);
+            Scene scene = new Scene(root, 400, 555);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);
             stage.show();

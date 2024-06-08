@@ -5,6 +5,16 @@ public class Department {
     private int capacity;
     private String description;
 
+    private Organization organization;
+
+    public Organization getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
+    }
+
     public Department(String name, int capacity, String description) {
         this.name = name;
         this.capacity = capacity;

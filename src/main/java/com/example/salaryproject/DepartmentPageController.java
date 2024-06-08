@@ -19,13 +19,7 @@ public class DepartmentPageController {
 
     public void setDepartment(Department department) {
         this.selectedDepartment = department;
-    }
-
-
-    @FXML
-    private void initialize() {
-        // Set department name label
-        // ...
+        departmentNameLabel.setText(department.getName());
     }
 
     @FXML
@@ -33,7 +27,10 @@ public class DepartmentPageController {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("DepartmentSelectionPage.fxml"));
-            Scene scene = new Scene(loader.load(), 400, 555);
+            Parent root = loader.load();
+            DepartmentSelectionController controller = loader.getController();
+            controller.setOrganization(selectedDepartment.getOrganization()); // Pass the current organization to the DepartmentSelectionController
+            Scene scene = new Scene(root, 400, 555);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);
             stage.setResizable(false);

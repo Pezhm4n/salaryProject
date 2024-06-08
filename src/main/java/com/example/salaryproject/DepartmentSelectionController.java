@@ -18,11 +18,16 @@ public class DepartmentSelectionController {
     @FXML
     private ListView<Department> departmentListView;
 
-    private Organization selectedOrganization;
+    private Organization organization;
 
     public void setOrganization(Organization organization) {
-        this.selectedOrganization = organization;
-        departmentListView.setItems(organization.getDepartments());
+        this.organization = organization;
+        if (organization != null) {
+            departmentListView.setItems(organization.getDepartments());
+        } else {
+            // Handle the case where organization is null
+            System.out.println("Organization is null");
+        }
     }
 
     @FXML
@@ -60,31 +65,15 @@ public class DepartmentSelectionController {
         }
     }
 
-//    @FXML
-//    private void handleAddDepartment(ActionEvent event) {
-//        try {
-//            FXMLLoader loader = new FXMLLoader();
-//            loader.setLocation(getClass().getResource("RegisterDepartmentPage.fxml"));
-//            Parent root = loader.load();
-//            RegisterDepartmentPageController controller = loader.getController();
-//            controller.setOrganization(selectedOrganization);
-//            controller.setDepartmentSelectionController(this);
-//            Scene scene = new Scene(root, 400, 555);
-//            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-//            stage.setScene(scene);
-//            stage.show();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
-
     @FXML
     private void handleBack(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("OrganizationPage.fxml"));
-            Scene scene = new Scene(loader.load(), 400, 555);
+            Parent root = loader.load();
+            OrganizationPageController controller = loader.getController();
+            controller.setOrganization(organization); // Pass the current organization to the OrganizationPageController
+            Scene scene = new Scene(root, 400, 555);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);
             stage.show();
@@ -94,9 +83,11 @@ public class DepartmentSelectionController {
     }
 
     public void refreshDepartmentList() {
-        Platform.runLater(() -> {
-            departmentListView.setItems(null);
-            departmentListView.setItems(selectedOrganization.getDepartments());
-        });
+        if (organization != null) {
+            Platform.runLater(() -> {
+                departmentListView.setItems(null);
+                departmentListView.setItems(organization.getDepartments());
+            });
+        }
     }
 }
