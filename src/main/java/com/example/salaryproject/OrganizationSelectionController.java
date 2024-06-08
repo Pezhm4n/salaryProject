@@ -13,21 +13,16 @@ import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class OrganizationSelectionController {
-
     @FXML
     private ListView<Organization> organizationListView;
 
-    private ObservableList<Organization> organizations;
+    public static ObservableList<Organization> organizations = FXCollections.observableArrayList();
 
     @FXML
     private void initialize() {
-        organizations = FXCollections.observableArrayList(
-                new Organization("Organization 1"),
-                new Organization("Organization 2"),
-                new Organization("Organization 3")
-        );
         organizationListView.setItems(organizations);
         organizationListView.setCellFactory(param -> new ListCell<Organization>() {
             @Override
@@ -62,9 +57,9 @@ public class OrganizationSelectionController {
         if (selectedOrganization != null) {
             try {
                 FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(getClass().getResource("/com/example/salaryproject/DepartmentSelectionPage.fxml"));
+                loader.setLocation(getClass().getResource("/com/example/salaryproject/OrganizationPage.fxml"));
                 Parent root = loader.load();
-                DepartmentSelectionController controller = loader.getController();
+                OrganizationPageController controller = loader.getController();
                 controller.setOrganization(selectedOrganization);
                 Scene scene = new Scene(root, 400, 555);
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

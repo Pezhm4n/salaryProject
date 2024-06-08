@@ -100,7 +100,7 @@ public class RegisterDepartmentPageController {
     private void handleBack(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("DepartmentSelectionPage.fxml"));
+            loader.setLocation(getClass().getResource("OrganizationPage.fxml"));
             Scene scene = new Scene(loader.load(), 400, 555);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);

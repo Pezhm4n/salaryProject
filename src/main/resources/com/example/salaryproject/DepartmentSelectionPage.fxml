@@ -9,6 +9,5 @@
     <Label styleClass="title" text="Select Department" />
     <ListView fx:id="departmentListView" prefHeight="200.0" prefWidth="200.0" styleClass="list-view" />
     <Button onAction="#handleDepartmentSelection" text="Select Department" styleClass="select-button" focusTraversable="true"/>
-    <Button onAction="#handleAddDepartment" text="Add New Department" styleClass="select-button" focusTraversable="true"/>
     <Button onAction="#handleBack" text="Back" styleClass="back-button" focusTraversable="true"/>
 </VBox>

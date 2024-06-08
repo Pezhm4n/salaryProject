@@ -60,30 +60,30 @@ public class DepartmentSelectionController {
         }
     }
 
-    @FXML
-    private void handleAddDepartment(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("RegisterDepartmentPage.fxml"));
-            Parent root = loader.load();
-            RegisterDepartmentPageController controller = loader.getController();
-            controller.setOrganization(selectedOrganization);
-            controller.setDepartmentSelectionController(this);
-            Scene scene = new Scene(root, 400, 555);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//    @FXML
+//    private void handleAddDepartment(ActionEvent event) {
+//        try {
+//            FXMLLoader loader = new FXMLLoader();
+//            loader.setLocation(getClass().getResource("RegisterDepartmentPage.fxml"));
+//            Parent root = loader.load();
+//            RegisterDepartmentPageController controller = loader.getController();
+//            controller.setOrganization(selectedOrganization);
+//            controller.setDepartmentSelectionController(this);
+//            Scene scene = new Scene(root, 400, 555);
+//            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+//            stage.setScene(scene);
+//            stage.show();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 
     @FXML
     private void handleBack(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("OrganizationSelectionPage.fxml"));
+            loader.setLocation(getClass().getResource("OrganizationPage.fxml"));
             Scene scene = new Scene(loader.load(), 400, 555);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);

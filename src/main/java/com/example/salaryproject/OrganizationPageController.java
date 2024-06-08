@@ -14,10 +14,18 @@ public class OrganizationPageController {
     @FXML
     private Label organizationNameLabel;
 
+    private Organization selectedOrganization;
+
     @FXML
     private void initialize() {
         // Set organization name label
-        organizationNameLabel.setText("Current Organization Name"); // مقدار واقعی را اینجا قرار دهید
+        if (selectedOrganization != null) {
+            organizationNameLabel.setText(selectedOrganization.getName());
+        }
+    }
+
+    public void setOrganization(Organization organization) {
+        this.selectedOrganization = organization;
     }
 
     @FXML
@@ -32,8 +40,8 @@ public class OrganizationPageController {
     @FXML
     private void handleEnterDepartment(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("OrganizationSelectionPage.fxml"));
-        Scene scene = new Scene(loader.load());
+        loader.setLocation(getClass().getResource("DepartmentSelectionPage.fxml"));
+        Scene scene = new Scene(loader.load(), 400, 555);
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
@@ -43,8 +51,8 @@ public class OrganizationPageController {
     private void handleBack(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("MainPage.fxml"));
-            Scene scene = new Scene(loader.load());
+            loader.setLocation(getClass().getResource("OrganizationSelectionPage.fxml"));
+            Scene scene = new Scene(loader.load(), 400, 555);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);
             stage.show();
@@ -52,5 +60,4 @@ public class OrganizationPageController {
             e.printStackTrace();
         }
     }
-
 }

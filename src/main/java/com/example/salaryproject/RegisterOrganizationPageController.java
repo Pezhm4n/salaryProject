@@ -44,7 +44,12 @@ public class RegisterOrganizationPageController {
                 double sharePrice = Double.parseDouble(sharePriceText);
 
                 // Create new Organization object
+                Organization organization = new Organization(name, totalShares, sharesAllocated, sharePrice);
+
                 // Save organization to file or database
+                // For simplicity, let's assume we have a static list of organizations
+                OrganizationSelectionController.organizations.add(organization);
+
                 messageLabel.setText("Organization registered successfully!");
                 messageLabel.setStyle("-fx-text-fill: green;");
                 clearFields();
@@ -54,6 +59,7 @@ public class RegisterOrganizationPageController {
             }
         }
     }
+
     @FXML
     private void handleBack(ActionEvent event) {
         try {
@@ -67,7 +73,6 @@ public class RegisterOrganizationPageController {
             e.printStackTrace();
         }
     }
-
 
     private void clearFields() {
         nameField.clear();
