@@ -35,12 +35,23 @@ public class LoginPageController {
     @FXML
     private Label titleLabel;
 
+    @FXML
+    private Button toggleThemeButton;
+
     private RotateTransition rotateInTransition;
     private RotateTransition rotateOutTransition;
     private boolean isRotating = false;
 
     private ScaleTransition scaleUpTransition;
     private ScaleTransition scaleDownTransition;
+
+    private boolean isDarkTheme = true;
+    @FXML
+    private RadioButton darkThemeRadioButton;
+    @FXML
+    private RadioButton lightThemeRadioButton;
+
+
 
     @FXML
     private void initialize() {
@@ -67,6 +78,18 @@ public class LoginPageController {
         userIcon.setOnMouseExited(event -> handleMouseExited(userIcon));
         passwordIcon.setOnMouseEntered(event -> handleMouseEntered(passwordIcon));
         passwordIcon.setOnMouseExited(event -> handleMouseExited(passwordIcon));
+
+        darkThemeRadioButton.setOnAction(event -> {
+            Scene scene = ((Node) event.getSource()).getScene();
+            scene.getStylesheets().remove(getClass().getResource("css/login-light.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("css/login.css").toExternalForm());
+        });
+
+        lightThemeRadioButton.setOnAction(event -> {
+            Scene scene = ((Node) event.getSource()).getScene();
+            scene.getStylesheets().remove(getClass().getResource("css/login.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("css/login-light.css").toExternalForm());
+        });
     }
 
     private void handleMouseEntered(ImageView icon) {
@@ -137,4 +160,19 @@ public class LoginPageController {
             stage.close();
         }
     }
+
+    @FXML
+    private void handleToggleTheme(ActionEvent event) {
+        Scene scene = ((Node) event.getSource()).getScene();
+        if (isDarkTheme) {
+            scene.getStylesheets().remove(getClass().getResource("css/login.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("css/login-light.css").toExternalForm());
+        } else {
+            scene.getStylesheets().remove(getClass().getResource("css/login-light.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("css/login.css").toExternalForm());
+        }
+        isDarkTheme = !isDarkTheme;
+    }
+
+
 }

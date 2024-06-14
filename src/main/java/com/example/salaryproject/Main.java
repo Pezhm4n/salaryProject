@@ -11,8 +11,10 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginPage.fxml"));
         Parent root = loader.load();
+        Scene scene = new Scene(root, 400, 555);
+        scene.getStylesheets().add(getClass().getResource("css/login.css").toExternalForm());
         primaryStage.setTitle("Salary Management System");
-        primaryStage.setScene(new Scene(root, 400, 555));
+        primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();
     }

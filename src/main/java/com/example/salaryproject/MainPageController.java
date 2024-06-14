@@ -25,6 +25,7 @@ public class MainPageController {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource(  "LoginPage.fxml"));
             Scene scene = new Scene(loader.load(), 400, 555);
+            scene.getStylesheets().add(getClass().getResource("css/login.css").toExternalForm());
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);
             stage.show();
