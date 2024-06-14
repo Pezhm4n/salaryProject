@@ -9,7 +9,7 @@
 
 <ScrollPane fitToWidth="true" prefHeight="555.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.salaryproject.OrganizationReportPageController">
     <content>
-        <VBox alignment="CENTER" prefHeight="552.0" prefWidth="398.0" spacing="20" stylesheets="@css/common.css, @css/button.css">
+        <VBox alignment="CENTER" prefHeight="552.0" prefWidth="398.0" spacing="20" styleClass="root" stylesheets="@css/common.css, @css/button.css">
             <padding>
                 <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
             </padding>

@@ -11,7 +11,7 @@
 
 <ScrollPane fitToWidth="true" prefHeight="555.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.salaryproject.AddEmployeePageController">
     <content>
-        <VBox alignment="CENTER" spacing="20" stylesheets="@css/common.css, @css/button.css, @css/form.css">
+        <VBox alignment="CENTER" spacing="20" styleClass="root" stylesheets="@css/common.css, @css/button.css, @css/form.css">
             <padding>
                 <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
             </padding>
@@ -22,22 +22,22 @@
                 </font>
             </Label>
 
-            <Label alignment="CENTER" text="First Name:" />
+            <Label alignment="CENTER" text="First Name:" textFill="#787983" />
             <TextField fx:id="firstNameField" maxWidth="Infinity" promptText="Enter first name" styleClass="text-field" />
 
-            <Label alignment="CENTER" text="Last Name:" />
+            <Label alignment="CENTER" text="Last Name:" textFill="#787983" />
             <TextField fx:id="lastNameField" maxWidth="Infinity" promptText="Enter last name" styleClass="text-field" />
 
-            <Label alignment="CENTER" text="National ID:" />
+            <Label alignment="CENTER" text="National ID:" textFill="#787983" />
             <TextField fx:id="nationalIdField" maxWidth="Infinity" promptText="Enter national ID" styleClass="text-field" />
 
-            <Label alignment="CENTER" text="Date of Birth:" />
+            <Label alignment="CENTER" text="Date of Birth:" textFill="#787983" />
             <DatePicker fx:id="dateOfBirthPicker" maxWidth="Infinity" promptText="Select date of birth" styleClass="date-picker" />
 
-            <Label alignment="CENTER" text="Email:" />
+            <Label alignment="CENTER" text="Email:" textFill="#787983" />
             <TextField fx:id="emailField" maxWidth="Infinity" promptText="Enter email" styleClass="text-field" />
 
-            <Label alignment="CENTER" text="Phone Number:" />
+            <Label alignment="CENTER" text="Phone Number:" textFill="#787983" />
             <TextField fx:id="phoneNumberField" maxWidth="Infinity" promptText="Enter phone number" styleClass="text-field" />
 
             <Button focusTraversable="true" maxWidth="Infinity" onAction="#handleAddEmployee" styleClass="add-button" text="Add Employee" />

@@ -10,34 +10,34 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" spacing="20" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.salaryproject.LoginPageController" stylesheets="@css/login.css">
+<VBox alignment="CENTER" spacing="20" stylesheets="@css/login.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.salaryproject.LoginPageController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
 
-    <Label text="USER LOGIN" styleClass="title">
+    <Label fx:id="titleLabel" styleClass="title" text="USER LOGIN" onMouseEntered="#handleTitleEntered" onMouseExited="#handleTitleExited">
         <font>
             <Font name="System Bold" size="24.0" />
         </font>
     </Label>
 
-    <ImageView fitHeight="50" fitWidth="50">
+    <ImageView fx:id="userIcon" fitHeight="50" fitWidth="50" onMouseEntered="#initialize" onMouseExited="#initialize">
         <Image url="@user-icon.png" />
     </ImageView>
 
     <TextField fx:id="usernameField" promptText="Username" styleClass="text-field" />
 
-    <ImageView fitHeight="50" fitWidth="50">
+    <ImageView fx:id="passwordIcon" fitHeight="50" fitWidth="50" onMouseEntered="#initialize" onMouseExited="#initialize">
         <Image url="@lock-icon.png" />
     </ImageView>
 
     <PasswordField fx:id="passwordField" promptText="Password" styleClass="text-field" />
 
-    <Button text="LOGIN" onAction="#handleLogin" styleClass="login-button" focusTraversable="true" />
+    <Button focusTraversable="true" onAction="#handleLogin" styleClass="login-button" text="LOGIN" />
 
-    <Button text="Exit" onAction="#handleExit" styleClass="exit-button" focusTraversable="true" />
+    <Button focusTraversable="true" onAction="#handleExit" styleClass="exit-button" text="Exit" />
 
-    <Label fx:id="messageLabel" styleClass="message-label"/>
+    <Label fx:id="messageLabel" styleClass="message-label" />
 
-    <Label text="Forgot password?" styleClass="forgot-password"/>
+    <Label styleClass="forgot-password" text="Forgot password?" />
 </VBox>

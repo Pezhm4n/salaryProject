@@ -1,41 +1,47 @@
 .root {
-    -fx-background-color: #f4f4f4;
+    -fx-background-color: #1A1E23; /* Darker background for better contrast */
 }
 
 .title {
     -fx-font-size: 24px;
     -fx-font-weight: bold;
-    -fx-text-fill: #333333;
+    -fx-text-fill: #ffffff; /* Pure white text for titles */
+    -fx-font-family: 'Lato', sans-serif;
 }
 
 .list-view {
-    -fx-background-color: #ffffff;
-    -fx-border-color: #cccccc;
+    -fx-background-color: #1E1E1E; /* Slightly lighter background for list view */
+    -fx-padding: 10px;
+    -fx-border-color: #383838;
     -fx-border-width: 1px;
     -fx-border-radius: 5px;
-    -fx-padding: 10px;
 }
 
 .list-cell {
     -fx-font-size: 16px;
     -fx-padding: 10px;
+    -fx-text-fill: #111111; /* Light grey text for better readability */
+    -fx-font-family: 'Lato', sans-serif;
 }
 
 .list-cell:hover {
-    -fx-background-color: #e0e0e0;
+    -fx-background-color: #3A6E99; /* Slightly lighter on hover */
 }
 
 .list-cell:selected {
-    -fx-background-color: #b3d9ff;
+    -fx-background-color: #115163; /* Muted blue for selected items */
 }
 
 .message-label {
     -fx-font-size: 14px;
     -fx-font-weight: bold;
+    -fx-text-fill: #ffffff; /* Pure white text for messages */
+    -fx-font-family: 'Lato', sans-serif;
 }
 
 .department-name {
     -fx-font-size: 18px;
     -fx-font-weight: bold;
-    -fx-text-fill: #00bfa5;
+    -fx-text-fill: #1E90FF; /* Dodger blue for department names */
+    -fx-font-family: 'Lato', sans-serif;
 }

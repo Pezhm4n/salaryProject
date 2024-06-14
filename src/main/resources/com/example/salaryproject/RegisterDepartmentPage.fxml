@@ -7,29 +7,29 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="center" spacing="20" stylesheets="@css/common.css, @css/button.css, @css/form.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21" fx:controller="com.example.salaryproject.RegisterDepartmentPageController">
+<VBox alignment="center" spacing="20" stylesheets="@css/common.css, @css/button.css, @css/form.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.salaryproject.RegisterDepartmentPageController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
 
-    <Label text="Register New Department" styleClass="title">
+    <Label styleClass="title" text="Register New Department">
         <font>
             <Font name="System Bold" size="24.0" />
         </font>
     </Label>
 
-    <Label text="Department Name:" />
+    <Label text="Department Name:" textFill="#787983" />
     <TextField fx:id="nameField" promptText="Enter department name" styleClass="text-field" />
 
-    <Label text="Employee Capacity:" />
+    <Label text="Employee Capacity:" textFill="#787983" />
     <TextField fx:id="capacityField" promptText="Enter employee capacity (max 100)" styleClass="text-field" />
 
-    <Label text="Description:" />
+    <Label text="Description:" textFill="#787983" />
     <TextField fx:id="descriptionField" promptText="Enter description (max 120 characters)" styleClass="text-field" />
 
-    <Button onAction="#handleRegister" text="Register" styleClass="register-button" focusTraversable="true" maxWidth="Infinity" />
+    <Button focusTraversable="true" maxWidth="Infinity" onAction="#handleRegister" styleClass="register-button" text="Register" />
 
-    <Button onAction="#handleBack" text="Back" styleClass="back-button" focusTraversable="true" maxWidth="Infinity" />
+    <Button focusTraversable="true" maxWidth="Infinity" onAction="#handleBack" styleClass="back-button" text="Back" />
 
     <Label fx:id="messageLabel" styleClass="message-label" />
 </VBox>

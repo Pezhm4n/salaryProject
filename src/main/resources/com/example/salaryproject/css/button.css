@@ -1,10 +1,12 @@
 .select-button, .register-button, .add-button, .action-button, .report-button {
-    -fx-background-color: #4CAF50;
-    -fx-text-fill: white;
+    -fx-background-color: #3A6EA5; /* Muted blue for a pleasant look */
+    -fx-text-fill: #ecf0f1; /* Light text color for contrast */
     -fx-font-size: 16px;
     -fx-padding: 10px 20px;
     -fx-pref-width: 300px;
     -fx-cursor: hand;
+    -fx-font-family: 'Lato', sans-serif;
+    -fx-transition: background-color 0.5s;
 }
 
 .select-button:hover, .select-button:focused,
@@ -12,31 +14,35 @@
 .add-button:hover, .add-button:focused,
 .action-button:hover, .action-button:focused,
 .report-button:hover, .report-button:focused {
-    -fx-background-color: #388E3C;
+    -fx-background-color: #2C5A80; /* Darker shade of blue for hover/active state */
 }
 
 .back-button {
-    -fx-background-color: #2196F3;
-    -fx-text-fill: white;
+    -fx-background-color: #D9534F; /* Soft red for back button */
+    -fx-text-fill: #ecf0f1;
     -fx-font-size: 16px;
     -fx-padding: 10px 20px;
     -fx-pref-width: 300px;
     -fx-cursor: hand;
+    -fx-font-family: 'Lato', sans-serif;
+    -fx-transition: background-color 0.5s;
 }
 
 .back-button:hover, .back-button:focused {
-    -fx-background-color: #1976D2;
+    -fx-background-color: #C12E2A; /* Darker red for hover/active state */
 }
 
 .clear-button {
-    -fx-background-color: #135aaa;
-    -fx-text-fill: white;
+    -fx-background-color: #5BC0DE; /* Cool blue for clear button */
+    -fx-text-fill: #ecf0f1;
     -fx-font-size: 16px;
     -fx-padding: 10px 20px;
     -fx-pref-width: 300px;
     -fx-cursor: hand;
+    -fx-font-family: 'Lato', sans-serif;
+    -fx-transition: background-color 0.5s;
 }
 
 .clear-button:hover, .clear-button:focused {
-    -fx-background-color: #127aaa;
+    -fx-background-color: #46B8DA; /* Darker blue for hover/active state */
 }
