@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="center" spacing="20" stylesheets="@register.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21" fx:controller="com.example.salaryproject.RegisterAdminPageController">
+<VBox alignment="center" spacing="20" stylesheets="@css/common.css, @css/button.css, @css/form.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21" fx:controller="com.example.salaryproject.RegisterAdminPageController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
@@ -28,8 +28,8 @@
     <Label text="Confirm Password:" />
     <PasswordField fx:id="confirmPasswordField" promptText="Confirm password" styleClass="text-field" />
 
-    <Button onAction="#handleRegister" text="Register" styleClass="register-button" focusTraversable="true"/>
-    <Button onAction="#handleBack" text="Back" styleClass="back-button" focusTraversable="true"/>
+    <Button onAction="#handleRegister" text="Register" styleClass="register-button" focusTraversable="true" maxWidth="Infinity" />
+    <Button onAction="#handleBack" text="Back" styleClass="back-button" focusTraversable="true" maxWidth="Infinity" />
 
 
     <Label fx:id="messageLabel" styleClass="message-label" />

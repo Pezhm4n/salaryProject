@@ -107,6 +107,7 @@ public class RegisterDepartmentPageController {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("DepartmentSelectionPage.fxml"));
+            //back to OrganizationPage.fxml
             Parent root = loader.load();
             DepartmentSelectionController controller = loader.getController();
             controller.setOrganization(selectedOrganization);

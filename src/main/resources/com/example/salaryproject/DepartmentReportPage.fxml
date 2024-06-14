@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" spacing="20" stylesheets="@report.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.salaryproject.DepartmentReportPageController" prefHeight="600.0" prefWidth="800.0">
+<VBox alignment="CENTER" spacing="20" stylesheets="@css/common.css, @css/button.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.salaryproject.DepartmentReportPageController" prefHeight="600.0" prefWidth="800.0">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
@@ -17,11 +17,11 @@
         </font>
     </Label>
 
-    <Button onAction="#generateDepartmentFinancialSummaryReport" text="Department Financial Summary Report" styleClass="report-button" focusTraversable="true" />
-    <Button onAction="#generateDepartmentPerformanceReport" text="Department Performance Report" styleClass="report-button" focusTraversable="true" />
-    <Button onAction="#generateDepartmentActionReport" text="Department Action Report" styleClass="report-button" focusTraversable="true" />
-    <Button onAction="#generateManagersReport" text="Managers Report" styleClass="report-button" focusTraversable="true"/>
+    <Button onAction="#generateDepartmentFinancialSummaryReport" text="Department Financial Summary Report" styleClass="report-button" focusTraversable="true" maxWidth="Infinity" />
+    <Button onAction="#generateDepartmentPerformanceReport" text="Department Performance Report" styleClass="report-button" focusTraversable="true" maxWidth="Infinity" />
+    <Button onAction="#generateDepartmentActionReport" text="Department Action Report" styleClass="report-button" focusTraversable="true" maxWidth="Infinity" />
+    <Button onAction="#generateManagersReport" text="Managers Report" styleClass="report-button" focusTraversable="true" maxWidth="Infinity" />
     <!-- Add more department report buttons as needed -->
 
-    <Button fx:id="backButton" onAction="#handleBack" text="Back" styleClass="back-button" focusTraversable="true" />
+    <Button fx:id="backButton" onAction="#handleBack" text="Back" styleClass="back-button" focusTraversable="true" maxWidth="Infinity" />
 </VBox>

@@ -9,42 +9,42 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<ScrollPane prefWidth="400.0" prefHeight="555.0" fitToWidth="true" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21" fx:controller="com.example.salaryproject.AddEmployeePageController">
+<ScrollPane fitToWidth="true" prefHeight="555.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.salaryproject.AddEmployeePageController">
     <content>
-        <VBox alignment="CENTER" spacing="20" stylesheets="@add-employee.css">
+        <VBox alignment="CENTER" spacing="20" stylesheets="@css/common.css, @css/button.css, @css/form.css">
             <padding>
                 <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
             </padding>
 
-            <Label text="Add New Employee" styleClass="title" alignment="CENTER">
+            <Label alignment="CENTER" styleClass="title" text="Add New Employee">
                 <font>
                     <Font name="System Bold" size="24.0" />
                 </font>
             </Label>
 
-            <Label text="First Name:" alignment="CENTER" />
-            <TextField fx:id="firstNameField" promptText="Enter first name" styleClass="text-field" maxWidth="Infinity" />
+            <Label alignment="CENTER" text="First Name:" />
+            <TextField fx:id="firstNameField" maxWidth="Infinity" promptText="Enter first name" styleClass="text-field" />
 
-            <Label text="Last Name:" alignment="CENTER" />
-            <TextField fx:id="lastNameField" promptText="Enter last name" styleClass="text-field" maxWidth="Infinity" />
+            <Label alignment="CENTER" text="Last Name:" />
+            <TextField fx:id="lastNameField" maxWidth="Infinity" promptText="Enter last name" styleClass="text-field" />
 
-            <Label text="National ID:" alignment="CENTER" />
-            <TextField fx:id="nationalIdField" promptText="Enter national ID" styleClass="text-field" maxWidth="Infinity" />
+            <Label alignment="CENTER" text="National ID:" />
+            <TextField fx:id="nationalIdField" maxWidth="Infinity" promptText="Enter national ID" styleClass="text-field" />
 
-            <Label text="Date of Birth:" alignment="CENTER" />
-            <DatePicker fx:id="dateOfBirthPicker" promptText="Select date of birth" styleClass="date-picker" maxWidth="Infinity" />
+            <Label alignment="CENTER" text="Date of Birth:" />
+            <DatePicker fx:id="dateOfBirthPicker" maxWidth="Infinity" promptText="Select date of birth" styleClass="date-picker" />
 
-            <Label text="Email:" alignment="CENTER" />
-            <TextField fx:id="emailField" promptText="Enter email" styleClass="text-field" maxWidth="Infinity" />
+            <Label alignment="CENTER" text="Email:" />
+            <TextField fx:id="emailField" maxWidth="Infinity" promptText="Enter email" styleClass="text-field" />
 
-            <Label text="Phone Number:" alignment="CENTER" />
-            <TextField fx:id="phoneNumberField" promptText="Enter phone number" styleClass="text-field" maxWidth="Infinity" />
+            <Label alignment="CENTER" text="Phone Number:" />
+            <TextField fx:id="phoneNumberField" maxWidth="Infinity" promptText="Enter phone number" styleClass="text-field" />
 
-            <Button onAction="#handleAddEmployee" text="Add Employee" styleClass="add-button" maxWidth="Infinity" focusTraversable="true" />
-            <Button onAction="#handleClear" text="Clear" styleClass="clear-button" maxWidth="Infinity" focusTraversable="true" />
-            <Button onAction="#handleBack" text="Back" styleClass="back-button" maxWidth="Infinity" focusTraversable="true" />
+            <Button focusTraversable="true" maxWidth="Infinity" onAction="#handleAddEmployee" styleClass="add-button" text="Add Employee" />
+            <Button focusTraversable="true" maxWidth="Infinity" onAction="#handleClear" styleClass="clear-button" text="Clear" />
+            <Button focusTraversable="true" maxWidth="Infinity" onAction="#handleBack" styleClass="back-button" text="Back" />
 
-            <Label fx:id="messageLabel" styleClass="message-label" alignment="CENTER" />
+            <Label fx:id="messageLabel" alignment="CENTER" styleClass="message-label" />
         </VBox>
     </content>
 </ScrollPane>

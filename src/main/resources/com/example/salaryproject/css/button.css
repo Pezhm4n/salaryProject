@@ -1,0 +1,42 @@
+.select-button, .register-button, .add-button, .action-button, .report-button {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-padding: 10px 20px;
+    -fx-pref-width: 300px;
+    -fx-cursor: hand;
+}
+
+.select-button:hover, .select-button:focused,
+.register-button:hover, .register-button:focused,
+.add-button:hover, .add-button:focused,
+.action-button:hover, .action-button:focused,
+.report-button:hover, .report-button:focused {
+    -fx-background-color: #388E3C;
+}
+
+.back-button {
+    -fx-background-color: #2196F3;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-padding: 10px 20px;
+    -fx-pref-width: 300px;
+    -fx-cursor: hand;
+}
+
+.back-button:hover, .back-button:focused {
+    -fx-background-color: #1976D2;
+}
+
+.clear-button {
+    -fx-background-color: #135aaa;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-padding: 10px 20px;
+    -fx-pref-width: 300px;
+    -fx-cursor: hand;
+}
+
+.clear-button:hover, .clear-button:focused {
+    -fx-background-color: #127aaa;
+}

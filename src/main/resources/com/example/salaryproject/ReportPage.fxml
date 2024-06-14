@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" prefHeight="497.0" prefWidth="348.0" spacing="20" stylesheets="@report.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.salaryproject.ReportPageController">
+<VBox alignment="CENTER" prefHeight="497.0" prefWidth="348.0" spacing="20" stylesheets="@css/common.css, @css/button.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.salaryproject.ReportPageController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
@@ -17,9 +17,9 @@
         </font>
     </Label>
 
-    <Button onAction="#generateOrganizationReports" styleClass="report-button" text="Organization Reports" focusTraversable="true"/>
-    <Button onAction="#generateDepartmentReports" styleClass="report-button" text="Department Reports" focusTraversable="true"/>
-    <Button onAction="#generateEmployeeReports" styleClass="report-button" text="Employee Reports" focusTraversable="true"/>
+    <Button onAction="#generateOrganizationReports" styleClass="report-button" text="Organization Reports" focusTraversable="true" maxWidth="Infinity" />
+    <Button onAction="#generateDepartmentReports" styleClass="report-button" text="Department Reports" focusTraversable="true" maxWidth="Infinity" />
+    <Button onAction="#generateEmployeeReports" styleClass="report-button" text="Employee Reports" focusTraversable="true" maxWidth="Infinity" />
 
-    <Button fx:id="backButton" onAction="#handleBack" styleClass="back-button" text="Back" />
+    <Button fx:id="backButton" onAction="#handleBack" styleClass="back-button" text="Back" maxWidth="Infinity" />
 </VBox>

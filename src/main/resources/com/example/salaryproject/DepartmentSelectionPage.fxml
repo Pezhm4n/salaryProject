@@ -5,9 +5,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.Label?>
 
-<VBox alignment="CENTER" spacing="20" stylesheets="@department-selection.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.salaryproject.DepartmentSelectionController">
+<VBox alignment="CENTER" spacing="20" stylesheets="@css/common.css, @css/button.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.salaryproject.DepartmentSelectionController">
     <Label styleClass="title" text="Select Department" />
     <ListView fx:id="departmentListView" prefHeight="200.0" prefWidth="200.0" styleClass="list-view" />
-    <Button onAction="#handleDepartmentSelection" text="Select Department" styleClass="select-button" focusTraversable="true"/>
-    <Button onAction="#handleBack" text="Back" styleClass="back-button" focusTraversable="true"/>
+    <Button onAction="#handleDepartmentSelection" text="Select Department" styleClass="select-button" focusTraversable="true" maxWidth="Infinity" />
+    <Button onAction="#handleBack" text="Back" styleClass="back-button" focusTraversable="true" maxWidth="Infinity" />
 </VBox>

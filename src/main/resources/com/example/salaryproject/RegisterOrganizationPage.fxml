@@ -10,7 +10,7 @@
 
 <ScrollPane prefWidth="400.0" prefHeight="555.0" fitToWidth="true" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21" fx:controller="com.example.salaryproject.RegisterOrganizationPageController">
     <content>
-        <VBox alignment="CENTER" spacing="20" stylesheets="@register-organization.css">
+        <VBox alignment="CENTER" spacing="20" stylesheets="@css/common.css, @css/button.css, @css/form.css">
             <padding>
                 <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
             </padding>
