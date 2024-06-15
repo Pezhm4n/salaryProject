@@ -45,3 +45,22 @@
     -fx-text-fill: #1E90FF; /* Dodger blue for department names */
     -fx-font-family: 'Lato', sans-serif;
 }
+
+.combo-box {
+    -fx-background-color: #1E1E1E; /* Slightly lighter background */
+    -fx-padding: 10px;
+    -fx-border-color: #383838; /* Border color to match list view */
+    -fx-border-width: 1px;
+    -fx-border-radius: 5px;
+    -fx-font-size: 16px;
+    -fx-font-family: 'Lato', sans-serif; /* Matching font family */
+    -fx-text-fill: #FFFFFF; /* Pure white text */
+}
+
+.combo-box:hover {
+    -fx-background-color: #3A6E99; /* Slightly lighter on hover */
+}
+
+.combo-box:focused {
+    -fx-background-color: #115163; /* Muted blue when focused */
+}

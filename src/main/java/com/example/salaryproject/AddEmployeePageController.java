@@ -3,7 +3,9 @@ package com.example.salaryproject;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -17,24 +19,82 @@ import java.util.regex.Pattern;
 public class AddEmployeePageController {
     @FXML
     private TextField firstNameField;
-
     @FXML
     private TextField lastNameField;
-
     @FXML
     private TextField nationalIdField;
-
     @FXML
     private DatePicker dateOfBirthPicker;
-
     @FXML
     private TextField emailField;
-
     @FXML
     private TextField phoneNumberField;
-
+    @FXML
+    private ComboBox<String> salaryTypeComboBox;
+    @FXML
+    private TextField baseMonthlySalaryField;
+    @FXML
+    private TextField overtimeHoursField;
+    @FXML
+    private TextField overtimeRateField;
+    @FXML
+    private TextField commissionRateField;
+    @FXML
+    private TextField totalSalesField;
+    @FXML
+    private TextField fixedAmountField;
+    @FXML
+    private TextField hourlyRateField;
+    @FXML
+    private TextField hoursWorkedField;
     @FXML
     private Label messageLabel;
+
+    private Department selectedDepartment;
+
+    public void setDepartment(Department department) {
+        this.selectedDepartment = department;
+    }
+
+    @FXML
+    private void handleSalaryTypeChange() {
+        String salaryType = salaryTypeComboBox.getValue();
+
+        // غیرفعال کردن همه فیلدها
+        baseMonthlySalaryField.setDisable(true);
+        overtimeHoursField.setDisable(true);
+        overtimeRateField.setDisable(true);
+        commissionRateField.setDisable(true);
+        totalSalesField.setDisable(true);
+        fixedAmountField.setDisable(true);
+        hourlyRateField.setDisable(true);
+        hoursWorkedField.setDisable(true);
+
+        if (salaryType != null) {
+            switch (salaryType) {
+                case "FixedSalary":
+                    baseMonthlySalaryField.setDisable(false);
+                    overtimeHoursField.setDisable(false);
+                    overtimeRateField.setDisable(false);
+                    break;
+                case "HourlySalary":
+                    hourlyRateField.setDisable(false);
+                    hoursWorkedField.setDisable(false);
+                    break;
+                case "CommissionSalary":
+                    commissionRateField.setDisable(false);
+                    totalSalesField.setDisable(false);
+                    break;
+                case "CommissionPlusFixedSalary":
+                    commissionRateField.setDisable(false);
+                    totalSalesField.setDisable(false);
+                    fixedAmountField.setDisable(false);
+                    break;
+            }
+        }
+    }
+
+
 
     @FXML
     private void handleAddEmployee(ActionEvent event) {
@@ -44,8 +104,10 @@ public class AddEmployeePageController {
         LocalDate dateOfBirth = dateOfBirthPicker.getValue();
         String email = emailField.getText();
         String phoneNumberText = phoneNumberField.getText();
+        String salaryType = salaryTypeComboBox.getValue();
+        Status status = Status.ACTIVE;
 
-        if (firstName.isEmpty() || lastName.isEmpty() || nationalIdText.isEmpty() || dateOfBirth == null || email.isEmpty() || phoneNumberText.isEmpty()) {
+        if (firstName.isEmpty() || lastName.isEmpty() || nationalIdText.isEmpty() || dateOfBirth == null || email.isEmpty() || phoneNumberText.isEmpty() || salaryType == null) {
             messageLabel.setText("Please fill in all fields!");
             messageLabel.setStyle("-fx-text-fill: red;");
         } else if (!isValidName(firstName)) {
@@ -70,11 +132,36 @@ public class AddEmployeePageController {
 
                 // Create new Employee object
                 Employee newEmployee = new Employee(firstName, lastName, nationalId, dateOfBirth, email, phoneNumber);
-                // Save employee to file or database
-                // ...
+
+                switch (salaryType) {
+                    case "FixedSalary":
+                        double baseMonthlySalary = Double.parseDouble(baseMonthlySalaryField.getText());
+                        double overtimeHours = Double.parseDouble(overtimeHoursField.getText());
+                        double overtimeRate = Double.parseDouble(overtimeRateField.getText());
+                        newEmployee.newFixedSalaryRecord(selectedDepartment, status, baseMonthlySalary, overtimeHours, overtimeRate);
+                        break;
+                    case "HourlySalary":
+                        double hourlyRate = Double.parseDouble(hourlyRateField.getText());
+                        double hoursWorked = Double.parseDouble(hoursWorkedField.getText());
+                        newEmployee.newHourlySalaryRecord(selectedDepartment, status, hourlyRate, hoursWorked);
+                        break;
+                    case "CommissionSalary":
+                        double commissionRate = Double.parseDouble(commissionRateField.getText());
+                        double totalSales = Double.parseDouble(totalSalesField.getText());
+                        newEmployee.newCommissionSalaryRecord(selectedDepartment, status, commissionRate, totalSales);
+                        break;
+                    case "CommissionPlusFixedSalary":
+                        double commRate = Double.parseDouble(commissionRateField.getText());
+                        double totalSalesAmount = Double.parseDouble(totalSalesField.getText());
+                        double fixedAmount = Double.parseDouble(fixedAmountField.getText());
+                        newEmployee.newCommissionPlusFixedSalaryRecord(selectedDepartment, status, commRate, totalSalesAmount, fixedAmount);
+                        break;
+                }
+
                 messageLabel.setText("Employee added successfully!");
                 messageLabel.setStyle("-fx-text-fill: green;");
                 clearFields();
+
             } catch (NumberFormatException e) {
                 messageLabel.setText("Invalid input format!");
                 System.out.println(e.getMessage());
@@ -103,13 +190,20 @@ public class AddEmployeePageController {
 
     @FXML
     private void handleBack(ActionEvent event) {
+        if (selectedDepartment == null) {
+            System.out.println("selectedDepartment is null");
+            return;
+        }
+
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("DepartmentPage.fxml"));
-            Scene scene = new Scene(loader.load(), 400, 555);
+            Parent root = loader.load();
+            DepartmentPageController controller = loader.getController();
+            controller.setDepartment(selectedDepartment);
+            Scene scene = new Scene(root, 400, 555);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);
-            stage.setResizable(false);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -121,13 +215,22 @@ public class AddEmployeePageController {
         clearFields();
     }
 
-    private void clearFields() {
+    private void clearFields()
+    {
         firstNameField.clear();
         lastNameField.clear();
         nationalIdField.clear();
         dateOfBirthPicker.setValue(null);
         emailField.clear();
         phoneNumberField.clear();
-        messageLabel.setText("");
+        salaryTypeComboBox.setValue(null);
+        baseMonthlySalaryField.clear();
+        overtimeHoursField.clear();
+        overtimeRateField.clear();
+        commissionRateField.clear();
+        totalSalesField.clear();
+        fixedAmountField.clear();
+        hourlyRateField.clear();
+        hoursWorkedField.clear();
     }
 }

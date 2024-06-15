@@ -1,15 +1,17 @@
 package com.example.salaryproject;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import java.io.IOException;
+import java.util.Comparator;
 
 public class DepartmentPageController {
     @FXML
@@ -29,7 +31,7 @@ public class DepartmentPageController {
             loader.setLocation(getClass().getResource("DepartmentSelectionPage.fxml"));
             Parent root = loader.load();
             DepartmentSelectionController controller = loader.getController();
-            controller.setOrganization(selectedDepartment.getOrganization()); // Pass the current organization to the DepartmentSelectionController
+            controller.setOrganization(selectedDepartment.getOrganization());
             Scene scene = new Scene(root, 400, 555);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);
@@ -41,12 +43,20 @@ public class DepartmentPageController {
     }
 
     @FXML
-    private void handleAddEmployee(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("AddEmployeePage.fxml"));
-        Scene scene = new Scene(root , 400 ,555);
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(scene);
-        stage.show();
+    private void handleAddEmployee(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("AddEmployeePage.fxml"));
+            Parent root = loader.load();
+            AddEmployeePageController controller = loader.getController();
+            controller.setDepartment(selectedDepartment);  // انتقال selectedDepartment به کنترلر AddEmployeePageController
+            Scene scene = new Scene(root, 400, 555);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -59,10 +69,50 @@ public class DepartmentPageController {
 
     @FXML
     private void handleGetEmployees(ActionEvent event) {
-        // Show list of employees in the department
-        // ...
-        showAlert("Employees retrieved successfully!");
+        if (selectedDepartment != null) {
+            ObservableList<Employee> employees = selectedDepartment.getEmployees();
+            if (!employees.isEmpty()) {
+                // مرتب سازی کارمندان بر اساس نام و نام خانوادگی
+                employees.sort(Comparator.comparing(Employee::getFirstName).thenComparing(Employee::getLastName));
+
+                // ایجاد TableView برای نمایش لیست کارمندان
+                TableView<Employee> tableView = new TableView<>();
+                tableView.setItems(employees);
+
+                // ایجاد ستون‌های جدول
+                TableColumn<Employee, String> nameColumn = new TableColumn<>("Name");
+                nameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirstName() + " " + cellData.getValue().getLastName()));
+
+                TableColumn<Employee, String> phoneColumn = new TableColumn<>("Phone Number");
+                phoneColumn.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getPhoneNumber())));
+
+                TableColumn<Employee, String> nationalIdColumn = new TableColumn<>("National ID");
+                nationalIdColumn.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getNationalId())));
+
+                TableColumn<Employee, String> salaryTypeColumn = new TableColumn<>("Salary Type");
+                salaryTypeColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCurrentEmployeeType().toString()));
+
+                TableColumn<Employee, String> dateAddedColumn = new TableColumn<>("Date Added");
+                dateAddedColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFormattedDate()));
+
+                tableView.getColumns().addAll(nameColumn, phoneColumn, nationalIdColumn, salaryTypeColumn, dateAddedColumn);
+
+                // نمایش TableView در یک Dialog
+                Dialog<Void> dialog = new Dialog<>();
+                dialog.setTitle("Employees");
+                dialog.getDialogPane().setContent(tableView);
+                dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
+                dialog.showAndWait();
+            } else {
+                showAlert("No employees found in the department.");
+            }
+        } else {
+            showAlert("No department selected.");
+        }
     }
+
+
+
 
     @FXML
     private void handleGetEmployeeByNationalId(ActionEvent event) {

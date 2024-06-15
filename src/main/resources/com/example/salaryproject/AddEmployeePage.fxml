@@ -1,50 +1,88 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
 <ScrollPane fitToWidth="true" prefHeight="555.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.salaryproject.AddEmployeePageController">
     <content>
         <VBox alignment="CENTER" spacing="20" styleClass="root" stylesheets="@css/common.css, @css/button.css, @css/form.css">
             <padding>
-                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
             </padding>
-
             <Label alignment="CENTER" styleClass="title" text="Add New Employee">
                 <font>
-                    <Font name="System Bold" size="24.0" />
+                    <Font name="System Bold" size="24.0"/>
                 </font>
             </Label>
 
-            <Label alignment="CENTER" text="First Name:" textFill="#787983" />
-            <TextField fx:id="firstNameField" maxWidth="Infinity" promptText="Enter first name" styleClass="text-field" />
+            <Label alignment="CENTER" text="First Name:" textFill="#787983"/>
+            <TextField fx:id="firstNameField" maxWidth="Infinity" promptText="Enter first name" styleClass="text-field"/>
 
-            <Label alignment="CENTER" text="Last Name:" textFill="#787983" />
-            <TextField fx:id="lastNameField" maxWidth="Infinity" promptText="Enter last name" styleClass="text-field" />
+            <Label alignment="CENTER" text="Last Name:" textFill="#787983"/>
+            <TextField fx:id="lastNameField" maxWidth="Infinity" promptText="Enter last name" styleClass="text-field"/>
 
-            <Label alignment="CENTER" text="National ID:" textFill="#787983" />
-            <TextField fx:id="nationalIdField" maxWidth="Infinity" promptText="Enter national ID" styleClass="text-field" />
+            <Label alignment="CENTER" text="National ID:" textFill="#787983"/>
+            <TextField fx:id="nationalIdField" maxWidth="Infinity" promptText="Enter national ID" styleClass="text-field"/>
 
-            <Label alignment="CENTER" text="Date of Birth:" textFill="#787983" />
-            <DatePicker fx:id="dateOfBirthPicker" maxWidth="Infinity" promptText="Select date of birth" styleClass="date-picker" />
+            <Label alignment="CENTER" text="Date of Birth:" textFill="#787983"/>
+            <DatePicker fx:id="dateOfBirthPicker" maxWidth="Infinity" promptText="Select date of birth" styleClass="date-picker"/>
 
-            <Label alignment="CENTER" text="Email:" textFill="#787983" />
-            <TextField fx:id="emailField" maxWidth="Infinity" promptText="Enter email" styleClass="text-field" />
+            <Label alignment="CENTER" text="Email:" textFill="#787983"/>
+            <TextField fx:id="emailField" maxWidth="Infinity" promptText="Enter email" styleClass="text-field"/>
 
-            <Label alignment="CENTER" text="Phone Number:" textFill="#787983" />
-            <TextField fx:id="phoneNumberField" maxWidth="Infinity" promptText="Enter phone number" styleClass="text-field" />
+            <Label alignment="CENTER" text="Phone Number:" textFill="#787983"/>
+            <TextField fx:id="phoneNumberField" maxWidth="Infinity" promptText="Enter phone number" styleClass="text-field"/>
 
-            <Button focusTraversable="true" maxWidth="Infinity" onAction="#handleAddEmployee" styleClass="add-button" text="Add Employee" />
-            <Button focusTraversable="true" maxWidth="Infinity" onAction="#handleClear" styleClass="clear-button" text="Clear" />
-            <Button focusTraversable="true" maxWidth="Infinity" onAction="#handleBack" styleClass="back-button" text="Back" />
+            <Label alignment="CENTER" text="Salary Type:" textFill="#787983"/>
 
-            <Label fx:id="messageLabel" alignment="CENTER" styleClass="message-label" />
+            <ComboBox fx:id="salaryTypeComboBox" maxWidth="Infinity" promptText="Select salary type" styleClass="combo-box" onAction="#handleSalaryTypeChange">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="FixedSalary"/>
+                        <String fx:value="HourlySalary"/>
+                        <String fx:value="CommissionSalary"/>
+                        <String fx:value="CommissionPlusFixedSalary"/>
+                    </FXCollections>
+                </items>
+            </ComboBox>
+
+
+            <Label alignment="CENTER" text="Base Monthly Salary:" textFill="#787983"/>
+            <TextField fx:id="baseMonthlySalaryField" maxWidth="Infinity" promptText="Enter base monthly salary" styleClass="text-field"/>
+
+            <Label alignment="CENTER" text="Overtime Hours:" textFill="#787983"/>
+            <TextField fx:id="overtimeHoursField" maxWidth="Infinity" promptText="Enter overtime hours" styleClass="text-field"/>
+
+            <Label alignment="CENTER" text="Overtime Rate:" textFill="#787983"/>
+            <TextField fx:id="overtimeRateField" maxWidth="Infinity" promptText="Enter overtime rate" styleClass="text-field"/>
+
+            <Label alignment="CENTER" text="Commission Rate:" textFill="#787983"/>
+            <TextField fx:id="commissionRateField" maxWidth="Infinity" promptText="Enter commission rate" styleClass="text-field"/>
+
+            <Label alignment="CENTER" text="Total Sales:" textFill="#787983"/>
+            <TextField fx:id="totalSalesField" maxWidth="Infinity" promptText="Enter total sales" styleClass="text-field"/>
+
+            <Label alignment="CENTER" text="Fixed Amount:" textFill="#787983"/>
+            <TextField fx:id="fixedAmountField" maxWidth="Infinity" promptText="Enter fixed amount" styleClass="text-field"/>
+
+            <Label alignment="CENTER" text="Hourly Rate:" textFill="#787983"/>
+            <TextField fx:id="hourlyRateField" maxWidth="Infinity" promptText="Enter hourly rate" styleClass="text-field"/>
+
+            <Label alignment="CENTER" text="Hours Worked:" textFill="#787983"/>
+            <TextField fx:id="hoursWorkedField" maxWidth="Infinity" promptText="Enter hours worked" styleClass="text-field"/>
+
+            <Button focusTraversable="true" maxWidth="Infinity" onAction="#handleAddEmployee" styleClass="add-button" text="Add Employee"/>
+            <Button focusTraversable="true" maxWidth="Infinity" onAction="#handleClear" styleClass="clear-button" text="Clear"/>
+            <Button focusTraversable="true" maxWidth="Infinity" onAction="#handleBack" styleClass="back-button" text="Back"/>
+
+            <Label fx:id="messageLabel" alignment="CENTER" styleClass="message-label"/>
         </VBox>
     </content>
 </ScrollPane>

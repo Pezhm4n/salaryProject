@@ -90,6 +90,7 @@ public class Employee {
             return lastRecord instanceof ManagerSalary;
         return false;
     }
+
     public Department getCurrentDepartment(){
         SalaryRecord lastRecord = getCurrentSalaryRecord();
         if (lastRecord != null)
@@ -130,23 +131,27 @@ public class Employee {
         }
 
         if (newDepartment == null) {
-            assert lastRecord != null;
-            newDepartment = lastRecord.getDepartment();
-        }
-        else {
-            assert lastRecord != null;
-            lastRecord.getDepartment().removeEmployee(this);
+            if (lastRecord != null) {
+                newDepartment = lastRecord.getDepartment();
+            }
+        } else {
+            if (lastRecord != null) {
+                lastRecord.getDepartment().removeEmployee(this);
+            }
             newDepartment.addEmployee(this);
         }
         if (newStatus == null) {
-            newStatus = lastRecord.getStatus();
+            if (lastRecord != null) {
+                newStatus = lastRecord.getStatus();
+            }
         }
 
         LocalDate startDate = LocalDate.now();
-        LocalDate endDate = null;
+        LocalDate endDate = null; // This should be set to null for new records
         FixedSalary newRecord = new FixedSalary(startDate, endDate, newDepartment, newStatus, baseMonthlySalary, overTimeHours, overTimeRate);
         salaryRecords.add(newRecord);
     }
+
     public void newCommissionSalaryRecord(Department newDepartment, Status newStatus, double commissionRate, double totalSales) {
         SalaryRecord lastRecord = getCurrentSalaryRecord();
         if (lastRecord != null) {
@@ -154,12 +159,14 @@ public class Employee {
         }
 
         if (newDepartment == null) {
-            assert lastRecord != null;
-            newDepartment = lastRecord.getDepartment();
+            if (lastRecord != null) {
+                newDepartment = lastRecord.getDepartment();
+            }
         }
         if (newStatus == null) {
-            assert lastRecord != null;
-            newStatus = lastRecord.getStatus();
+            if (lastRecord != null) {
+                newStatus = lastRecord.getStatus();
+            }
         }
 
         LocalDate startDate = LocalDate.now();
@@ -167,6 +174,7 @@ public class Employee {
         CommissionSalary newRecord = new CommissionSalary(startDate, endDate, newDepartment, newStatus, commissionRate, totalSales);
         salaryRecords.add(newRecord);
     }
+
     public void newCommissionPlusFixedSalaryRecord(Department newDepartment, Status newStatus, double commissionRate, double totalSales, double fixedAmount) {
         SalaryRecord lastRecord = getCurrentSalaryRecord();
         if (lastRecord != null) {
@@ -174,12 +182,14 @@ public class Employee {
         }
 
         if (newDepartment == null) {
-            assert lastRecord != null;
-            newDepartment = lastRecord.getDepartment();
+            if (lastRecord != null) {
+                newDepartment = lastRecord.getDepartment();
+            }
         }
         if (newStatus == null) {
-            assert lastRecord != null;
-            newStatus = lastRecord.getStatus();
+            if (lastRecord != null) {
+                newStatus = lastRecord.getStatus();
+            }
         }
 
         LocalDate startDate = LocalDate.now();
@@ -187,6 +197,7 @@ public class Employee {
         CommissionPlusFixedSalary newRecord = new CommissionPlusFixedSalary(startDate, endDate, newDepartment, newStatus, commissionRate, totalSales, fixedAmount);
         salaryRecords.add(newRecord);
     }
+
     public void newHourlySalaryRecord(Department newDepartment, Status newStatus, double hourlyRate, double hoursWorked) {
         SalaryRecord lastRecord = getCurrentSalaryRecord();
         if (lastRecord != null) {
@@ -194,12 +205,14 @@ public class Employee {
         }
 
         if (newDepartment == null) {
-            assert lastRecord != null;
-            newDepartment = lastRecord.getDepartment();
+            if (lastRecord != null) {
+                newDepartment = lastRecord.getDepartment();
+            }
         }
         if (newStatus == null) {
-            assert lastRecord != null;
-            newStatus = lastRecord.getStatus();
+            if (lastRecord != null) {
+                newStatus = lastRecord.getStatus();
+            }
         }
 
         LocalDate startDate = LocalDate.now();
