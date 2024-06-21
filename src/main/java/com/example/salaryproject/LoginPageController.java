@@ -13,7 +13,12 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 import java.util.Optional;
 
 public class LoginPageController {
@@ -50,8 +55,6 @@ public class LoginPageController {
     private RadioButton darkThemeRadioButton;
     @FXML
     private RadioButton lightThemeRadioButton;
-
-
 
     @FXML
     private void initialize() {
@@ -126,19 +129,47 @@ public class LoginPageController {
         if (username.isEmpty() || password.isEmpty()) {
             messageLabel.setText("Please enter username and password!");
             messageLabel.setStyle("-fx-text-fill: red;");
-        } else if (username.equals("admin") && password.equals("admin")) {
-            messageLabel.setText("Login successful!");
-            messageLabel.setStyle("-fx-text-fill: green;");
-
-            Parent root = FXMLLoader.load(getClass().getResource("MainPage.fxml"));
-            Scene scene = new Scene(root, 400, 555);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.setResizable(false);
-            stage.show();
         } else {
-            messageLabel.setText("Invalid username or password!");
-            messageLabel.setStyle("-fx-text-fill: red;");
+            String hashedPassword = hashPassword(password);
+            if (validateCredentials(username, hashedPassword) || (username.equals("admin") && password.equals("admin")) )  {
+                messageLabel.setText("Login successful!");
+                messageLabel.setStyle("-fx-text-fill: green;");
+
+                Parent root = FXMLLoader.load(getClass().getResource("MainPage.fxml"));
+                Scene scene = new Scene(root, 400, 555);
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                stage.setScene(scene);
+                stage.setResizable(false);
+                stage.show();
+            } else {
+                messageLabel.setText("Invalid username or password!");
+                messageLabel.setStyle("-fx-text-fill: red;");
+            }
+        }
+    }
+
+    private boolean validateCredentials(String username, String hashedPassword) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("admins.csv"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length == 2 && parts[0].equals(username) && parts[1].equals(hashedPassword)) {
+                    return true;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    private String hashPassword(String password) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(password.getBytes());
+            return Base64.getEncoder().encodeToString(hash);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("Error hashing password", e);
         }
     }
 
@@ -173,6 +204,4 @@ public class LoginPageController {
         }
         isDarkTheme = !isDarkTheme;
     }
-
-
 }
