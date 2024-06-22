@@ -10,15 +10,6 @@ public class ManagerSalary extends SalaryRecord{
     private double currentSharePrice;
     private double bonus;
 
-    public ManagerSalary(LocalDate startDate, LocalDate endDate, Department department, Status status, double baseMonthlySalary, double commissionRate, double netProfitOfDepartment, double sharesGranted, double currentSharePrice, double bonus) {
-        super(startDate, endDate, department, status);
-        this.baseMonthlySalary = baseMonthlySalary;
-        this.commissionRate = commissionRate;
-        this.netProfitOfDepartment = netProfitOfDepartment;
-        this.sharesGranted = sharesGranted;
-        this.currentSharePrice = currentSharePrice;
-        this.bonus = bonus;
-    }
     public ManagerSalary(LocalDate startDate, LocalDate endDate, Department department, Status status, double baseMonthlySalary, double commissionRate, double netProfitOfDepartment) {
         this(startDate, endDate, department, status, baseMonthlySalary, commissionRate, netProfitOfDepartment, 0, 0, 0);
 
@@ -28,6 +19,15 @@ public class ManagerSalary extends SalaryRecord{
     }
     public ManagerSalary(LocalDate startDate, LocalDate endDate, Department department, Status status, double baseMonthlySalary){
         this(startDate, endDate, department, status, baseMonthlySalary, 0, 0, 0, 0, 0);
+    }
+    public ManagerSalary(LocalDate startDate, LocalDate endDate, Department department, Status status, double baseMonthlySalary, double commissionRate, double netProfitOfDepartment, double sharesGranted, double currentSharePrice, double bonus) {
+        super(startDate, endDate, department, status);
+        this.baseMonthlySalary = baseMonthlySalary;
+        this.commissionRate = commissionRate;
+        this.netProfitOfDepartment = netProfitOfDepartment;
+        this.sharesGranted = sharesGranted;
+        this.currentSharePrice = currentSharePrice;
+        this.bonus = bonus;
     }
 
     public double getBaseMonthlySalary() {

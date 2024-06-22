@@ -46,6 +46,19 @@ public abstract class SalaryRecord {
     public void setStatus(Status status) {
         this.status = status;
     }
+    public EmployeeType getType(){
+        if (this instanceof FixedSalary)
+            return EmployeeType.FIXED_SALARY;
+        else if (this.getClass() == CommissionPlusFixedSalary.class)
+            return EmployeeType.COMMISSION_FIXED_SALARY;
+        else if (this.getClass() == CommissionSalary.class)
+            return EmployeeType.COMMISSION_SALARY;
+        else if (this instanceof HourlySalary)
+            return EmployeeType.HOURLY_SALARY;
+        else if (this instanceof ManagerSalary)
+            return EmployeeType.MANAGER;
+        return null;
+    }
     public abstract double calculateTotalSalary();
 }
 

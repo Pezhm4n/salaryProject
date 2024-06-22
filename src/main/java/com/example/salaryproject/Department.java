@@ -8,32 +8,52 @@ import java.time.LocalDate;
 public class Department {
     private String name;
     private Employee manager;
-    private ObservableList<Employee> formerManagers;
-    private int headCount;
-    private ObservableList<Employee> employees;
-    private ObservableList<FinancialRecord> financialRecords;
     private int capacity;
+    private int headCount;
+    private ObservableList<FinancialRecord> financialRecords;
+    private ObservableList<Employee> employees;
+    private ObservableList<Employee> formerManagers;
+    private ObservableList<Employee> formerEmployees;
+
+
     private String description;
     private Organization organization;
 
-    public Department(String name, int capacity, String description) {
-        this(name, capacity, description, null, null, null);
+    public Department(String name, int capacity, int headCount, String description) {
+        this(name, capacity, headCount, description, null, null, null, null);
     }
 
-    public Department(String name, int capacity, String description, Employee[] employees, FinancialRecord[] financialRecords, Employee[] formerManagers) {
+    public Department(String name, int capacity, int headCount, String description, FinancialRecord[] financialRecords, Employee[] employees, Employee[] formerManagers, Employee[] formerEmployees) {
         this.name = name;
         this.capacity = capacity;
+        this.headCount = headCount;
         this.description = description;
         this.employees = employees == null ? FXCollections.observableArrayList() : FXCollections.observableArrayList(employees);
         this.financialRecords = financialRecords == null ? FXCollections.observableArrayList() : FXCollections.observableArrayList(financialRecords);
         this.formerManagers = formerManagers == null ? FXCollections.observableArrayList() : FXCollections.observableArrayList(formerManagers);
+        this.formerEmployees = formerEmployees == null ? FXCollections.observableArrayList() : FXCollections.observableArrayList(formerEmployees);
+        incrementHeadCount();
     }
+
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+    public int getHeadCount() {
+        return headCount;
+    }
+
+    public void setHeadCount(int headCount) {
+        this.headCount = headCount;
+    }
+    public void incrementHeadCount(){
+        setHeadCount(getHeadCount() + 1);
+    }
+    public void decrementHeadCount(){
+        setHeadCount(getHeadCount() - 1);
     }
 
     public int getCapacity() {
@@ -52,24 +72,34 @@ public class Department {
         this.description = description;
     }
 
-    public ObservableList<Employee> getFormerManagers() {
-        return formerManagers;
+    public void setCurrentManager(Employee manager){
+        this.manager = manager;
     }
 
     public Employee getCurrentManager(){
         for(Employee employee : employees){
-            if(employee.isCurrentManager())
+            if(employee.isCurrentManager() && this.manager == employee)
                 return employee;
         }
         return null;
     }
-    public void addFormerManager(Employee formerManager){
-        this.formerManagers.add(formerManager);
-    }
+
     public void changeManager(Employee newManager, double baseMonthlySalary, double commissionRate, double netProfitOfDepartment, double sharesGranted, double currentSharePrice, double bonus){
-        addFormerManager(manager);
+        if (manager != null){
+            if(!manager.getSalaryRecords().isEmpty())
+                manager.getCurrentSalaryRecord().setEndDate(LocalDate.now());
+            addFormerManager(manager);
+        }
+
         newManager.newManagerSalaryRecord(this, newManager.getCurrentStatus(), baseMonthlySalary, commissionRate, netProfitOfDepartment, sharesGranted, currentSharePrice, bonus);
         manager = newManager;
+    }
+    public ObservableList<Employee> getFormerManagers() {
+        return formerManagers;
+    }
+    public void addFormerManager(Employee formerManager){
+        if(formerManager != null)
+            this.formerManagers.add(formerManager);
     }
 
     public void addEmployee(Employee employee){
@@ -78,6 +108,7 @@ public class Department {
 
     public void removeEmployee(Employee employee){
         employees.remove(employee);
+        decrementHeadCount();
     }
 
     public ObservableList<Employee> getEmployees() {
@@ -91,11 +122,14 @@ public class Department {
     public FinancialRecord getLastFinancialRecord(){
         return financialRecords.get(financialRecords.size() - 1);
     }
-    public void addNewFinancialRecord(LocalDate startDate, double budget, double revenue, double costs){
-        getLastFinancialRecord().setEndDate(LocalDate.now());
-        FinancialRecord newRecord = new FinancialRecord(LocalDate.now(), null, budget, revenue, costs);
+    public void createNewFinancialRecord(LocalDate startDate, double budget, double revenue, double costs){
+        if(!getFinancialRecords().isEmpty())
+            getLastFinancialRecord().setEndDate(LocalDate.now());
+        FinancialRecord newRecord = new FinancialRecord(startDate, null, budget, revenue, costs);
+        addFinancialRecord(newRecord);
+    }
+    public void addFinancialRecord(FinancialRecord newRecord){
         financialRecords.add(newRecord);
-
     }
     public Organization getOrganization() {
         return organization;
@@ -110,4 +144,7 @@ public class Department {
         return budget - netProfit;
     }
 
+    public ObservableList<Employee> getFormerEmployees() {
+        return formerEmployees;
+    }
 }
