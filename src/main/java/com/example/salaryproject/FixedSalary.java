@@ -15,6 +15,7 @@ public class FixedSalary extends SalaryRecord {
         this.baseMonthlySalary = baseMonthlySalary;
         this.overTimeHours = overTimeHours;
         this.overTimeRate = overTimeRate;
+        department.setHeadCount(department.getHeadCount() + 1);
     }
 
     public double getBaseMonthlySalary() {

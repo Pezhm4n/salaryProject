@@ -11,6 +11,7 @@ public class HourlySalary extends SalaryRecord {
         super(startDate, endDate, department, status);
         this.hourlyRate = hourlyRate;
         this.hoursWorked = hoursWorked;
+        department.setHeadCount(department.getHeadCount() + 1);
     }
 
     public double getHourlyRate() {

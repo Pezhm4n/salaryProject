@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 public class Employee {
     private String firstName;
@@ -26,6 +27,7 @@ public class Employee {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.salaryRecords = salaryRecords == null ? FXCollections.observableArrayList() : FXCollections.observableArrayList(salaryRecords);
+
     }
 
     public String getFirstName() {
@@ -128,24 +130,25 @@ public class Employee {
         if (lastRecord != null) {
             lastRecord.setEndDate(LocalDate.now());
         }
-
         if (newDepartment == null) {
             assert lastRecord != null;
             newDepartment = lastRecord.getDepartment();
         }
         else {
             assert lastRecord != null;
-            lastRecord.getDepartment().removeEmployee(this);
+            Department lastDepartment = lastRecord.getDepartment();
+            lastDepartment.removeEmployee(this);
+            lastDepartment.setHeadCount(lastDepartment.getHeadCount() - 1);
             newDepartment.addEmployee(this);
         }
         if (newStatus == null) {
             newStatus = lastRecord.getStatus();
         }
-
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = null;
         FixedSalary newRecord = new FixedSalary(startDate, endDate, newDepartment, newStatus, baseMonthlySalary, overTimeHours, overTimeRate);
         salaryRecords.add(newRecord);
+
     }
     public void newCommissionSalaryRecord(Department newDepartment, Status newStatus, double commissionRate, double totalSales) {
         SalaryRecord lastRecord = getCurrentSalaryRecord();
@@ -156,6 +159,13 @@ public class Employee {
         if (newDepartment == null) {
             assert lastRecord != null;
             newDepartment = lastRecord.getDepartment();
+        }
+        else {
+            assert lastRecord != null;
+            Department lastDepartment = lastRecord.getDepartment();
+            lastDepartment.removeEmployee(this);
+            lastDepartment.setHeadCount(lastDepartment.getHeadCount() - 1);
+            newDepartment.addEmployee(this);
         }
         if (newStatus == null) {
             assert lastRecord != null;
@@ -177,6 +187,13 @@ public class Employee {
             assert lastRecord != null;
             newDepartment = lastRecord.getDepartment();
         }
+        else {
+            assert lastRecord != null;
+            Department lastDepartment = lastRecord.getDepartment();
+            lastDepartment.removeEmployee(this);
+            lastDepartment.setHeadCount(lastDepartment.getHeadCount() - 1);
+            newDepartment.addEmployee(this);
+        }
         if (newStatus == null) {
             assert lastRecord != null;
             newStatus = lastRecord.getStatus();
@@ -197,6 +214,13 @@ public class Employee {
             assert lastRecord != null;
             newDepartment = lastRecord.getDepartment();
         }
+        else {
+            assert lastRecord != null;
+            Department lastDepartment = lastRecord.getDepartment();
+            lastDepartment.removeEmployee(this);
+            lastDepartment.setHeadCount(lastDepartment.getHeadCount() - 1);
+            newDepartment.addEmployee(this);
+        }
         if (newStatus == null) {
             assert lastRecord != null;
             newStatus = lastRecord.getStatus();
@@ -207,24 +231,29 @@ public class Employee {
         HourlySalary newRecord = new HourlySalary(startDate, endDate, newDepartment, newStatus, hourlyRate, hoursWorked);
         salaryRecords.add(newRecord);
     }
-    public void newManagerSalaryRecord(Department newDepartment, Status newStatus, double baseMonthlySalary, double commissionRate, double netProfitOfDepartment, double sharesGranted, double currentSharePrice, double bonus) {
+    public void newManagerSalaryRecord(Department department, Status newStatus, double baseMonthlySalary, double commissionRate, double netProfitOfDepartment, double sharesGranted, double currentSharePrice, double bonus) {
         SalaryRecord lastRecord = getCurrentSalaryRecord();
         if (lastRecord != null) {
             lastRecord.setEndDate(LocalDate.now());
-        }
 
-        if (newDepartment == null) {
-            assert lastRecord != null;
-            newDepartment = lastRecord.getDepartment();
+            if (department == null) {
+                department = Objects.requireNonNull(lastRecord).getDepartment();
+            } else {
+                department = lastRecord.getDepartment();
+
+            }
+            if (newStatus == null) {
+                newStatus = lastRecord.getStatus();
+            }
         }
-        if (newStatus == null) {
-            assert lastRecord != null;
-            newStatus = lastRecord.getStatus();
-        }
+        department.removeEmployee(this);
+        department.addFormerManager(this);
+        department.decrementHeadCount();
+        department.addEmployee(this);
 
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = null;
-        ManagerSalary newRecord = new ManagerSalary(startDate, endDate, newDepartment, newStatus, baseMonthlySalary, commissionRate, netProfitOfDepartment, sharesGranted, currentSharePrice, bonus);
+        ManagerSalary newRecord = new ManagerSalary(startDate, endDate, department, newStatus, baseMonthlySalary, commissionRate, netProfitOfDepartment, sharesGranted, currentSharePrice, bonus);
         salaryRecords.add(newRecord);
     }
 

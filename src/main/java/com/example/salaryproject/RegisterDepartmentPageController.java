@@ -58,7 +58,7 @@ public class RegisterDepartmentPageController {
             int capacity = Integer.parseInt(capacityText);
 
             // Create new Department object
-            Department newDepartment = new Department(name, capacity, description);
+            Department newDepartment = new Department(name, capacity,0,  description);
             newDepartment.setOrganization(selectedOrganization); // Set the organization for the department
 
             // Ensure selectedOrganization is not null

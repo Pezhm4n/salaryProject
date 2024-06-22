@@ -10,6 +10,7 @@ public class CommissionSalary extends SalaryRecord {
         super(startDate, endDate, department, status);
         this.commissionRate = commissionRate;
         this.totalSales = totalSales;
+        department.setHeadCount(department.getHeadCount() + 1);
     }
 
     public double getCommissionRate() {

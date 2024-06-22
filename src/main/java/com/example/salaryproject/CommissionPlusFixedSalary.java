@@ -8,6 +8,7 @@ public class CommissionPlusFixedSalary extends CommissionSalary{
     public CommissionPlusFixedSalary(LocalDate startDate, LocalDate endDate, Department department, Status status, double commissionRate, double totalSales, double fixedAmount){
         super(startDate, endDate, department, status, commissionRate, totalSales);
         this.fixedAmount = fixedAmount;
+        department.setHeadCount(department.getHeadCount() + 1);
     }
 
     public double getFixedAmount() {
