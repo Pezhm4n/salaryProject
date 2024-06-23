@@ -23,15 +23,13 @@
             <Label alignment="CENTER" text="Department: " textFill="#787983" />
             <Label fx:id="departmentNameLabel" alignment="CENTER" styleClass="department-name" />
 
-            <Button focusTraversable="true" maxWidth="Infinity" onAction="#handleAddEmployee" styleClass="action-button" text="Add Employee" />
-            <Button focusTraversable="true" maxWidth="Infinity" onAction="#handleRemoveEmployee" styleClass="action-button" text="Remove Employee" />
-            <Button focusTraversable="true" maxWidth="Infinity" onAction="#handleGetEmployees" styleClass="action-button" text="Get Employees" />
-            <Button focusTraversable="true" maxWidth="Infinity" onAction="#handleGetEmployeeByNationalId" styleClass="action-button" text="Get Employee by National ID" />
-            <Button focusTraversable="true" maxWidth="Infinity" onAction="#handleMergeInto" styleClass="action-button" text="Merge Into" />
-            <Button focusTraversable="true" maxWidth="Infinity" onAction="#handleSplitInto" styleClass="action-button" text="Split Into" />
-            <Button focusTraversable="true" maxWidth="Infinity" onAction="#handleActivate" styleClass="action-button" text="Activate" />
-            <Button focusTraversable="true" maxWidth="Infinity" onAction="#handleDeactivate" styleClass="action-button" text="Deactivate" />
-            <Button focusTraversable="true" maxWidth="Infinity" onAction="#handleBack" styleClass="back-button" text="Back" />
+            <Button fx:id="addEmployeeButton" focusTraversable="true" maxWidth="Infinity" onAction="#handleAddEmployee" styleClass="action-button" text="Add Employee" />
+            <Button fx:id="removeEmployeeButton" focusTraversable="true" maxWidth="Infinity" onAction="#handleRemoveEmployee" styleClass="action-button" text="Remove Employee" />
+            <Button fx:id="changeManagerButton" focusTraversable="true" maxWidth="Infinity" onAction="#handleChangeManager" styleClass="action-button" text="Change Manager" />
+            <Button fx:id="currentManagerButton" focusTraversable="true" maxWidth="Infinity" onAction="#handleCurrentManager" styleClass="action-button" text="Get Current Manager" />
+            <Button fx:id="getEmployeesButton" focusTraversable="true" maxWidth="Infinity" onAction="#handleGetEmployees" styleClass="action-button" text="View and Manage Employees" />
+            <Button fx:id="getEmployeeByNationalIdButton" focusTraversable="true" maxWidth="Infinity" onAction="#handleGetEmployeeByNationalId" styleClass="action-button" text="Get and Manage by National ID" />
+            <Button fx:id="backButton" focusTraversable="true" maxWidth="Infinity" onAction="#handleBack" styleClass="back-button" text="Back" />
         </VBox>
     </content>
 </ScrollPane>

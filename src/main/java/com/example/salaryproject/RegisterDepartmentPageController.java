@@ -58,13 +58,17 @@ public class RegisterDepartmentPageController {
             int capacity = Integer.parseInt(capacityText);
 
             // Create new Department object
-            Department newDepartment = new Department(name, capacity,0,  description);
+            Department newDepartment = new Department(name, capacity, 0, description);
             newDepartment.setOrganization(selectedOrganization); // Set the organization for the department
 
             // Ensure selectedOrganization is not null
             if (selectedOrganization != null) {
                 // Add department to the organization
                 selectedOrganization.addDepartment(newDepartment);
+
+                // Save the new department to CSV
+                newDepartment.saveToCSV();
+
                 // Update the department list in the DepartmentSelectionPage
                 if (departmentSelectionController != null) {
                     departmentSelectionController.refreshDepartmentList();
@@ -84,6 +88,7 @@ public class RegisterDepartmentPageController {
             }
         }
     }
+
 
     private boolean isValidName(String name) {
         return name.matches("[a-zA-Z\\s]{1,30}");

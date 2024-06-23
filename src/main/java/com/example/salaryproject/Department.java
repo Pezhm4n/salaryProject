@@ -15,7 +15,6 @@ public class Department {
     private ObservableList<Employee> formerManagers;
     private ObservableList<Employee> formerEmployees;
 
-
     private String description;
     private Organization organization;
 
@@ -33,6 +32,11 @@ public class Department {
         this.formerManagers = formerManagers == null ? FXCollections.observableArrayList() : FXCollections.observableArrayList(formerManagers);
         this.formerEmployees = formerEmployees == null ? FXCollections.observableArrayList() : FXCollections.observableArrayList(formerEmployees);
         incrementHeadCount();
+    }
+
+
+    public void saveToCSV() {
+        WriteToCSV.writeDepartmentDataToCsv(this);
     }
 
     public String getName() {
@@ -106,10 +110,15 @@ public class Department {
         employees.add(employee);
     }
 
-    public void removeEmployee(Employee employee){
+    public void removeEmployee(Employee employee) {
         employees.remove(employee);
         decrementHeadCount();
+        formerEmployees.add(employee);
+        WriteToCSV.removeEmployeeFromDepartment(this, employee);
+        WriteToCSV.addFormerEmployeeToDepartment(this, employee);
     }
+
+
 
     public ObservableList<Employee> getEmployees() {
         return employees;

@@ -130,6 +130,12 @@ public class AddEmployeePageController {
                 long nationalId = Long.parseLong(nationalIdText);
                 long phoneNumber = Long.parseLong(phoneNumberText);
 
+                if (selectedDepartment == null) {
+                    messageLabel.setText("No department selected!");
+                    messageLabel.setStyle("-fx-text-fill: red;");
+                    return;
+                }
+
                 // Create new Employee object
                 Employee newEmployee = new Employee(firstName, lastName, nationalId, dateOfBirth, email, phoneNumber);
 

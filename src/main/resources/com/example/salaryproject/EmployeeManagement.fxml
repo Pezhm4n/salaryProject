@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<ScrollPane fitToWidth="true" prefHeight="555.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.salaryproject.EmployeeManagementController">
+    <content>
+        <VBox alignment="CENTER" spacing="20" styleClass="root" stylesheets="@css/common.css, @css/button.css">
+            <padding>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </padding>
+
+            <Label alignment="CENTER" styleClass="title" text="Employee Management">
+                <font>
+                    <Font name="System Bold" size="24.0" />
+                </font>
+            </Label>
+
+            <Label alignment="CENTER" text="Employee: " textFill="#787983">
+            <font>
+               <Font size="14.0" />
+            </font></Label>
+            <Label fx:id="employeeNameLabel" alignment="CENTER" styleClass="department-name" />
+
+
+            <Button focusTraversable="true" maxWidth="Infinity" onAction="#showEmployeeInfo" styleClass="action-button" text="Show Employee Info" />
+            <Button focusTraversable="true" maxWidth="Infinity" onAction="#getReceivedSalary" styleClass="action-button" text="Get Received Salary" />
+            <Button focusTraversable="true" maxWidth="Infinity" onAction="#getCurrentSalaryRecord" styleClass="action-button" text="Get Current Salary Record" />
+            <Button focusTraversable="true" maxWidth="Infinity" onAction="#addNewSalaryRecord" styleClass="action-button" text="Add New Salary Record" />
+            <Button focusTraversable="true" maxWidth="Infinity" onAction="#getAllSalaryRecords" styleClass="action-button" text="Get All Salary Records" />
+            <Button focusTraversable="true" maxWidth="Infinity" onAction="#getCurrentDepartment" styleClass="action-button" text="Get Current Department" />
+            <Button focusTraversable="true" maxWidth="Infinity" onAction="#changeDepartment" styleClass="action-button" text="Change Department" />
+            <Button focusTraversable="true" maxWidth="Infinity" onAction="#getCurrentEmployeeType" styleClass="action-button" text="Get Current Employee Type" />
+            <Button focusTraversable="true" maxWidth="Infinity" onAction="#changeEmployeeType" styleClass="action-button" text="Change Employee Type" />
+            <Button focusTraversable="true" maxWidth="Infinity" onAction="#getCurrentStatus" styleClass="action-button" text="Get Current Status" />
+            <Button focusTraversable="true" maxWidth="Infinity" onAction="#changeStatus" styleClass="action-button" text="Change Status" />
+            <Button focusTraversable="true" maxWidth="Infinity" onAction="#handleBack" styleClass="back-button" text="Back" />
+        </VBox>
+    </content>
+</ScrollPane>
