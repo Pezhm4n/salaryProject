@@ -44,7 +44,8 @@ public class RegisterOrganizationPageController {
                 double sharePrice = Double.parseDouble(sharePriceText);
 
                 // Create new Organization object
-                Organization organization = new Organization(name, totalShares, sharesAllocated, sharePrice);
+                // طبق  فیلد های جدید سازمان تغییرش بده
+                Organization organization = new Organization(name, totalShares, sharePrice);
 
                 // Save organization to file or database
                 // For simplicity, let's assume we have a static list of organizations

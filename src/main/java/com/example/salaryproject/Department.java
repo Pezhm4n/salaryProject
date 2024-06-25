@@ -14,19 +14,19 @@ public class Department {
     private ObservableList<Employee> employees;
     private ObservableList<Employee> formerManagers;
     private ObservableList<Employee> formerEmployees;
-
-    private String description;
+    private String workField;
     private Organization organization;
 
-    public Department(String name, int capacity, int headCount, String description) {
-        this(name, capacity, headCount, description, null, null, null, null);
+    public Department(Organization organization, String name, int capacity, int headCount, String description) {
+        this(organization, name, capacity, headCount, description, null, null, null, null);
     }
 
-    public Department(String name, int capacity, int headCount, String description, FinancialRecord[] financialRecords, Employee[] employees, Employee[] formerManagers, Employee[] formerEmployees) {
+    public Department(Organization organization,String name, int capacity, int headCount, String description, FinancialRecord[] financialRecords, Employee[] employees, Employee[] formerManagers, Employee[] formerEmployees) {
+        this.organization = organization;
         this.name = name;
         this.capacity = capacity;
         this.headCount = headCount;
-        this.description = description;
+        this.workField = description;
         this.employees = employees == null ? FXCollections.observableArrayList() : FXCollections.observableArrayList(employees);
         this.financialRecords = financialRecords == null ? FXCollections.observableArrayList() : FXCollections.observableArrayList(financialRecords);
         this.formerManagers = formerManagers == null ? FXCollections.observableArrayList() : FXCollections.observableArrayList(formerManagers);
@@ -69,11 +69,11 @@ public class Department {
     }
 
     public String getDescription() {
-        return description;
+        return workField;
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.workField = description;
     }
 
     public void setCurrentManager(Employee manager){
@@ -88,15 +88,8 @@ public class Department {
         return null;
     }
 
-    public void changeManager(Employee newManager, double baseMonthlySalary, double commissionRate, double netProfitOfDepartment, double sharesGranted, double currentSharePrice, double bonus){
-        if (manager != null){
-            if(!manager.getSalaryRecords().isEmpty())
-                manager.getCurrentSalaryRecord().setEndDate(LocalDate.now());
-            addFormerManager(manager);
-        }
-
-        newManager.newManagerSalaryRecord(this, newManager.getCurrentStatus(), baseMonthlySalary, commissionRate, netProfitOfDepartment, sharesGranted, currentSharePrice, bonus);
-        manager = newManager;
+    public void changeManager(Employee newManager, Status status, double baseMonthlySalary, double commissionRate, double netProfitOfDepartment, double sharesGranted, double currentSharePrice, double bonus){
+        newManager.newManagerSalaryRecord(this, status, baseMonthlySalary, commissionRate, netProfitOfDepartment, sharesGranted, currentSharePrice, bonus);
     }
     public ObservableList<Employee> getFormerManagers() {
         return formerManagers;
@@ -107,18 +100,17 @@ public class Department {
     }
 
     public void addEmployee(Employee employee){
+        incrementHeadCount();
         employees.add(employee);
     }
 
-    public void removeEmployee(Employee employee) {
+    public void removeEmployee(Employee employee){
         employees.remove(employee);
         decrementHeadCount();
         formerEmployees.add(employee);
         WriteToCSV.removeEmployeeFromDepartment(this, employee);
         WriteToCSV.addFormerEmployeeToDepartment(this, employee);
     }
-
-
 
     public ObservableList<Employee> getEmployees() {
         return employees;
@@ -151,6 +143,18 @@ public class Department {
     }
     public double calculateVariance(double budget, double netProfit) {
         return budget - netProfit;
+    }
+
+    public double calculateTotalBudget() {
+        return financialRecords.stream().mapToDouble(FinancialRecord::getBudget).sum();
+    }
+
+    public double calculateTotalRevenue() {
+        return financialRecords.stream().mapToDouble(record -> record.getRevenue() != null ? record.getRevenue() : 0).sum();
+    }
+
+    public double calculateTotalCosts() {
+        return financialRecords.stream().mapToDouble(record -> record.getCosts() != null ? record.getCosts() : 0).sum();
     }
 
     public ObservableList<Employee> getFormerEmployees() {

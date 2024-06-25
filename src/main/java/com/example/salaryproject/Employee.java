@@ -16,7 +16,7 @@ public class Employee {
     private long phoneNumber;
     private ObservableList<SalaryRecord> salaryRecords;
 
-    public Employee(String firstName, String lastName, long nationalId, LocalDate dateOfBirth, String email, long phoneNumber) {
+    public Employee(String firstName, String lastName, long nationalId, LocalDate dateOfBirth, String email, long phoneNumber){
         this(firstName, lastName, nationalId, dateOfBirth, email, phoneNumber, null);
     }
 
@@ -84,6 +84,13 @@ public class Employee {
         return null;
     }
 
+    public void addSalaryRecord(SalaryRecord salaryRecord){
+        if(salaryRecord != null) salaryRecords.add(salaryRecord);
+    }
+
+    public void removeSalaryRecord(SalaryRecord salaryRecord){
+        if(salaryRecord != null) salaryRecords.remove(salaryRecord);
+    }
     public double getCurrentSalary() {
         return getCurrentSalaryRecord().calculateTotalSalary();
     }
@@ -126,17 +133,19 @@ public class Employee {
 
     public void newFixedSalaryRecord(Department newDepartment, Status newStatus, double baseMonthlySalary, double overTimeHours, double overTimeRate) {
         SalaryRecord lastRecord = getCurrentSalaryRecord();
+        boolean inSameDepartment = false;
 
         if (lastRecord != null) {
             lastRecord.setEndDate(LocalDate.now());
 
             if (newDepartment == null) {
                 newDepartment = lastRecord.getDepartment();
-            } else {
+            } else if(lastRecord.getDepartment() != newDepartment){
                 Department lastDepartment = lastRecord.getDepartment();
                 lastDepartment.removeEmployee(this);
-                lastDepartment.setHeadCount(lastDepartment.getHeadCount() - 1);
-            }
+                }
+            else
+                inSameDepartment = true;
 
             if (newStatus == null) {
                 newStatus = lastRecord.getStatus();
@@ -146,33 +155,38 @@ public class Employee {
             if (newDepartment == null || newStatus == null) {
                 throw new IllegalArgumentException("For the first salary record, both department and status must be provided.");
             }
-        }
-
-        if (newDepartment != null) {
-            newDepartment.addEmployee(this);
         }
 
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = null; // This should be set to null for new records
         FixedSalary newRecord = new FixedSalary(startDate, endDate, newDepartment, newStatus, baseMonthlySalary, overTimeHours, overTimeRate);
         salaryRecords.add(newRecord);
-        saveToCSV(newDepartment);
+
+        if(inSameDepartment) {
+            WriteToCSV.addSalaryRecordToEmployee(newDepartment, this, newRecord);
+        }
+        else{
+            newDepartment.addEmployee(this);
+            WriteToCSV.addEmployeeToDepartment(newDepartment, this);
+        }
     }
 
 
     public void newCommissionSalaryRecord(Department newDepartment, Status newStatus, double commissionRate, double totalSales) {
         SalaryRecord lastRecord = getCurrentSalaryRecord();
+        boolean inSameDepartment = false;
 
         if (lastRecord != null) {
             lastRecord.setEndDate(LocalDate.now());
 
             if (newDepartment == null) {
                 newDepartment = lastRecord.getDepartment();
-            } else {
+            } else if(lastRecord.getDepartment() != newDepartment){
                 Department lastDepartment = lastRecord.getDepartment();
                 lastDepartment.removeEmployee(this);
-                lastDepartment.setHeadCount(lastDepartment.getHeadCount() - 1);
             }
+            else
+                inSameDepartment = true;
 
             if (newStatus == null) {
                 newStatus = lastRecord.getStatus();
@@ -182,33 +196,38 @@ public class Employee {
             if (newDepartment == null || newStatus == null) {
                 throw new IllegalArgumentException("For the first salary record, both department and status must be provided.");
             }
-        }
-
-        if (newDepartment != null) {
-            newDepartment.addEmployee(this);
         }
 
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = null; // This should be set to null for new records
         CommissionSalary newRecord = new CommissionSalary(startDate, endDate, newDepartment, newStatus, commissionRate, totalSales);
         salaryRecords.add(newRecord);
-        saveToCSV(newDepartment);
+
+        if(inSameDepartment) {
+            WriteToCSV.addSalaryRecordToEmployee(newDepartment, this, newRecord);
+        }
+        else {
+            newDepartment.addEmployee(this);
+            WriteToCSV.addEmployeeToDepartment(newDepartment, this);
+        }
     }
 
 
     public void newCommissionPlusFixedSalaryRecord(Department newDepartment, Status newStatus, double commissionRate, double totalSales, double fixedAmount) {
         SalaryRecord lastRecord = getCurrentSalaryRecord();
+        boolean inSameDepartment = false;
 
         if (lastRecord != null) {
             lastRecord.setEndDate(LocalDate.now());
 
             if (newDepartment == null) {
                 newDepartment = lastRecord.getDepartment();
-            } else {
+            } else if(lastRecord.getDepartment() != newDepartment){
                 Department lastDepartment = lastRecord.getDepartment();
                 lastDepartment.removeEmployee(this);
-                lastDepartment.setHeadCount(lastDepartment.getHeadCount() - 1);
             }
+            else
+                inSameDepartment = true;
 
             if (newStatus == null) {
                 newStatus = lastRecord.getStatus();
@@ -218,33 +237,38 @@ public class Employee {
             if (newDepartment == null || newStatus == null) {
                 throw new IllegalArgumentException("For the first salary record, both department and status must be provided.");
             }
-        }
-
-        if (newDepartment != null) {
-            newDepartment.addEmployee(this);
         }
 
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = null; // This should be set to null for new records
         CommissionPlusFixedSalary newRecord = new CommissionPlusFixedSalary(startDate, endDate, newDepartment, newStatus, commissionRate, totalSales, fixedAmount);
         salaryRecords.add(newRecord);
-        saveToCSV(newDepartment);
+
+        if(inSameDepartment) {
+            WriteToCSV.addSalaryRecordToEmployee(newDepartment, this, newRecord);
+        }
+        else {
+            newDepartment.addEmployee(this);
+            WriteToCSV.addEmployeeToDepartment(newDepartment, this);
+        }
     }
 
 
     public void newHourlySalaryRecord(Department newDepartment, Status newStatus, double hourlyRate, double hoursWorked) {
         SalaryRecord lastRecord = getCurrentSalaryRecord();
+        boolean inSameDepartment = false;
 
         if (lastRecord != null) {
             lastRecord.setEndDate(LocalDate.now());
 
             if (newDepartment == null) {
                 newDepartment = lastRecord.getDepartment();
-            } else {
+            } else if(lastRecord.getDepartment() != newDepartment){
                 Department lastDepartment = lastRecord.getDepartment();
                 lastDepartment.removeEmployee(this);
-                lastDepartment.setHeadCount(lastDepartment.getHeadCount() - 1);
             }
+            else
+                inSameDepartment = true;
 
             if (newStatus == null) {
                 newStatus = lastRecord.getStatus();
@@ -256,55 +280,61 @@ public class Employee {
             }
         }
 
-        if (newDepartment != null) {
-            newDepartment.addEmployee(this);
-        }
-
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = null; // This should be set to null for new records
         HourlySalary newRecord = new HourlySalary(startDate, endDate, newDepartment, newStatus, hourlyRate, hoursWorked);
         salaryRecords.add(newRecord);
-        saveToCSV(newDepartment);
-    }
 
+    if (newDepartment != null) {
+        if (inSameDepartment) {
+            WriteToCSV.addSalaryRecordToEmployee(newDepartment, this, newRecord);
+        } else {
+            newDepartment.addEmployee(this);
+            WriteToCSV.addEmployeeToDepartment(newDepartment, this);
+        }
+    }
+    }
     public void newManagerSalaryRecord(Department department, Status newStatus, double baseMonthlySalary, double commissionRate, double netProfitOfDepartment, double sharesGranted, double currentSharePrice, double bonus) {
         SalaryRecord lastRecord = getCurrentSalaryRecord();
+        boolean becameManagerInSameDepartment = false;
+
         if (lastRecord != null) {
             lastRecord.setEndDate(LocalDate.now());
 
             if (department == null) {
-                department = Objects.requireNonNull(lastRecord).getDepartment();
-            } else {
                 department = lastRecord.getDepartment();
+            } else if(lastRecord.getDepartment() != department){
+                Department lastDepartment = lastRecord.getDepartment();
+                lastDepartment.removeEmployee(this);
             }
+            else
+                becameManagerInSameDepartment = true;
+
             if (newStatus == null) {
                 newStatus = lastRecord.getStatus();
             }
+        } else {
+            // اگر این اولین رکورد حقوق کارمند است
+            if (department == null || newStatus == null) {
+                throw new IllegalArgumentException("For the first salary record, both department and status must be provided.");
+            }
         }
-
-        Employee formerManager = department.getCurrentManager();
-        department.removeEmployee(this);
-        department.decrementHeadCount();
-        department.addEmployee(this);
 
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = null;
         ManagerSalary newRecord = new ManagerSalary(startDate, endDate, department, newStatus, baseMonthlySalary, commissionRate, netProfitOfDepartment, sharesGranted, currentSharePrice, bonus);
         salaryRecords.add(newRecord);
 
-        // انتقال مدیر قبلی به بخش "Former Managers"
-        if (formerManager != null) {
+        if(!becameManagerInSameDepartment)
+            department.addEmployee(this);
+
+        Employee formerManager = department.getCurrentManager();
+        if (formerManager != null)
             department.addFormerManager(formerManager);
-        }
 
-        // فراخوانی متد مناسب برای ذخیره اطلاعات مدیر
-        WriteToCSV.changeManagerOfDepartment(this, formerManager, department);
         department.setCurrentManager(this);
-
-        // ذخیره تغییرات در فایل CSV
-        WriteToCSV.writeDepartmentDataToCsv(department);
+        WriteToCSV.changeManagerOfDepartment(this, formerManager, department, becameManagerInSameDepartment);
     }
-
 
     public ObservableList<SalaryRecord> getSalaryRecords() {
         return salaryRecords;

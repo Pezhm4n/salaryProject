@@ -5,6 +5,11 @@ import com.opencsv.CSVWriter;
 import com.opencsv.CSVWriterBuilder;
 import com.opencsv.ICSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import java.io.*;
 import java.time.LocalDate;
@@ -14,14 +19,84 @@ import java.util.List;
 public class WriteToCSV {
     public static final String RESOURCE_DIRECTORY = "src/main/resources/com/example/salaryproject/";
 
-    public static void writeDepartmentDataToCsv(Department department) {
-        try (CSVWriter writer = (CSVWriter) new CSVWriterBuilder(new FileWriter(RESOURCE_DIRECTORY + department.getName() + ".csv")
-        )
+    public static void creatOrganization(Organization organization){
+        String directoryPath = RESOURCE_DIRECTORY + organization.getName();
+        createFolderIfNotExists(Paths.get(directoryPath));
+
+        try (CSVWriter writer = (CSVWriter) new CSVWriterBuilder(new FileWriter(directoryPath + "/" + "organization_info" + ".csv"))
                 .withQuoteChar(ICSVWriter.NO_QUOTE_CHARACTER)
                 .build()) {
 
             List<String[]> data = new ArrayList<>();
 
+            data.add(new String[]{"Name", "Industry", "Foundation Year", "HeadQuarters", "CEO", "Total Shares", "Share Price"});
+            data.add(new String[]{organization.getName(), organization.getIndustry(), String.valueOf(organization.getFoundationYear()), organization.getHeadquarters(), organization.getCEO(), String.valueOf(organization.getTotalShares()), String.valueOf(organization.getSharePrice())});
+
+            writer.writeAll(data);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if(!organization.getDepartments().isEmpty()){
+        for(Department department : organization.getDepartments())
+            writeDepartmentDataToCsv(department);
+        }
+    }
+    private static void createFolderIfNotExists(Path folderPath) {
+        if (folderPath != null) {
+            try {
+                Files.createDirectories(folderPath);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    private static void deleteOrganization(Organization organization) {
+        if (organization != null) {
+            try {
+                Files.deleteIfExists(Paths.get(RESOURCE_DIRECTORY + organization.getName()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    private static void deleteDepartment(Department department) {
+        if (department != null) {
+            try {
+                Files.deleteIfExists(Paths.get(RESOURCE_DIRECTORY + department.getOrganization().getName() + "/" + department.getName() + ".csv"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    public static void updateFieldOfOrganization(Organization organization, int fieldIndex, String newValue){
+        ArrayList<String[]> data = readCSV(RESOURCE_DIRECTORY + organization.getName() + "/" + "organization_info" + ".csv");
+            data.get(1)[fieldIndex] = newValue;
+        writeCSV(RESOURCE_DIRECTORY + organization.getName() + "/" + "organization_info" + ".csv", data);
+    }
+
+    public static void writeDepartmentDataToCsv(Department department) {
+        try (CSVWriter writer = (CSVWriter) new CSVWriterBuilder(new FileWriter(RESOURCE_DIRECTORY + department.getOrganization().getName() + "/" + department.getName() + ".csv")
+        )
+                .withQuoteChar(ICSVWriter.NO_QUOTE_CHARACTER)
+                .build()) {
+
+            List<String[]> data = new ArrayList<>();
+            
+//            Each department is listed with its basic details, followed by its financial records, and then its current manager, employees, former managers, former employees with their salary records.",
+//                Structure:
+//                1. Department Information: Name, Head Count, Capacity, Description
+//                2. Financial Records: Start Date, End Date, Budget, Revenue, Costs
+//                3. Employee Information: First Name, Last Name, National ID, Date of Birth, Email, Phone Number
+//                4. Salary Records:
+//                  [1] Fixed Salary: Start Date, End Date, Department Name, Status, Employee Type, Base Monthly Salary, Overtime Hours, Overtime Rate
+//                  [2] Commission Salary: Start Date, End Date, Department Name, Status, Employee Type, Commission Rate, Total Sales",
+//                  [3] Commission Plus Fixed Salary: Start Date, End Date, Department Name, Status, Employee Type, Base Monthly Salary, Commission Rate, Total Sales
+//                  [4] Hourly Salary: Start Date, End Date, Department Name, Status, Employee Type, Hourly Rate, Hours Worked
+//                  [5] Manager Salary: Start Date, End Date, Department Name, Status, Employee Type, Base Monthly Salary, Commission Rate, Department Net Profit, Shares Granted, Current Share Price, Bonus
+//                
+            
             data.add(new String[]{"Department:"});
             data.add(new String[]{department.getName(), String.valueOf(department.getHeadCount()), String.valueOf(department.getCapacity()), department.getDescription()});
             data.add(new String[]{""});  // Blank line
@@ -64,7 +139,8 @@ public class WriteToCSV {
                 data.addAll(employeeInfoToCSVLines(formerEmployee));
                 data.add(new String[]{""});  // Blank line
             }
-            data.add(new String[]{""});  // Blank line after former employees
+            if(formerEmployees.isEmpty())
+                data.add(new String[]{""});  // Blank line
 
             // Write all the collected data to the CSV file
             writer.writeAll(data);
@@ -78,10 +154,6 @@ public class WriteToCSV {
 
         // Write employee information
         neWEmployeeInfo.add(new String[]{employee.getFirstName(), employee.getLastName(), String.valueOf(employee.getNationalId()), employee.getDateOfBirth().toString(), employee.getEmail(), String.valueOf(employee.getPhoneNumber())});
-        neWEmployeeInfo.add(new String[]{""});
-
-        // Write salary records
-        neWEmployeeInfo.add(new String[]{"Salary Records:"});
         for (SalaryRecord record : employee.getSalaryRecords()) {
             neWEmployeeInfo.add(salaryRecordToCSVLine(record));
         }
@@ -125,18 +197,18 @@ public class WriteToCSV {
         return salaryData.toArray(new String[0]);
     }
     public static void updateFieldOfDepartment(Department department, int fieldIndex, String newValue) {
-        ArrayList<String[]> data = readCSV(RESOURCE_DIRECTORY + department.getName() + ".csv");
+        ArrayList<String[]> data = readCSV(RESOURCE_DIRECTORY + department.getOrganization().getName() + "/" + department.getName() + ".csv");
         for (int i = 0; i < data.size(); i++) {
             if (data.get(i)[0].startsWith("Department:")) {
                 data.get(i + 1)[fieldIndex] = newValue;
                 break;
             }
         }
-        writeCSV(RESOURCE_DIRECTORY + department.getName() + ".csv", data);
+        writeCSV(RESOURCE_DIRECTORY + department.getOrganization().getName() + "/" + department.getName() + ".csv", data);
     }
 
     public static void addFinancialRecordToDepartment(Department department, FinancialRecord record){
-        ArrayList<String[]> data = readCSV(RESOURCE_DIRECTORY + department.getName() + ".csv");
+        ArrayList<String[]> data = readCSV(RESOURCE_DIRECTORY + department.getOrganization().getName() + "/" + department.getName() + ".csv");
         boolean inFinancialRecordSection = false;
 
         for (int i = 0; i < data.size(); i++) {
@@ -150,11 +222,11 @@ public class WriteToCSV {
             }
 
         }
-        writeCSV(RESOURCE_DIRECTORY + department.getName() + ".csv", data);
+        writeCSV(RESOURCE_DIRECTORY + department.getOrganization().getName() + "/" + department.getName() + ".csv", data);
     }
 
     public static void removeFinancialRecordFromDepartment(Department department, FinancialRecord record){
-        ArrayList<String[]> data = readCSV(RESOURCE_DIRECTORY + department.getName() + ".csv");
+        ArrayList<String[]> data = readCSV(RESOURCE_DIRECTORY + department.getOrganization().getName() + "/" + department.getName() + ".csv");
         boolean inFinancialRecordSection = false;
 
         for (int i = 0; i < data.size(); i++) {
@@ -167,10 +239,10 @@ public class WriteToCSV {
                 break;
             }
         }
-        writeCSV(RESOURCE_DIRECTORY + department.getName() + ".csv", data);
+        writeCSV(RESOURCE_DIRECTORY + department.getOrganization().getName() + "/" + department.getName() + ".csv", data);
     }
     public static void updateFieldOfFinancialRecord(Department department, FinancialRecord record, int fieldIndex, String newValue) {
-        ArrayList<String[]> data = readCSV(RESOURCE_DIRECTORY + department.getName() + ".csv");
+        ArrayList<String[]> data = readCSV(RESOURCE_DIRECTORY + department.getOrganization().getName() + "/" + department.getName() + ".csv");
         boolean inFinancialRecordSection = false;
 
         for (int i = 0; i < data.size(); i++) {
@@ -184,15 +256,15 @@ public class WriteToCSV {
             }
 
         }
-        writeCSV(RESOURCE_DIRECTORY + department.getName() + ".csv", data);
+        writeCSV(RESOURCE_DIRECTORY + department.getOrganization().getName() + "/" + department.getName() + ".csv", data);
     }
     public static void addEmployeeToDepartment(Department department, Employee newEmployee) {
-        ArrayList<String[]> data = readCSV(RESOURCE_DIRECTORY + department.getName() + ".csv");
+        ArrayList<String[]> data = readCSV(RESOURCE_DIRECTORY + department.getOrganization().getName() + "/" + department.getName() + ".csv");
 
         for (int i = 0; i < data.size(); i++){
             if (data.get(i)[0].startsWith("Former Managers:")) {
                 List<String[]> employeeInfo = employeeInfoToCSVLines(newEmployee);
-                if(data.get(i - 2)[0].startsWith("Former Employees:"))
+                if(data.get(i - 2)[0].startsWith("Employees:"))
                     data.addAll(i - 1 , employeeInfo);
                 else {
                     employeeInfo.add(new String[]{""});
@@ -201,10 +273,10 @@ public class WriteToCSV {
                 break;
             }
         }
-        writeCSV(RESOURCE_DIRECTORY + department.getName() + ".csv", data);
+        writeCSV(RESOURCE_DIRECTORY + department.getOrganization().getName() + "/" + department.getName() + ".csv", data);
     }
     public static void removeEmployeeFromDepartment(Department department, Employee employee) {
-        ArrayList<String[]> data = readCSV(RESOURCE_DIRECTORY + department.getName() + ".csv");
+        ArrayList<String[]> data = readCSV(RESOURCE_DIRECTORY + department.getOrganization().getName() + "/" + department.getName() + ".csv");
         boolean inEmployeesSection = false;
 
         for (int i = 0; i < data.size(); i++) {
@@ -213,20 +285,20 @@ public class WriteToCSV {
             }
             if (inEmployeesSection && data.get(i).length > 2 && data.get(i)[2].equals(String.valueOf(employee.getNationalId()))) {
                 int blankLineCounter = 0;
-                while (blankLineCounter < 2) {
+                while (blankLineCounter < 1) {
                     if (data.get(i).length == 1 && data.get(i)[0].trim().isEmpty()) {
                         blankLineCounter++;
                     }
-
-                    data.remove(i);
+                    if(!data.get(i + 1)[0].equals("Former Managers:") || !data.get(i - 1)[0].equals("Employees:"))
+                        data.remove(i);
                 }
                 break;
             }
         }
-        writeCSV(RESOURCE_DIRECTORY + department.getName() + ".csv", data);
+        writeCSV(RESOURCE_DIRECTORY + department.getOrganization().getName() + "/" + department.getName() + ".csv", data);
     }
     public static void updateFieldOfEmployee(Department department, Employee employee, int fieldIndex, String newValue) {
-        ArrayList<String[]> data = readCSV(RESOURCE_DIRECTORY + department.getName() + ".csv");
+        ArrayList<String[]> data = readCSV(RESOURCE_DIRECTORY + department.getOrganization().getName() + "/" + department.getName() + ".csv");
         boolean inCurrentManagerSection = false;
         boolean inEmployeesSection = false;
         boolean inFormerManagersSection = false;
@@ -280,15 +352,14 @@ public class WriteToCSV {
         }
 
         // Write the updated data back to the CSV
-        writeCSV(RESOURCE_DIRECTORY + department.getName() + ".csv", data);
+        writeCSV(RESOURCE_DIRECTORY + department.getOrganization().getName() + "/" + department.getName() + ".csv", data);
     }
     public static void addSalaryRecordToEmployee(Department department, Employee employee, SalaryRecord record){
-        ArrayList<String[]> data = readCSV(RESOURCE_DIRECTORY + department.getName() + ".csv");
+        ArrayList<String[]> data = readCSV(RESOURCE_DIRECTORY + department.getOrganization().getName() + "/" + department.getName() + ".csv");
         boolean inSalaryRecordSection = false;
 
         for (int i = 0; i < data.size(); i++) {
-            if (data.get(i)[0].equals("Salary Records:") &&
-                    i >= 2  && data.get(i - 2)[2].equals(String.valueOf(employee.getNationalId()))) {
+            if (data.get(i).length > 2 && data.get(i)[2].equals(String.valueOf(employee.getNationalId()))) {
                 inSalaryRecordSection = true;
                 continue;
             }
@@ -300,10 +371,10 @@ public class WriteToCSV {
                     break;
             }
         }
-        writeCSV(RESOURCE_DIRECTORY + department.getName() + ".csv", data);
+        writeCSV(RESOURCE_DIRECTORY + department.getOrganization().getName() + "/" + department.getName() + ".csv", data);
     }
     public static void removeSalaryRecordFromEmployee(Department department, Employee employee, SalaryRecord record){
-        ArrayList<String[]> data = readCSV(RESOURCE_DIRECTORY + department.getName() + ".csv");
+        ArrayList<String[]> data = readCSV(RESOURCE_DIRECTORY + department.getOrganization().getName() + "/" + department.getName() + ".csv");
         boolean inSalaryRecordSection = false;
         boolean inCurrentManagerSection = false;
 
@@ -313,8 +384,7 @@ public class WriteToCSV {
                 inCurrentManagerSection = true;
             else if(data.get(i)[0].equals("Employees:"))
                 inCurrentManagerSection = false;
-            else if (data.get(i)[0].equals("Salary Records:") &&
-                    i >= 2 && data.get(i - 2).length > 0 && data.get(i - 2)[2].equals(String.valueOf(employee.getNationalId()))) {
+            else if (data.get(i).length > 2 && data.get(i)[2].equals(String.valueOf(employee.getNationalId()))) {
                 inSalaryRecordSection = true;
             }
             else if (inSalaryRecordSection && data.get(i).length > 4 && data.get(i)[0].equals(record.getStartDate().toString()) &&
@@ -328,10 +398,10 @@ public class WriteToCSV {
                     break;
             }
         }
-        writeCSV(RESOURCE_DIRECTORY + department.getName() + ".csv", data);
+        writeCSV(RESOURCE_DIRECTORY + department.getOrganization().getName() + "/" + department.getName() + ".csv", data);
     }
     public static void updateFieldOfSalaryRecord(Department department, Employee employee, SalaryRecord record, int fieldIndex, String newValue) {
-        ArrayList<String[]> data = readCSV(RESOURCE_DIRECTORY + department.getName() + ".csv");
+        ArrayList<String[]> data = readCSV(RESOURCE_DIRECTORY + department.getOrganization().getName() + "/" + department.getName() + ".csv");
         boolean inSalaryRecordSection = false;
         boolean inCurrentManagerSection = false;
 
@@ -340,32 +410,35 @@ public class WriteToCSV {
                 inCurrentManagerSection = true;
             else if(data.get(i)[0].equals("Employees:"))
                 inCurrentManagerSection = false;
-            else if (data.get(i)[0].equals("Salary Records:") &&
-                    i >= 2 && data.get(i - 2).length > 0 && data.get(i - 2)[2].equals(String.valueOf(employee.getNationalId()))) {
+            else if (data.get(i).length > 0 && data.get(i)[2].equals(String.valueOf(employee.getNationalId()))) {
                 inSalaryRecordSection = true;
             }
-            else if (inSalaryRecordSection && data.get(i)[0].equals(record.getStartDate().toString()) &&
+            else if (inSalaryRecordSection && data.get(i).length > 4 && data.get(i)[0].equals(record.getStartDate().toString()) &&
                     data.get(i)[1].equals(record.getEndDate().toString()) &&
                     data.get(i)[2].equals(record.getDepartment().getName()) &&
-                    data.get(i)[3].equals(record.getStatus().toString())) {
+                    data.get(i)[3].equals(record.getStatus().toString()) &&
+                    data.get(i)[4].equals(record.getType().toString())) {
                 data.get(i)[fieldIndex] = newValue;
                 inSalaryRecordSection = false;
                 if(!inCurrentManagerSection)
                     break;
             }
         }
-        writeCSV(RESOURCE_DIRECTORY + department.getName() + ".csv", data);
+        writeCSV(RESOURCE_DIRECTORY + department.getOrganization().getName() + "/" + department.getName() + ".csv", data);
     }
     public static void changeEmployeeDepartment(Department currentDepartment, Department newDepartment, Employee employee){
         removeEmployeeFromDepartment(currentDepartment, employee);
         addFormerEmployeeToDepartment(newDepartment, employee);
     }
 
-    public static void changeManagerOfDepartment(Employee newManager, Employee formerManager, Department department) {
-        ArrayList<String[]> data = readCSV(RESOURCE_DIRECTORY + department.getName() + ".csv");
+    public static void changeManagerOfDepartment(Employee newManager, Employee formerManager, Department department, boolean becameManagerInSameDepartment) {
+        ArrayList<String[]> data = readCSV(RESOURCE_DIRECTORY + department.getOrganization().getName() + "/" + department.getName() + ".csv");
         boolean inCurrentManagerSection = false;
         boolean inEmployeesSection = false;
         boolean inFormerManagersSection = false;
+
+        boolean deleteFormerManagerInfo = false;
+        boolean addSalaryRecordToNewManager = false;
 
         for (int i = 0; i < data.size(); i++) {
             if (data.get(i)[0].equals("Current Manager:")) {
@@ -373,36 +446,69 @@ public class WriteToCSV {
             } else if (inCurrentManagerSection && formerManager != null && data.get(i).length > 2 && data.get(i)[2].equals(String.valueOf(formerManager.getNationalId()))) {
                 // Remove current manager details
                 int blankLineCounter = 0;
-                while (blankLineCounter < 2) {
+                while (blankLineCounter < 1) {
                     if (data.get(i).length == 1 && data.get(i)[0].trim().isEmpty()) {
                         blankLineCounter++;
                     }
                     data.remove(i);
                 }
                 // Add new manager details
-                List<String[]> newManagerInfo = employeeInfoToCSVLines(newManager);
+                ArrayList<String[]> newManagerInfo = employeeInfoToCSVLines(newManager);
                 newManagerInfo.add(new String[]{""});
                 data.addAll(i, newManagerInfo);
                 inCurrentManagerSection = false;
-            } else if (!inCurrentManagerSection && data.get(i)[0].equals("Employees:")) {
+            }
+            else if (!inCurrentManagerSection && data.get(i)[0].equals("Employees:")) {
                 inEmployeesSection = true;
-            } else if (inEmployeesSection && formerManager != null && data.get(i).length > 2 && data.get(i)[2].equals(String.valueOf(formerManager.getNationalId()))) {
+            } else if (inEmployeesSection && !becameManagerInSameDepartment && formerManager != null && data.get(i).length > 2 && data.get(i)[2].equals(String.valueOf(formerManager.getNationalId()))) {
                 int blankLineCounter = 0;
-                while (blankLineCounter < 2) {
-                    data.remove(i);
+                while (blankLineCounter < 1) {
                     if (data.get(i).length == 1 && data.get(i)[0].trim().isEmpty()) {
                         blankLineCounter++;
                     }
+                    data.remove(i);
                 }
                 // Add new manager to employees section
-                data.addAll(i, employeeInfoToCSVLines(newManager));
+                ArrayList<String[]> newManagerInfo;
+                newManagerInfo = employeeInfoToCSVLines(newManager);
+                newManagerInfo.add(new String[]{""});
+                data.addAll(i, newManagerInfo);
                 inEmployeesSection = false;
-            } else if (!inEmployeesSection && data.get(i)[0].equals("Former Managers:")) {
+            }
+            else if (inEmployeesSection && becameManagerInSameDepartment) {
+                if(formerManager != null && data.get(i).length > 2 && data.get(i)[2].equals(String.valueOf(formerManager.getNationalId()))){
+                    // delete former manager from employees
+                    int blankLineCounter = 0;
+                    while (blankLineCounter < 1) {
+                        if (data.get(i).length == 1 && data.get(i)[0].trim().isEmpty()) {
+                            blankLineCounter++;
+                        }
+                        data.remove(i);
+                    }
+                    deleteFormerManagerInfo = true;
+                } else if(data.get(i).length > 2 && data.get(i)[2].equals(String.valueOf(newManager.getNationalId()))){
+                    // add manager salary record to new manager that already exist in employees section
+                    int blankLineCounter = 0;
+                    while (blankLineCounter < 1) {
+                        i++;
+                        if (data.get(i).length == 1 && data.get(i)[0].trim().isEmpty()) {
+                            blankLineCounter++;
+                        }
+                    }
+                    data.add(i, salaryRecordToCSVLine(newManager.getCurrentSalaryRecord()));
+                    addSalaryRecordToNewManager = true;
+                }
+                // after we ensure that both of these done we set inEmployeesSection to false
+                if(addSalaryRecordToNewManager && deleteFormerManagerInfo)
+                    inEmployeesSection = false;
+            }
+            else if (data.get(i)[0].equals("Former Managers:")) {
+                inEmployeesSection = false;
                 inFormerManagersSection = true;
             } else if (inFormerManagersSection && formerManager != null && data.get(i).length > 2 && data.get(i)[2].equals(String.valueOf(formerManager.getNationalId()))) {
                 // Remove former manager details if already present
                 int blankLineCounter = 0;
-                while (blankLineCounter < 2) {
+                while (blankLineCounter < 1) {
                     if (data.get(i).length == 1 && data.get(i)[0].trim().isEmpty()) {
                         blankLineCounter++;
                     }
@@ -411,34 +517,36 @@ public class WriteToCSV {
             } else if (inFormerManagersSection && formerManager != null && data.get(i)[0].equals("Former Employees:")) {
                 // Add former manager to former managers section
                 List<String[]> formerManagerInfo = employeeInfoToCSVLines(formerManager);
-                formerManagerInfo.add(new String[]{""});
-                data.addAll(i, formerManagerInfo);
+                if (data.get(i - 2)[0].startsWith("Former Managers:")) {
+                    data.addAll(i - 1, formerManagerInfo);
+                } else {
+                    formerManagerInfo.add(new String[]{""});
+                    data.addAll(i, formerManagerInfo);
+                }
                 break;
             }
         }
 
         // Write updated data to the CSV
-        writeCSV(RESOURCE_DIRECTORY + department.getName() + ".csv", data);
+        writeCSV(RESOURCE_DIRECTORY + department.getOrganization().getName() + "/" + department.getName() + ".csv", data);
     }
-
     public static void addFormerEmployeeToDepartment(Department department, Employee formerEmployee) {
-        ArrayList<String[]> data = readCSV(RESOURCE_DIRECTORY + department.getName() + ".csv");
+        ArrayList<String[]> data = readCSV(RESOURCE_DIRECTORY + department.getOrganization().getName() + "/" + department.getName() + ".csv");
 
         int size = data.size();
         List<String[]> employeeInfo = employeeInfoToCSVLines(formerEmployee);
-        if(data.get(size - 2)[0].startsWith("Former Managers:"))
+        if(data.get(size - 2)[0].startsWith("Former Employees:"))
             data.addAll(size - 1, employeeInfo);
         else {
             employeeInfo.add(new String[]{""});
             data.addAll(employeeInfo);
         }
 
-        writeCSV(RESOURCE_DIRECTORY + department.getName() + ".csv", data);
+        writeCSV(RESOURCE_DIRECTORY + department.getOrganization().getName() + "/" + department.getName() + ".csv", data);
     }
 
-
     public static void removeFormerEmployeeFromDepartment(Department department, Employee formerEmployee) {
-        ArrayList<String[]> data = readCSV(RESOURCE_DIRECTORY + department.getName() + ".csv");
+        ArrayList<String[]> data = readCSV(RESOURCE_DIRECTORY + department.getOrganization().getName() + "/" + department.getName() + ".csv");
         boolean inEmployeesSection = false;
 
         for (int i = 0; i < data.size(); i++){
@@ -447,15 +555,16 @@ public class WriteToCSV {
             }
             if (inEmployeesSection && data.get(i).length > 1 && data.get(i)[2].equals(String.valueOf(formerEmployee.getNationalId()))) {
                 int blankLineCounter = 0;
-                while (blankLineCounter <  2){
+                while (blankLineCounter <  1){
                     if(data.get(i).length == 1 && data.get(i)[0].trim().isEmpty())
                         blankLineCounter++;
-                    data.remove(i);
+                    if(i + 1 != data.size() || !data.get(i - 1)[0].equals("Former Employees:"))
+                        data.remove(i);
                 }
                 break;
             }
         }
-        writeCSV(RESOURCE_DIRECTORY + department.getName() + ".csv", data);
+        writeCSV(RESOURCE_DIRECTORY + department.getOrganization().getName() + "/" + department.getName() + ".csv", data);
     }
 
     public static ArrayList<String[]> readCSV(String filePath) {
@@ -488,4 +597,6 @@ public class WriteToCSV {
         }
     }
 
+    public static void main(String[] args) {
+    }
 }
