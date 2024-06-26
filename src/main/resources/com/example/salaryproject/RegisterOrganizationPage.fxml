@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -24,11 +23,20 @@
             <Label alignment="CENTER" text="Organization Name:" textFill="#787983" />
             <TextField fx:id="nameField" maxWidth="Infinity" promptText="Enter organization name" styleClass="text-field typing" />
 
+            <Label alignment="CENTER" text="Industry:" textFill="#787983" />
+            <TextField fx:id="industryField" maxWidth="Infinity" promptText="Enter organization industry" styleClass="text-field typing" />
+
+            <Label alignment="CENTER" text="Foundation Year:" textFill="#787983" />
+            <TextField fx:id="foundationYearField" maxWidth="Infinity" promptText="Enter foundation year" styleClass="text-field typing" />
+
+            <Label alignment="CENTER" text="Headquarters:" textFill="#787983" />
+            <TextField fx:id="headquartersField" maxWidth="Infinity" promptText="Enter headquarters" styleClass="text-field typing" />
+
+            <Label alignment="CENTER" text="CEO:" textFill="#787983" />
+            <TextField fx:id="ceoField" maxWidth="Infinity" promptText="Enter CEO" styleClass="text-field typing" />
+
             <Label alignment="CENTER" text="Total Shares Outstanding:" textFill="#787983" />
             <TextField fx:id="totalSharesField" maxWidth="Infinity" promptText="Enter total shares" styleClass="text-field typing" />
-
-            <Label alignment="CENTER" text="Shares Allocated for Employees:" textFill="#787983" />
-            <TextField fx:id="sharesAllocatedField" maxWidth="Infinity" promptText="Enter shares allocated" styleClass="text-field typing" />
 
             <Label alignment="CENTER" text="Current Share Price:" textFill="#787983" />
             <TextField fx:id="sharePriceField" maxWidth="Infinity" promptText="Enter share price" styleClass="text-field typing" />

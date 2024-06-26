@@ -16,10 +16,19 @@ public class RegisterOrganizationPageController {
     private TextField nameField;
 
     @FXML
-    private TextField totalSharesField;
+    private TextField industryField;
 
     @FXML
-    private TextField sharesAllocatedField;
+    private TextField foundationYearField;
+
+    @FXML
+    private TextField headquartersField;
+
+    @FXML
+    private TextField ceoField;
+
+    @FXML
+    private TextField totalSharesField;
 
     @FXML
     private TextField sharePriceField;
@@ -30,25 +39,29 @@ public class RegisterOrganizationPageController {
     @FXML
     private void handleRegister(ActionEvent event) {
         String name = nameField.getText();
+        String foundationYearText = foundationYearField.getText();
+        String headquarters = headquartersField.getText();
+        String ceo = ceoField.getText();
         String totalSharesText = totalSharesField.getText();
-        String sharesAllocatedText = sharesAllocatedField.getText();
         String sharePriceText = sharePriceField.getText();
+        String industry = industryField.getText();
 
-        if (name.isEmpty() || totalSharesText.isEmpty() || sharesAllocatedText.isEmpty() || sharePriceText.isEmpty()) {
+        if (name.isEmpty() || foundationYearText.isEmpty() || headquarters.isEmpty() || ceo.isEmpty() || totalSharesText.isEmpty() || sharePriceText.isEmpty()) {
             messageLabel.setText("Please fill in all fields!");
             messageLabel.setStyle("-fx-text-fill: red;");
         } else {
             try {
+                int foundationYear = Integer.parseInt(foundationYearText);
                 double totalShares = Double.parseDouble(totalSharesText);
-                double sharesAllocated = Double.parseDouble(sharesAllocatedText);
                 double sharePrice = Double.parseDouble(sharePriceText);
 
                 // Create new Organization object
-                // طبق  فیلد های جدید سازمان تغییرش بده
-                Organization organization = new Organization(name, totalShares, sharePrice);
+                Organization organization = new Organization(name, industry, foundationYear, headquarters, ceo, totalShares, sharePrice);
 
-                // Save organization to file or database
-                // For simplicity, let's assume we have a static list of organizations
+                // Save organization to CSV file
+                WriteToCSV.creatOrganization(organization);
+
+                // Optionally, add the organization to the static list
                 OrganizationSelectionController.organizations.add(organization);
 
                 messageLabel.setText("Organization registered successfully!");
@@ -77,8 +90,11 @@ public class RegisterOrganizationPageController {
 
     private void clearFields() {
         nameField.clear();
+        industryField.clear();
+        foundationYearField.clear();
+        headquartersField.clear();
+        ceoField.clear();
         totalSharesField.clear();
-        sharesAllocatedField.clear();
         sharePriceField.clear();
     }
 }

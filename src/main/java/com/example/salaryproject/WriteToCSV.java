@@ -587,6 +587,25 @@ public class WriteToCSV {
     }
 
 
+    public static ArrayList<String[]> readCSV(String filePath, boolean skipHeader) {
+        ArrayList<String[]> data = new ArrayList<>();
+        try (CSVReader reader = new CSVReader(new FileReader(filePath))) {
+            String[] line;
+            boolean headerSkipped = !skipHeader;
+            while ((line = reader.readNext()) != null) {
+                if (headerSkipped) {
+                    data.add(line);
+                } else {
+                    headerSkipped = true;
+                }
+            }
+        } catch (IOException | CsvValidationException e) {
+            e.printStackTrace();
+        }
+        return data;
+    }
+
+
     public static void writeCSV(String filePath, ArrayList<String[]> data) {
         try (CSVWriter writer = (CSVWriter) new CSVWriterBuilder(new FileWriter(filePath))
                 .withQuoteChar(ICSVWriter.NO_QUOTE_CHARACTER)

@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class Department {
     private String name;
@@ -160,4 +161,18 @@ public class Department {
     public ObservableList<Employee> getFormerEmployees() {
         return formerEmployees;
     }
+
+    public void setEmployees(List<Employee> employees) {
+        this.employees = FXCollections.observableArrayList(employees);
+    }
+
+    public void setFormerEmployees(List<Employee> formerEmployees) {
+        this.formerEmployees = FXCollections.observableArrayList(formerEmployees);
+    }
+
+
+    public void setFinancialRecords(List<FinancialRecord> financialRecords) {
+        this.financialRecords = FXCollections.observableArrayList(financialRecords);
+    }
+
 }

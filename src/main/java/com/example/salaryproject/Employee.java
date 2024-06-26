@@ -5,7 +5,7 @@ import javafx.collections.ObservableList;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Objects;
+import java.util.List;
 
 public class Employee {
     private String firstName;
@@ -334,6 +334,8 @@ public class Employee {
 
         department.setCurrentManager(this);
         WriteToCSV.changeManagerOfDepartment(this, formerManager, department, becameManagerInSameDepartment);
+
+        WriteToCSV.writeDepartmentDataToCsv(department);
     }
 
     public ObservableList<SalaryRecord> getSalaryRecords() {
@@ -344,6 +346,9 @@ public class Employee {
         WriteToCSV.addEmployeeToDepartment(newDepartment, this);
     }
 
+    public void setSalaryRecords(List<SalaryRecord> salaryRecords) {
+        this.salaryRecords = (ObservableList<SalaryRecord>) salaryRecords;
+    }
 }
 
 
