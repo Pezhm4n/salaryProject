@@ -127,8 +127,8 @@ public class AddEmployeePageController {
             messageLabel.setStyle("-fx-text-fill: red;");
         } else {
             try {
-                long nationalId = Long.parseLong(nationalIdText);
-                long phoneNumber = Long.parseLong(phoneNumberText);
+                int nationalId = Integer.parseInt(nationalIdText);
+                int phoneNumber = Integer.parseInt(phoneNumberText);
 
                 if (selectedDepartment == null) {
                     messageLabel.setText("No department selected!");

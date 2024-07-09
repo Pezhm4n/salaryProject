@@ -18,6 +18,9 @@ public class Department {
     private String workField;
     private Organization organization;
 
+    public Department(Organization organization, String name) {
+        this(organization, name, 0, 0, null, null, null, null, null);
+    }
     public Department(Organization organization, String name, int capacity, int headCount, String description) {
         this(organization, name, capacity, headCount, description, null, null, null, null);
     }
@@ -131,6 +134,7 @@ public class Department {
         addFinancialRecord(newRecord);
     }
     public void addFinancialRecord(FinancialRecord newRecord){
+        this.getLastFinancialRecord().setEndDate(LocalDate.now());
         financialRecords.add(newRecord);
     }
     public Organization getOrganization() {
@@ -160,6 +164,9 @@ public class Department {
 
     public ObservableList<Employee> getFormerEmployees() {
         return formerEmployees;
+    }
+    public  void addFormerEmployee(Employee formerEmployee){
+        formerEmployees.add(formerEmployee);
     }
 
     public void setEmployees(List<Employee> employees) {

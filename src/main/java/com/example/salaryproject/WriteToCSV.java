@@ -7,14 +7,12 @@ import com.opencsv.ICSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 
 import java.io.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class WriteToCSV {
     public static final String RESOURCE_DIRECTORY = "src/main/resources/com/example/salaryproject/";
@@ -29,7 +27,8 @@ public class WriteToCSV {
 
             List<String[]> data = new ArrayList<>();
 
-            data.add(new String[]{"Name", "Industry", "Foundation Year", "HeadQuarters", "CEO", "Total Shares", "Share Price"});
+            //data.add(new String[]{"Name", "Industry", "Foundation Year", "HeadQuarters", "CEO", "Total Shares", "Share Price"});
+            data.add(new  String[]{"Organization:"});
             data.add(new String[]{organization.getName(), organization.getIndustry(), String.valueOf(organization.getFoundationYear()), organization.getHeadquarters(), organization.getCEO(), String.valueOf(organization.getTotalShares()), String.valueOf(organization.getSharePrice())});
 
             writer.writeAll(data);
@@ -188,6 +187,7 @@ public class WriteToCSV {
             salaryData.add(String.valueOf(((HourlySalary) record).getHoursWorked()));
         } else if (record instanceof ManagerSalary) {
             salaryData.add(String.valueOf(EmployeeType.MANAGER));
+            salaryData.add(String.valueOf(((ManagerSalary) record).getBaseMonthlySalary()));
             salaryData.add(String.valueOf(((ManagerSalary) record).getCommissionRate()));
             salaryData.add(String.valueOf(((ManagerSalary) record).getNetProfitOfDepartment()));
             salaryData.add(String.valueOf(((ManagerSalary) record).getSharesGranted()));
@@ -573,7 +573,7 @@ public class WriteToCSV {
             String[] line;
             boolean dataSectionStarted = false;
             while ((line = reader.readNext()) != null) {
-                if (line.length > 0 && (line[0].equals("Department:") || line[0].equals("Financial Records:") || line[0].equals("Employees:") || line[0].equals("Salary Records:"))) {
+                if (line.length > 0 && (line[0].equals("Organization:") || line[0].equals("Department:") || line[0].equals("Financial Records:") || line[0].equals("Employees:") || line[0].equals("Salary Records:"))) {
                     dataSectionStarted = true;
                 }
                 if (dataSectionStarted) {
@@ -585,7 +585,221 @@ public class WriteToCSV {
         }
         return data;
     }
+    public static boolean isValidDate(String dateString) {
+        try {
+            LocalDate.parse(dateString);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    public static Organization createOrganizationAndDepartments(String organizationName){
 
+        ArrayList<String[]> organization_info = readCSV(RESOURCE_DIRECTORY + organizationName + "/organization_info.csv");
+        Organization organization = new Organization(organization_info.get(1)[0], organization_info.get(1)[1], Integer.parseInt(organization_info.get(1)[2]), organization_info.get(1)[3], organization_info.get(1)[4], Double.parseDouble(organization_info.get(1)[5]), Double.parseDouble(organization_info.get(1)[6]));
+
+        Map<String, Department> departmentMap = new HashMap<>();
+        List<Path> csvFilePaths = listCSVFilesInDirectory(RESOURCE_DIRECTORY + organizationName);
+
+        for(Path path : csvFilePaths) {
+            ArrayList<String[]> data = readCSV(path.toString());
+
+            boolean inCurrentManagerSection = false;
+            boolean inEmployeesSection = false;
+            boolean inFormerManagersSection = false;
+            boolean inFormerEmployeesSection = false;
+            Department department = null;
+
+            for (int i = 0; i < data.size(); i++){
+                if (data.get(i)[0].startsWith("Department:")) {
+                    if(departmentMap.get(data.get(i + 1)[0]) == null) {
+                        department = new Department(organization, data.get(i + 1)[0], Integer.parseInt(data.get(i + 1)[1]), Integer.parseInt(data.get(i + 1)[2]), data.get(i + 1)[3]);
+                        departmentMap.put(data.get(i + 1)[0], department);
+                    }
+                    else {
+                        department = departmentMap.get(data.get(i + 1)[0]);
+                        department.setCapacity(Integer.parseInt(data.get(i + 1)[1]));
+                        department.setHeadCount(Integer.parseInt(data.get(i + 1)[2]));
+                        department.setDescription(data.get(i + 1)[3]);
+                    }
+                }
+                else if (data.get(i)[0].equals("Financial Records:")) {
+                    i++;
+                    while(data.get(i).length != 1 && !data.get(i)[0].trim().isEmpty()){
+                            department.addFinancialRecord(new FinancialRecord(
+                                    LocalDate.parse(data.get(i)[0]),
+                                    LocalDate.parse(data.get(i)[1]),
+                                    Double.parseDouble(data.get(i)[2]),
+                                    Double.parseDouble(data.get(i)[3]),
+                                    Double.parseDouble(data.get(i)[4])
+                            ));
+                        i++;
+                    }
+                }
+                else if(data.get(i)[0].startsWith("Current Manager:")){
+                    inCurrentManagerSection = true;
+                }
+                else if (inCurrentManagerSection && data.get(i).length == 6) {
+                    Employee employee = new Employee(data.get(i)[0], data.get(i)[1], Long.parseLong(data.get(i)[2]), LocalDate.parse(data.get(i)[3]), data.get(i)[4], Long.parseLong(data.get(i)[5]));
+                    department.addEmployee(employee);
+                    department.setCurrentManager(employee);
+                    i++;
+                    while(data.get(i).length != 1 && !data.get(i)[0].trim().isEmpty()){
+                        Department dept;
+                        if(departmentMap.get(data.get(i)[2]) == null){
+                            dept = new Department(organization, data.get(i)[2]);
+                            departmentMap.put(data.get(i)[2], dept);
+                        }
+                        else
+                            dept = departmentMap.get(data.get(i)[2]);
+                        if(data.get(i)[4].equals(String.valueOf(EmployeeType.FIXED_SALARY))){
+                            employee.addSalaryRecord(new FixedSalary(LocalDate.parse(data.get(i)[0]), data.get(i)[1].isEmpty() ? null: LocalDate.parse(data.get(i)[1]), dept, Status.valueOf(data.get(i)[3]),  Double.parseDouble(data.get(i)[5]), Double.parseDouble(data.get(i)[6]), Double.parseDouble(data.get(i)[7])));
+                        }
+                        else if(data.get(i)[4].equals(String.valueOf(EmployeeType.COMMISSION_FIXED_SALARY))){
+                            employee.addSalaryRecord(new CommissionPlusFixedSalary(LocalDate.parse(data.get(i)[0]), data.get(i)[1].isEmpty() ? null: LocalDate.parse(data.get(i)[1]), dept, Status.valueOf(data.get(i)[3]), Double.parseDouble(data.get(i)[5]), Double.parseDouble(data.get(i)[6]), Double.parseDouble(data.get(i)[7])));
+                        }
+                        else if(data.get(i)[4].equals(String.valueOf(EmployeeType.COMMISSION_SALARY))){
+                            employee.addSalaryRecord(new CommissionSalary(LocalDate.parse(data.get(i)[0]), data.get(i)[1].isEmpty() ? null: LocalDate.parse(data.get(i)[1]), dept, Status.valueOf(data.get(i)[3]), Double.parseDouble(data.get(i)[5]), Double.parseDouble(data.get(i)[6])));
+                        }
+                        else if(data.get(i)[4].equals(String.valueOf(EmployeeType.HOURLY_SALARY))){
+                            employee.addSalaryRecord(new HourlySalary(LocalDate.parse(data.get(i)[0]), data.get(i)[1].isEmpty() ? null: LocalDate.parse(data.get(i)[1]), dept, Status.valueOf(data.get(i)[3]), Double.parseDouble(data.get(i)[5]), Double.parseDouble(data.get(i)[6])));
+                        }
+                        else if(data.get(i)[4].equals(String.valueOf(EmployeeType.MANAGER))){
+                            employee.addSalaryRecord(new ManagerSalary(LocalDate.parse(data.get(i)[0]), data.get(i)[1].isEmpty() ? null: LocalDate.parse(data.get(i)[1]), dept, Status.valueOf(data.get(i)[3]), Double.parseDouble(data.get(i)[5]), Double.parseDouble(data.get(i)[6]), Double.parseDouble(data.get(i)[7]), Double.parseDouble(data.get(i)[8]), Double.parseDouble(data.get(i)[9]), Double.parseDouble(data.get(i)[10])));
+                        }
+                        i++;
+                    }
+                }
+                else if(data.get(i)[0].startsWith("Employees:")){
+                    inEmployeesSection = true;
+                    inCurrentManagerSection = false;
+                }
+                else if (inEmployeesSection && data.get(i).length == 6) {
+                    Employee employee = new Employee(data.get(i)[0], data.get(i)[1], Long.parseLong(data.get(i)[2]), LocalDate.parse(data.get(i)[3]), data.get(i)[4], Long.parseLong(data.get(i)[5]));
+                    department.addEmployee(employee);
+                    i++;
+                    while(data.get(i).length != 1 && !data.get(i)[0].trim().isEmpty()){
+                        Department dept;
+                        if(departmentMap.get(data.get(i)[2]) == null){
+                            dept = new Department(organization, data.get(i)[2]);
+                            departmentMap.put(data.get(i)[2], dept);
+                        }
+                        else
+                            dept = departmentMap.get(data.get(i)[2]);
+                        if(data.get(i)[4].equals(String.valueOf(EmployeeType.FIXED_SALARY))){
+                            employee.addSalaryRecord(new FixedSalary(LocalDate.parse(data.get(i)[0]), data.get(i)[1].isEmpty() ? null: LocalDate.parse(data.get(i)[1]), dept, Status.valueOf(data.get(i)[3]),  Double.parseDouble(data.get(i)[5]), Double.parseDouble(data.get(i)[6]), Double.parseDouble(data.get(i)[7])));
+                        }
+                        else if(data.get(i)[4].equals(String.valueOf(EmployeeType.COMMISSION_FIXED_SALARY))){
+                            employee.addSalaryRecord(new CommissionPlusFixedSalary(LocalDate.parse(data.get(i)[0]), data.get(i)[1].isEmpty() ? null: LocalDate.parse(data.get(i)[1]), dept, Status.valueOf(data.get(i)[3]), Double.parseDouble(data.get(i)[5]), Double.parseDouble(data.get(i)[6]), Double.parseDouble(data.get(i)[7])));
+                        }
+                        else if(data.get(i)[4].equals(String.valueOf(EmployeeType.COMMISSION_SALARY))){
+                            employee.addSalaryRecord(new CommissionSalary(LocalDate.parse(data.get(i)[0]), data.get(i)[1].isEmpty() ? null: LocalDate.parse(data.get(i)[1]), dept, Status.valueOf(data.get(i)[3]), Double.parseDouble(data.get(i)[5]), Double.parseDouble(data.get(i)[6])));
+                        }
+                        else if(data.get(i)[4].equals(String.valueOf(EmployeeType.HOURLY_SALARY))){
+                            employee.addSalaryRecord(new HourlySalary(LocalDate.parse(data.get(i)[0]), data.get(i)[1].isEmpty() ? null: LocalDate.parse(data.get(i)[1]), dept, Status.valueOf(data.get(i)[3]), Double.parseDouble(data.get(i)[5]), Double.parseDouble(data.get(i)[6])));
+                        }
+                        else if(data.get(i)[4].equals(String.valueOf(EmployeeType.MANAGER))){
+                            employee.addSalaryRecord(new ManagerSalary(LocalDate.parse(data.get(i)[0]), data.get(i)[1].isEmpty() ? null: LocalDate.parse(data.get(i)[1]), dept, Status.valueOf(data.get(i)[3]), Double.parseDouble(data.get(i)[5]), Double.parseDouble(data.get(i)[6]), Double.parseDouble(data.get(i)[7]), Double.parseDouble(data.get(i)[8]), Double.parseDouble(data.get(i)[9]), Double.parseDouble(data.get(i)[10])));
+                        }
+                        i++;
+                    }
+                }
+                else if(data.get(i)[0].startsWith("Former Managers:")){
+                    inFormerManagersSection = true;
+                    inEmployeesSection = false;
+                }
+                else if(inFormerManagersSection && data.get(i).length == 6){
+                    Employee employee = new Employee(data.get(i)[0], data.get(i)[1], Long.parseLong(data.get(i)[2]), LocalDate.parse(data.get(i)[3]), data.get(i)[4], Long.parseLong(data.get(i)[5]));
+                    department.addFormerManager(employee);
+                    i++;
+                    while(data.get(i).length != 1 && !data.get(i)[0].trim().isEmpty()){
+                        Department dept;
+                        if(departmentMap.get(data.get(i)[2]) == null){
+                            dept = new Department(organization, data.get(i)[2]);
+                            departmentMap.put(data.get(i)[2], dept);
+                        }
+                        else
+                            dept = departmentMap.get(data.get(i)[2]);
+                        if(data.get(i)[4].equals(String.valueOf(EmployeeType.FIXED_SALARY))){
+                            employee.addSalaryRecord(new FixedSalary(LocalDate.parse(data.get(i)[0]), data.get(i)[1].isEmpty() ? null: LocalDate.parse(data.get(i)[1]), dept, Status.valueOf(data.get(i)[3]),  Double.parseDouble(data.get(i)[5]), Double.parseDouble(data.get(i)[6]), Double.parseDouble(data.get(i)[7])));
+                        }
+                        else if(data.get(i)[4].equals(String.valueOf(EmployeeType.COMMISSION_FIXED_SALARY))){
+                            employee.addSalaryRecord(new CommissionPlusFixedSalary(LocalDate.parse(data.get(i)[0]), data.get(i)[1].isEmpty() ? null: LocalDate.parse(data.get(i)[1]), dept, Status.valueOf(data.get(i)[3]), Double.parseDouble(data.get(i)[5]), Double.parseDouble(data.get(i)[6]), Double.parseDouble(data.get(i)[7])));
+                        }
+                        else if(data.get(i)[4].equals(String.valueOf(EmployeeType.COMMISSION_SALARY))){
+                            employee.addSalaryRecord(new CommissionSalary(LocalDate.parse(data.get(i)[0]), data.get(i)[1].isEmpty() ? null: LocalDate.parse(data.get(i)[1]), dept, Status.valueOf(data.get(i)[3]), Double.parseDouble(data.get(i)[5]), Double.parseDouble(data.get(i)[6])));
+                        }
+                        else if(data.get(i)[4].equals(String.valueOf(EmployeeType.HOURLY_SALARY))){
+                            employee.addSalaryRecord(new HourlySalary(LocalDate.parse(data.get(i)[0]), data.get(i)[1].isEmpty() ? null: LocalDate.parse(data.get(i)[1]), dept, Status.valueOf(data.get(i)[3]), Double.parseDouble(data.get(i)[5]), Double.parseDouble(data.get(i)[6])));
+                        }
+                        else if(data.get(i)[4].equals(String.valueOf(EmployeeType.MANAGER))){
+                            employee.addSalaryRecord(new ManagerSalary(LocalDate.parse(data.get(i)[0]), data.get(i)[1].isEmpty() ? null: LocalDate.parse(data.get(i)[1]), dept, Status.valueOf(data.get(i)[3]), Double.parseDouble(data.get(i)[5]), Double.parseDouble(data.get(i)[6]), Double.parseDouble(data.get(i)[7]), Double.parseDouble(data.get(i)[8]), Double.parseDouble(data.get(i)[9]), Double.parseDouble(data.get(i)[10])));
+                        }
+                        i++;
+                    }
+                }
+                else if(data.get(i)[0].startsWith("Former Employees:")){
+                    inFormerEmployeesSection = true;
+                    inFormerManagersSection = false;
+                }
+                else if(inFormerEmployeesSection && data.get(i).length == 6){
+                    Employee employee = new Employee(data.get(i)[0], data.get(i)[1], Long.parseLong(data.get(i)[2]), LocalDate.parse(data.get(i)[3]), data.get(i)[4], Long.parseLong(data.get(i)[5]));
+                    department.addFormerEmployee(employee);
+                    i++;
+                    while(data.get(i).length != 1 && !data.get(i)[0].trim().isEmpty()){
+                        Department dept;
+                        if(departmentMap.get(data.get(i)[2]) == null){
+                            dept = new Department(organization, data.get(i)[2]);
+                            departmentMap.put(data.get(i)[2], dept);
+                        }
+                        else
+                            dept = departmentMap.get(data.get(i)[2]);
+                        if(data.get(i)[4].equals(String.valueOf(EmployeeType.FIXED_SALARY))){
+                            employee.addSalaryRecord(new FixedSalary(LocalDate.parse(data.get(i)[0]), data.get(i)[1].isEmpty() ? null: LocalDate.parse(data.get(i)[1]), dept, Status.valueOf(data.get(i)[3]),  Double.parseDouble(data.get(i)[5]), Double.parseDouble(data.get(i)[6]), Double.parseDouble(data.get(i)[7])));
+                        }
+                        else if(data.get(i)[4].equals(String.valueOf(EmployeeType.COMMISSION_FIXED_SALARY))){
+                            employee.addSalaryRecord(new CommissionPlusFixedSalary(LocalDate.parse(data.get(i)[0]), data.get(i)[1].isEmpty() ? null: LocalDate.parse(data.get(i)[1]), dept, Status.valueOf(data.get(i)[3]), Double.parseDouble(data.get(i)[5]), Double.parseDouble(data.get(i)[6]), Double.parseDouble(data.get(i)[7])));
+                        }
+                        else if(data.get(i)[4].equals(String.valueOf(EmployeeType.COMMISSION_SALARY))){
+                            employee.addSalaryRecord(new CommissionSalary(LocalDate.parse(data.get(i)[0]), data.get(i)[1].isEmpty() ? null: LocalDate.parse(data.get(i)[1]), dept, Status.valueOf(data.get(i)[3]), Double.parseDouble(data.get(i)[5]), Double.parseDouble(data.get(i)[6])));
+                        }
+                        else if(data.get(i)[4].equals(String.valueOf(EmployeeType.HOURLY_SALARY))){
+                            employee.addSalaryRecord(new HourlySalary(LocalDate.parse(data.get(i)[0]), data.get(i)[1].isEmpty() ? null: LocalDate.parse(data.get(i)[1]), dept, Status.valueOf(data.get(i)[3]), Double.parseDouble(data.get(i)[5]), Double.parseDouble(data.get(i)[6])));
+                        }
+                        else if(data.get(i)[4].equals(String.valueOf(EmployeeType.MANAGER))){
+                            employee.addSalaryRecord(new ManagerSalary(LocalDate.parse(data.get(i)[0]), data.get(i)[1].isEmpty() ? null: LocalDate.parse(data.get(i)[1]), dept, Status.valueOf(data.get(i)[3]), Double.parseDouble(data.get(i)[5]), Double.parseDouble(data.get(i)[6]), Double.parseDouble(data.get(i)[7]), Double.parseDouble(data.get(i)[8]), Double.parseDouble(data.get(i)[9]), Double.parseDouble(data.get(i)[10])));
+                        }
+                        i++;
+                    }
+                }
+            }
+        organization.addDepartment(department);
+        }
+        return organization;
+        }
+
+    public static List<Path> listCSVFilesInDirectory(String directoryPath) {
+        List<Path> csvFilePaths = new ArrayList<>();
+        try {
+            Files.walkFileTree(Paths.get(directoryPath), new SimpleFileVisitor<Path>() {
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                    if (file.toString().endsWith(".csv") && !file.toString().endsWith("_info.csv")) {
+                        csvFilePaths.add(file);
+                    }
+                    return FileVisitResult.CONTINUE;
+                }
+
+                @Override
+                public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+                    return FileVisitResult.CONTINUE;
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return csvFilePaths;
+    }
 
     public static ArrayList<String[]> readCSV(String filePath, boolean skipHeader) {
         ArrayList<String[]> data = new ArrayList<>();
@@ -617,5 +831,6 @@ public class WriteToCSV {
     }
 
     public static void main(String[] args) {
+
     }
 }
