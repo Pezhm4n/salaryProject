@@ -108,6 +108,15 @@ public class Department {
         employees.add(employee);
     }
 
+    public void addEmployee(Employee employee, boolean fromController) {
+        if (fromController) {
+            incrementHeadCount();
+            employees.add(employee);
+            WriteToCSV.addEmployeeToDepartment(this ,employee);
+        }
+    }
+
+
     public void removeEmployee(Employee employee){
         employees.remove(employee);
         decrementHeadCount();

@@ -349,6 +349,9 @@ public class Employee {
     public void setSalaryRecords(List<SalaryRecord> salaryRecords) {
         this.salaryRecords = (ObservableList<SalaryRecord>) salaryRecords;
     }
+
+    public void setDepartment(Department selectedDepartment) {
+    }
 }
 
 

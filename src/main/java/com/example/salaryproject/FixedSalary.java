@@ -44,6 +44,12 @@ public class FixedSalary extends SalaryRecord {
 
     @Override
     public double calculateTotalSalary() {
-        return baseMonthlySalary;
+        return baseMonthlySalary + (overTimeHours * overTimeRate);
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + String.format("\nBase Monthly Salary: %.2f\nOver Time Hours: %.2f\nOver Time Rate: %.2f\n",
+                baseMonthlySalary, overTimeHours, overTimeRate);
     }
 }

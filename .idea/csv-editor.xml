@@ -10,14 +10,35 @@
             </Attribute>
           </value>
         </entry>
-        <entry key="\src\main\resources\com\example\salaryproject\Org\Engineering.csv">
+        <entry key="\src\main\resources\com\example\salaryproject\asdasd\adasd.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value=":" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\src\main\resources\com\example\salaryproject\asdasd\organization_info.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="\src\main\resources\com\example\salaryproject\Org\organization_info.csv">
+        <entry key="\src\main\resources\com\example\salaryproject\asdasd\test capacity.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\src\main\resources\com\example\salaryproject\asdasd\test change.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\src\main\resources\com\example\salaryproject\zxczx.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />

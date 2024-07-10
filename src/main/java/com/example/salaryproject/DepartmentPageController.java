@@ -1,6 +1,7 @@
 package com.example.salaryproject;
 
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,11 +11,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class DepartmentPageController {
     @FXML
@@ -31,11 +34,10 @@ public class DepartmentPageController {
     @FXML
     private Button getEmployeesButton;
     @FXML
-    private Button getEmployeeByNationalIdButton;
-    @FXML
     private Button backButton;
 
     private Department selectedDepartment;
+    private Organization organization;
 
     public void setDepartment(Department department) {
         this.selectedDepartment = department;
@@ -43,12 +45,12 @@ public class DepartmentPageController {
 
         boolean isManagerPresent = department.getCurrentManager() != null;
         getEmployeesButton.setDisable(!isManagerPresent);
-        getEmployeeByNationalIdButton.setDisable(!isManagerPresent);
         currentManagerButton.setDisable(!isManagerPresent);
         backButton.setDisable(!isManagerPresent);
-
     }
-
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
+    }
     @FXML
     private void handleBack(ActionEvent event) {
         try {
@@ -69,20 +71,30 @@ public class DepartmentPageController {
 
     @FXML
     private void handleAddEmployee(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("AddEmployeePage.fxml"));
-            Parent root = loader.load();
-            AddEmployeePageController controller = loader.getController();
-            controller.setDepartment(selectedDepartment);  // انتقال selectedDepartment به کنترلر AddEmployeePageController
-            Scene scene = new Scene(root, 400, 555);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (selectedDepartment != null) {
+            // Check if the department is at full capacity
+            if (selectedDepartment.getEmployees().size() >= selectedDepartment.getCapacity()) {
+                showAlert("The department is at full capacity. Cannot add more employees.");
+            } else {
+                try {
+                    FXMLLoader loader = new FXMLLoader();
+                    loader.setLocation(getClass().getResource("AddEmployeePage.fxml"));
+                    Parent root = loader.load();
+                    AddEmployeePageController controller = loader.getController();
+                    controller.setDepartment(selectedDepartment);
+                    Scene scene = new Scene(root, 400, 555);
+                    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                    stage.setScene(scene);
+                    stage.show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            showAlert("No department selected.");
         }
     }
+
 
     @FXML
     private void handleRemoveEmployee(ActionEvent event) {
@@ -91,7 +103,6 @@ public class DepartmentPageController {
             if (!employees.isEmpty()) {
                 Employee selectedEmployee = showEmployeeListDialog(employees);
                 if (selectedEmployee != null) {
-                    // حذف کارمند انتخاب شده از دپارتمان
                     selectedDepartment.removeEmployee(selectedEmployee);
                     showAlert("Employee removed successfully!");
                 }
@@ -104,14 +115,11 @@ public class DepartmentPageController {
     }
 
     private Employee showEmployeeListDialog(ObservableList<Employee> employees) {
-        // مرتب‌سازی کارمندان بر اساس نام و نام خانوادگی
         employees.sort(Comparator.comparing(Employee::getFirstName).thenComparing(Employee::getLastName));
 
-        // ایجاد TableView برای نمایش لیست کارمندان
         TableView<Employee> tableView = new TableView<>();
         tableView.setItems(employees);
 
-        // ایجاد ستون‌های جدول
         TableColumn<Employee, String> nameColumn = new TableColumn<>("Name");
         nameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirstName() + " " + cellData.getValue().getLastName()));
 
@@ -129,14 +137,39 @@ public class DepartmentPageController {
 
         tableView.getColumns().addAll(nameColumn, phoneColumn, nationalIdColumn, salaryTypeColumn, dateAddedColumn);
 
-        // نمایش TableView در یک Dialog
+        TextField searchField = new TextField();
+        searchField.setPromptText("Enter National ID");
+
+        Button searchButton = new Button("Search");
+        searchButton.setOnAction(e -> {
+            String searchQuery = searchField.getText().trim();
+            if (!searchQuery.isEmpty()) {
+                ObservableList<Employee> filteredEmployees = employees.stream()
+                        .filter(emp -> String.valueOf(emp.getNationalId()).contains(searchQuery))
+                        .collect(Collectors.toCollection(FXCollections::observableArrayList));
+                tableView.setItems(filteredEmployees);
+            } else {
+                tableView.setItems(employees);
+            }
+        });
+
+        GridPane searchPane = new GridPane();
+        searchPane.setHgap(10);
+        searchPane.setVgap(10);
+        searchPane.setPadding(new Insets(10));
+        searchPane.add(new Label("National ID:"), 0, 0);
+        searchPane.add(searchField, 1, 0);
+        searchPane.add(searchButton, 2, 0);
+
+        VBox vbox = new VBox(10);
+        vbox.getChildren().addAll(searchPane, tableView);
+
         Dialog<Employee> dialog = new Dialog<>();
         dialog.setTitle("Employees");
-        dialog.getDialogPane().setContent(tableView);
+        dialog.getDialogPane().setContent(vbox);
         ButtonType okButtonType = new ButtonType("Select", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(okButtonType, ButtonType.CANCEL);
 
-        // تنظیم نتیجه دیالوگ
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == okButtonType) {
                 return tableView.getSelectionModel().getSelectedItem();
@@ -155,7 +188,6 @@ public class DepartmentPageController {
             if (!employees.isEmpty()) {
                 Employee selectedEmployee = showEmployeeListDialog(employees);
                 if (selectedEmployee != null) {
-                    // انتقال کارمند انتخاب شده به EmployeeManagementController
                     try {
                         FXMLLoader loader = new FXMLLoader();
                         loader.setLocation(getClass().getResource("EmployeeManagement.fxml"));
@@ -163,6 +195,7 @@ public class DepartmentPageController {
                         EmployeeManagementController controller = loader.getController();
                         controller.setEmployee(selectedEmployee);
                         controller.setDepartment(selectedDepartment);
+                        controller.setOrganization(selectedDepartment.getOrganization());
                         Scene scene = new Scene(root, 400, 555);
                         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                         stage.setTitle("Employee Management");
@@ -181,41 +214,56 @@ public class DepartmentPageController {
     }
 
     @FXML
-    private void handleGetEmployeeByNationalId(ActionEvent event) {
-        // Show dialog to enter national ID
-        // Search for employee by national ID and display information
-        // ...
-        showAlert("Employee information retrieved successfully!");
-    }
-
-    @FXML
     private void handleCurrentManager(ActionEvent event) {
-/*        if (selectedDepartment != null) {
+        if (selectedDepartment != null && selectedDepartment.getCurrentManager() != null) {
             Employee currentManager = selectedDepartment.getCurrentManager();
-            if (currentManager != null) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Current Manager Information");
-                alert.setHeaderText("Manager Details:");
+            ManagerSalary currentManagerSalary = (ManagerSalary) currentManager.getCurrentSalaryRecord();
 
-                StringBuilder managerInfo = new StringBuilder();
-                managerInfo.append("Name: ").append(currentManager.getFirstName()).append(" ").append(currentManager.getLastName()).append("\n");
-                managerInfo.append("National ID: ").append(currentManager.getNationalId()).append("\n");
-                managerInfo.append("Date of Employment: ").append(currentManager.getDateOfEmployment()).append("\n");
-                managerInfo.append("Base Monthly Salary: ").append(currentManager.getBaseMonthlySalary()).append("\n");
-                managerInfo.append("Commission Rate: ").append(currentManager.getCommissionRate()).append("\n");
-                managerInfo.append("Net Profit of Department: ").append(currentManager.getNetProfitOfDepartment()).append("\n");
-                managerInfo.append("Shares Granted: ").append(currentManager.getSharesGranted()).append("\n");
-                managerInfo.append("Current Share Price: ").append(currentManager.getCurrentSharePrice()).append("\n");
-                managerInfo.append("Bonus: ").append(currentManager.getBonus()).append("\n");
+            // Create a dialog to display the manager information
+            Dialog<Void> dialog = new Dialog<>();
+            dialog.setTitle("Current Manager Information");
 
-                alert.setContentText(managerInfo.toString());
-                alert.showAndWait();
-            } else {
-                showAlert("No manager assigned to this department.");
-            }
+            // Create a GridPane to layout the manager information
+            GridPane grid = new GridPane();
+            grid.setHgap(10);
+            grid.setVgap(10);
+            grid.setPadding(new Insets(20, 150, 10, 10));
+
+            // Add manager information to the GridPane
+            grid.add(new Label("First Name:"), 0, 0);
+            grid.add(new Label(currentManager.getFirstName()), 1, 0);
+            grid.add(new Label("Last Name:"), 0, 1);
+            grid.add(new Label(currentManager.getLastName()), 1, 1);
+            grid.add(new Label("National ID:"), 0, 2);
+            grid.add(new Label(String.valueOf(currentManager.getNationalId())), 1, 2);
+            grid.add(new Label("Phone Number:"), 0, 3);
+            grid.add(new Label(String.valueOf(currentManager.getPhoneNumber())), 1, 3);
+            grid.add(new Label("Email:"), 0, 4);
+            grid.add(new Label(currentManager.getEmail()), 1, 4);
+            grid.add(new Label("Base Monthly Salary:"), 0, 5);
+            grid.add(new Label(String.valueOf(currentManagerSalary.getBaseMonthlySalary())), 1, 5);
+            grid.add(new Label("Commission Rate:"), 0, 6);
+            grid.add(new Label(String.valueOf(currentManagerSalary.getCommissionRate())), 1, 6);
+            grid.add(new Label("Net Profit of Department:"), 0, 7);
+            grid.add(new Label(String.valueOf(currentManagerSalary.getNetProfitOfDepartment())), 1, 7);
+            grid.add(new Label("Shares Granted:"), 0, 8);
+            grid.add(new Label(String.valueOf(currentManagerSalary.getSharesGranted())), 1, 8);
+            grid.add(new Label("Current Share Price:"), 0, 9);
+            grid.add(new Label(String.valueOf(currentManagerSalary.getCurrentSharePrice())), 1, 9);
+            grid.add(new Label("Bonus:"), 0, 10);
+            grid.add(new Label(String.valueOf(currentManagerSalary.getBonus())), 1, 10);
+            grid.add(new Label("Total Salary: "), 0, 11);
+            grid.add(new Label(String.valueOf(currentManagerSalary.calculateTotalSalary())), 1, 11);
+
+            // Set the content of the dialog
+            dialog.getDialogPane().setContent(grid);
+            dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
+
+            // Show the dialog
+            dialog.showAndWait();
         } else {
-            showAlert("No department selected.");
-        }*/
+            showAlert("No current manager found for this department.");
+        }
     }
 
 
@@ -226,7 +274,6 @@ public class DepartmentPageController {
             if (!employees.isEmpty()) {
                 Employee selectedEmployee = showEmployeeListDialog(employees);
                 if (selectedEmployee != null) {
-                    // دریافت اطلاعات مورد نیاز برای تغییر مدیر
                     TextInputDialog dialog = new TextInputDialog();
                     dialog.setTitle("Change Manager");
                     dialog.setHeaderText("Enter the required information for the new manager");
@@ -274,13 +321,10 @@ public class DepartmentPageController {
                             double currentSharePrice = Double.parseDouble(currentSharePriceField.getText());
                             double bonus = Double.parseDouble(bonusField.getText());
 
-                            // انتقال اطلاعات به متد newManagerSalaryRecord
                             selectedEmployee.newManagerSalaryRecord(selectedDepartment, selectedEmployee.getCurrentStatus(), baseMonthlySalary, commissionRate, netProfitOfDepartment, sharesGranted, currentSharePrice, bonus);
                             showAlert("Manager changed successfully!");
 
-                            // بعد از تغییر مدیر، دکمه‌ها را فعال می‌کنیم
                             getEmployeesButton.setDisable(false);
-                            getEmployeeByNationalIdButton.setDisable(false);
                             backButton.setDisable(false);
                             currentManagerButton.setDisable(false);
                         } catch (NumberFormatException e) {

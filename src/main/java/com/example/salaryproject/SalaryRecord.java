@@ -1,6 +1,7 @@
 package com.example.salaryproject;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public abstract class SalaryRecord {
     private LocalDate startDate;
@@ -59,6 +60,20 @@ public abstract class SalaryRecord {
             return EmployeeType.MANAGER;
         return null;
     }
+
+    @Override
+    public String toString() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String startDateStr = startDate != null ? startDate.format(formatter) : "N/A";
+        String endDateStr = endDate != null ? endDate.format(formatter) : "N/A";
+
+        return String.format("Type: %s\nStart Date: %s\nEnd Date: %s\nDepartment: %s\nStatus: %s",
+                getType() != null ? getType().toString() : "N/A",
+                startDateStr, endDateStr,
+                department != null ? department.getName() : "N/A",
+                status != null ? status.toString() : "N/A");
+    }
+
     public abstract double calculateTotalSalary();
 }
 

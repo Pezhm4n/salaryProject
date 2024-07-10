@@ -28,7 +28,6 @@
             <Button fx:id="changeManagerButton" focusTraversable="true" maxWidth="Infinity" onAction="#handleChangeManager" styleClass="action-button" text="Change Manager" />
             <Button fx:id="currentManagerButton" focusTraversable="true" maxWidth="Infinity" onAction="#handleCurrentManager" styleClass="action-button" text="Get Current Manager" />
             <Button fx:id="getEmployeesButton" focusTraversable="true" maxWidth="Infinity" onAction="#handleGetEmployees" styleClass="action-button" text="View and Manage Employees" />
-            <Button fx:id="getEmployeeByNationalIdButton" focusTraversable="true" maxWidth="Infinity" onAction="#handleGetEmployeeByNationalId" styleClass="action-button" text="Get and Manage by National ID" />
             <Button fx:id="backButton" focusTraversable="true" maxWidth="Infinity" onAction="#handleBack" styleClass="back-button" text="Back" />
         </VBox>
     </content>

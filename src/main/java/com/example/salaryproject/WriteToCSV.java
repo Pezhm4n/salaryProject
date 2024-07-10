@@ -51,16 +51,31 @@ public class WriteToCSV {
             }
         }
     }
-    private static void deleteOrganization(Organization organization) {
+    public static void deleteOrganization(Organization organization) {
         if (organization != null) {
+            Path directoryPath = Paths.get(RESOURCE_DIRECTORY + organization.getName());
             try {
-                Files.deleteIfExists(Paths.get(RESOURCE_DIRECTORY + organization.getName()));
+                Files.walkFileTree(directoryPath, new SimpleFileVisitor<Path>() {
+                    @Override
+                    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                        Files.delete(file);
+                        return FileVisitResult.CONTINUE;
+                    }
+
+                    @Override
+                    public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+                        Files.delete(dir);
+                        return FileVisitResult.CONTINUE;
+                    }
+                });
+                System.out.println("Organization folder deleted successfully.");
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
-    private static void deleteDepartment(Department department) {
+
+    public static void deleteDepartment(Department department) {
         if (department != null) {
             try {
                 Files.deleteIfExists(Paths.get(RESOURCE_DIRECTORY + department.getOrganization().getName() + "/" + department.getName() + ".csv"));
@@ -400,32 +415,90 @@ public class WriteToCSV {
         }
         writeCSV(RESOURCE_DIRECTORY + department.getOrganization().getName() + "/" + department.getName() + ".csv", data);
     }
-    public static void updateFieldOfSalaryRecord(Department department, Employee employee, SalaryRecord record, int fieldIndex, String newValue) {
-        ArrayList<String[]> data = readCSV(RESOURCE_DIRECTORY + department.getOrganization().getName() + "/" + department.getName() + ".csv");
-        boolean inSalaryRecordSection = false;
-        boolean inCurrentManagerSection = false;
 
-        for (int i = 0; i < data.size(); i++) {
-            if(data.get(i)[0].equals("Current Manager:"))
-                inCurrentManagerSection = true;
-            else if(data.get(i)[0].equals("Employees:"))
-                inCurrentManagerSection = false;
-            else if (data.get(i).length > 0 && data.get(i)[2].equals(String.valueOf(employee.getNationalId()))) {
-                inSalaryRecordSection = true;
-            }
-            else if (inSalaryRecordSection && data.get(i).length > 4 && data.get(i)[0].equals(record.getStartDate().toString()) &&
-                    data.get(i)[1].equals(record.getEndDate().toString()) &&
-                    data.get(i)[2].equals(record.getDepartment().getName()) &&
-                    data.get(i)[3].equals(record.getStatus().toString()) &&
-                    data.get(i)[4].equals(record.getType().toString())) {
-                data.get(i)[fieldIndex] = newValue;
-                inSalaryRecordSection = false;
-                if(!inCurrentManagerSection)
+
+
+    public static void updateFieldOfSalaryRecord(Department department, Employee employee, SalaryRecord record, int fieldIndex, String newValue) {
+        try {
+            // خواندن داده‌های CSV
+            System.out.println("Reading CSV file...");
+            ArrayList<String[]> data = readCSV(RESOURCE_DIRECTORY + department.getOrganization().getName() + "/" + department.getName() + ".csv");
+            System.out.println("CSV file read successfully.");
+
+            boolean inEmployeeSection = false;
+            boolean recordUpdated = false;
+
+            for (int i = 0; i < data.size(); i++) {
+                // بررسی شروع بخش کارکنان
+                if (data.get(i).length > 0 && data.get(i)[0].equals("Employees:")) {
+                    System.out.println("Entered Employees section.");
+                    inEmployeeSection = true;
+                    continue;
+                }
+
+                // بررسی پایان بخش کارکنان
+                if (inEmployeeSection && data.get(i).length == 0) {
+                    System.out.println("Exiting Employees section.");
+                    break;  // خارج شدن از حلقه پس از پایان بخش کارکنان
+                }
+
+                // پیدا کردن کارمند با استفاده از شناسه ملی
+                if (inEmployeeSection && data.get(i).length > 2 && data.get(i)[2].equals(String.valueOf(employee.getNationalId()))) {
+                    System.out.println("Employee found: " + employee.getNationalId());
+
+                    // پیدا کردن رکورد حقوق و دستمزد
+                    for (int j = i + 1; j < data.size(); j++) {
+                        // بررسی پایان بخش حقوق و دستمزد
+                        if (data.get(j).length == 0) {
+                            System.out.println("End of salary records section.");
+                            break;
+                        }
+
+                        // مقایسه رکورد با داده‌های موجود
+                        if (data.get(j).length > 4 &&
+                                data.get(j)[0].equals(record.getStartDate().toString()) &&
+                                data.get(j)[1].equals(record.getEndDate() != null ? record.getEndDate().toString() : "") &&
+                                data.get(j)[2].equals(record.getDepartment().getName()) &&
+                                data.get(j)[3].equals(record.getStatus().toString())) {
+
+                            System.out.println("Salary record found: " + record.getStartDate());
+
+                            // به روز رسانی فیلد وضعیت
+                            if (fieldIndex < data.get(j).length) {
+                                data.get(j)[fieldIndex] = newValue;
+                                System.out.println("Updating field at index " + fieldIndex + " with new value: " + newValue);
+                                recordUpdated = true;
+                            } else {
+                                System.out.println("Field index out of bounds for the salary record.");
+                            }
+                            break;
+                        } else {
+                            System.out.println("Checking salary record: " + data.get(j)[0] + ", " + (data.get(j).length > 1 ? data.get(j)[1] : "null") + ", " + (data.get(j).length > 2 ? data.get(j)[2] : "null") + ", " + (data.get(j).length > 3 ? data.get(j)[3] : "null"));
+                        }
+                    }
+                }
+
+                if (recordUpdated) {
                     break;
+                }
             }
+
+            // ذخیره تغییرات در فایل CSV
+            if (recordUpdated) {
+                System.out.println("Updating CSV file...");
+                writeCSV(RESOURCE_DIRECTORY + department.getOrganization().getName() + "/" + department.getName() + ".csv", data);
+                System.out.println("Data updated successfully");
+            } else {
+                System.out.println("Record not found or not updated.");
+            }
+
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.err.println("Array index out of bounds: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("An error occurred: " + e.getMessage());
         }
-        writeCSV(RESOURCE_DIRECTORY + department.getOrganization().getName() + "/" + department.getName() + ".csv", data);
     }
+
     public static void changeEmployeeDepartment(Department currentDepartment, Department newDepartment, Employee employee){
         removeEmployeeFromDepartment(currentDepartment, employee);
         addFormerEmployeeToDepartment(newDepartment, employee);

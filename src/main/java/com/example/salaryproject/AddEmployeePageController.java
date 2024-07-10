@@ -6,6 +6,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -14,6 +15,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.regex.Pattern;
 
 public class AddEmployeePageController {
@@ -57,6 +59,18 @@ public class AddEmployeePageController {
     }
 
     @FXML
+    private void initialize() {
+        LocalDate maxDate = LocalDate.now().minusYears(18);
+        dateOfBirthPicker.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                setDisable(empty || date.isAfter(maxDate));
+            }
+        });
+    }
+
+    @FXML
     private void handleSalaryTypeChange() {
         String salaryType = salaryTypeComboBox.getValue();
 
@@ -94,8 +108,6 @@ public class AddEmployeePageController {
         }
     }
 
-
-
     @FXML
     private void handleAddEmployee(ActionEvent event) {
         String firstName = firstNameField.getText();
@@ -125,10 +137,13 @@ public class AddEmployeePageController {
         } else if (!isValidEmail(email)) {
             messageLabel.setText("Invalid email format!");
             messageLabel.setStyle("-fx-text-fill: red;");
+        } else if (!isValidAge(dateOfBirth)) {
+            messageLabel.setText("Employee must be at least 18 years old!");
+            messageLabel.setStyle("-fx-text-fill: red;");
         } else {
             try {
-                int nationalId = Integer.parseInt(nationalIdText);
-                int phoneNumber = Integer.parseInt(phoneNumberText);
+                long nationalId = Long.parseLong(nationalIdText);
+                long phoneNumber = Long.parseLong(phoneNumberText);
 
                 if (selectedDepartment == null) {
                     messageLabel.setText("No department selected!");
@@ -194,6 +209,12 @@ public class AddEmployeePageController {
         return pattern.matcher(email).matches();
     }
 
+    private boolean isValidAge(LocalDate dateOfBirth) {
+        LocalDate today = LocalDate.now();
+        Period period = Period.between(dateOfBirth, today);
+        return period.getYears() >= 18;
+    }
+
     @FXML
     private void handleBack(ActionEvent event) {
         if (selectedDepartment == null) {
@@ -221,8 +242,7 @@ public class AddEmployeePageController {
         clearFields();
     }
 
-    private void clearFields()
-    {
+    private void clearFields() {
         firstNameField.clear();
         lastNameField.clear();
         nationalIdField.clear();

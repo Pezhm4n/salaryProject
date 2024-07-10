@@ -22,4 +22,8 @@ public class CommissionPlusFixedSalary extends CommissionSalary{
     public double calculateTotalSalary(){
         return super.calculateTotalSalary() + fixedAmount;
     }
+    @Override
+    public String toString() {
+        return super.toString() + String.format("Fixed Amount: %.2f\n", fixedAmount);
+    }
 }

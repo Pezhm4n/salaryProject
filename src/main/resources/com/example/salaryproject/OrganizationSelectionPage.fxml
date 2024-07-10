@@ -18,8 +18,10 @@
         </font>
     </Label>
 
-    <ListView fx:id="organizationListView" maxWidth="Infinity" styleClass="list-view" />
+    <ListView fx:id="organizationListView" prefHeight="200.0" prefWidth="200.0" styleClass="list-view" />
 
+    <Label fx:id="statusLabel" styleClass="message-label" />
     <Button focusTraversable="true" maxWidth="Infinity" onAction="#handleOrganizationSelection" styleClass="action-button" text="Select" />
+    <Button focusTraversable="true" maxWidth="Infinity" onAction="#handleDeleteOrganization" styleClass="action-button" text="Delete" />
     <Button focusTraversable="true" maxWidth="Infinity" onAction="#handleBack" styleClass="back-button" text="Back" />
 </VBox>

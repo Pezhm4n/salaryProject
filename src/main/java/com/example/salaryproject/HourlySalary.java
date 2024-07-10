@@ -34,4 +34,10 @@ public class HourlySalary extends SalaryRecord {
     public double calculateTotalSalary() {
         return hourlyRate * hoursWorked;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + String.format("\nHourly Rate: %.2f\nHours Worked: %.2f\n",
+                hourlyRate, hoursWorked);
+    }
 }
