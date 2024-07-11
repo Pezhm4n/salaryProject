@@ -143,7 +143,6 @@ public class AddEmployeePageController {
         } else {
             try {
                 long nationalId = Long.parseLong(nationalIdText);
-                long phoneNumber = Long.parseLong(phoneNumberText);
 
                 if (selectedDepartment == null) {
                     messageLabel.setText("No department selected!");
@@ -152,7 +151,7 @@ public class AddEmployeePageController {
                 }
 
                 // Create new Employee object
-                Employee newEmployee = new Employee(firstName, lastName, nationalId, dateOfBirth, email, phoneNumber);
+                Employee newEmployee = new Employee(firstName, lastName, nationalId, dateOfBirth, email, phoneNumberText);
 
                 switch (salaryType) {
                     case "FixedSalary":

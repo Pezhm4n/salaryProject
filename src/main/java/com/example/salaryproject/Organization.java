@@ -128,7 +128,7 @@ public class Organization {
                 .mapToDouble(FinancialRecord::getBudget)
                 .sum();
     }
-    public Employee getEmployeeByNationalID(int nationalID) {
+    public Employee getEmployeeByNationalID(long nationalID) {
         for (Department department : departments) {
             for (Employee employee : department.getEmployees()) {
                 if (employee.getNationalId() == nationalID)
