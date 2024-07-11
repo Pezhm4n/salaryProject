@@ -25,17 +25,16 @@ public class Department {
         this(organization, name, capacity, headCount, description, null, null, null, null);
     }
 
-    public Department(Organization organization,String name, int capacity, int headCount, String description, FinancialRecord[] financialRecords, Employee[] employees, Employee[] formerManagers, Employee[] formerEmployees) {
+    public Department(Organization organization,String name, int capacity, int headCount, String description, ObservableList<FinancialRecord> financialRecords, ObservableList<Employee> employees, ObservableList<Employee> formerManagers, ObservableList<Employee> formerEmployees) {
         this.organization = organization;
         this.name = name;
         this.capacity = capacity;
         this.headCount = headCount;
         this.workField = description;
-        this.employees = employees == null ? FXCollections.observableArrayList() : FXCollections.observableArrayList(employees);
-        this.financialRecords = financialRecords == null ? FXCollections.observableArrayList() : FXCollections.observableArrayList(financialRecords);
-        this.formerManagers = formerManagers == null ? FXCollections.observableArrayList() : FXCollections.observableArrayList(formerManagers);
-        this.formerEmployees = formerEmployees == null ? FXCollections.observableArrayList() : FXCollections.observableArrayList(formerEmployees);
-        incrementHeadCount();
+        this.employees = employees == null ? FXCollections.observableArrayList() : employees;
+        this.financialRecords = financialRecords == null ? FXCollections.observableArrayList() : financialRecords;
+        this.formerManagers = formerManagers == null ? FXCollections.observableArrayList() : formerManagers;
+        this.formerEmployees = formerEmployees == null ? FXCollections.observableArrayList() : formerEmployees;
     }
 
 
@@ -85,10 +84,8 @@ public class Department {
     }
 
     public Employee getCurrentManager(){
-        for(Employee employee : employees){
-            if(employee.isCurrentManager() && this.manager == employee)
-                return employee;
-        }
+        if(this.manager != null && this.manager.isCurrentManager())
+            return this.manager;
         return null;
     }
 
@@ -134,7 +131,9 @@ public class Department {
     }
 
     public FinancialRecord getLastFinancialRecord(){
-        return financialRecords.get(financialRecords.size() - 1);
+        if(!financialRecords.isEmpty())
+            return financialRecords.get(financialRecords.size() - 1);
+        return null;
     }
     public void createNewFinancialRecord(LocalDate startDate, double budget, double revenue, double costs){
         if(!getFinancialRecords().isEmpty())
@@ -143,7 +142,9 @@ public class Department {
         addFinancialRecord(newRecord);
     }
     public void addFinancialRecord(FinancialRecord newRecord){
-        this.getLastFinancialRecord().setEndDate(LocalDate.now());
+        FinancialRecord lastFinancialRecord = this.getLastFinancialRecord();
+        if(lastFinancialRecord != null)
+            this.getLastFinancialRecord().setEndDate(LocalDate.now());
         financialRecords.add(newRecord);
     }
     public Organization getOrganization() {

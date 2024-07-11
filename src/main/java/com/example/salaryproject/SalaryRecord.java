@@ -3,7 +3,7 @@ package com.example.salaryproject;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public abstract class SalaryRecord {
+public class SalaryRecord {
     private LocalDate startDate;
     private LocalDate endDate;
     private Department department;
@@ -74,6 +74,8 @@ public abstract class SalaryRecord {
                 status != null ? status.toString() : "N/A");
     }
 
-    public abstract double calculateTotalSalary();
+    public double calculateTotalSalary() {
+        return 0.0;
+    }
 }
 

@@ -13,21 +13,21 @@ public class Employee {
     private long nationalId;
     private LocalDate dateOfBirth;
     private String email;
-    private long phoneNumber;
+    private String phoneNumber;
     private ObservableList<SalaryRecord> salaryRecords;
 
-    public Employee(String firstName, String lastName, long nationalId, LocalDate dateOfBirth, String email, long phoneNumber){
+    public Employee(String firstName, String lastName, long nationalId, LocalDate dateOfBirth, String email, String phoneNumber){
         this(firstName, lastName, nationalId, dateOfBirth, email, phoneNumber, null);
     }
 
-    public Employee(String firstName, String lastName, long nationalId, LocalDate dateOfBirth, String email, long phoneNumber, SalaryRecord[] salaryRecords) {
+    public Employee(String firstName, String lastName, long nationalId, LocalDate dateOfBirth, String email, String phoneNumber, ObservableList<SalaryRecord> salaryRecords) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.nationalId = nationalId;
         this.dateOfBirth = dateOfBirth;
         this.email = email;
         this.phoneNumber = phoneNumber;
-        this.salaryRecords = salaryRecords == null ? FXCollections.observableArrayList() : FXCollections.observableArrayList(salaryRecords);
+        this.salaryRecords = salaryRecords == null ? FXCollections.observableArrayList() : salaryRecords;
 
     }
 
@@ -51,7 +51,7 @@ public class Employee {
         return email;
     }
 
-    public long getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
@@ -75,7 +75,7 @@ public class Employee {
         this.email = email;
     }
 
-    public void setPhoneNumber(long phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
@@ -324,9 +324,6 @@ public class Employee {
         LocalDate endDate = null;
         ManagerSalary newRecord = new ManagerSalary(startDate, endDate, department, newStatus, baseMonthlySalary, commissionRate, netProfitOfDepartment, sharesGranted, currentSharePrice, bonus);
         salaryRecords.add(newRecord);
-
-        if(!becameManagerInSameDepartment)
-            department.addEmployee(this);
 
         Employee formerManager = department.getCurrentManager();
         if (formerManager != null)
