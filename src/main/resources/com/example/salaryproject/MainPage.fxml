@@ -25,6 +25,8 @@
 
     <Button onAction="#handleEnterOrganization" text="Enter Organization" styleClass="menu-button" focusTraversable="true" />
 
+    <Button onAction="#handleRandomGenerator" text="Random Generator" styleClass="menu-button" focusTraversable="true" />
+
     <Button onAction="#handleReports" text="Reports" styleClass="menu-button" focusTraversable="true" />
 
     <Button fx:id="logoutButton" onAction="#handleLogout" text="Logout" styleClass="menu-button" focusTraversable="true" />

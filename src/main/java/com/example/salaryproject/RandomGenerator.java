@@ -9,8 +9,8 @@ import java.util.*;
 
 public class RandomGenerator {
     private static final Random RANDOM = new Random();
-    private static final List<String> ORGANIZATION_NAMES = List.of("TechCorp", "InnovaTech", "NextGen Solutions", "InfoMatrix", "FutureWorks");
-    private static final List<String> INDUSTRIES = List.of("Software", "Hardware", "IT Services", "Consulting", "Telecom");
+    private static final List<String> ORGANIZATION_NAMES = List.of("TechCorp", "InnovaTech", "NextGenSolutions", "InfoMatrix", "FutureWorks");
+    private static final List<String> INDUSTRIES = List.of("Software", "Hardware", "ITServices", "Consulting", "Telecom");
     private static final List<String> HEADQUARTERS = List.of("Tehran", "Mashhad", "Isfahan", "Shiraz", "Tabriz");
     private static final List<String> CEOS = List.of("Ali Rezaei", "Hossein Ahmadi", "Nima Yousefi", "Farhad Kamrani", "Parsa Tavakoli");
 
@@ -94,11 +94,11 @@ public class RandomGenerator {
         }
     }
     private static final List<String> DEPARTMENTS = Arrays.asList(
-            "Engineering", "Product", "Marketing", "Sales", "Human Resources",
-            "Finance", "IT Support", "Design", "Customer Support", "Legal",
-            "Operations", "Business Development", "Data Science", "DevOps",
-            "Quality Assurance", "Research and Development", "Security",
-            "Public Relations", "Administration", "Content"
+            "Engineering", "Product", "Marketing", "Sales", "HumanResources",
+            "Finance", "IT Support", "Design", "CustomerSupport", "Legal",
+            "Operations", "BusinessDevelopment", "Data Science", "DevOps",
+            "QualityAssurance", "ResearchAndDevelopment", "Security",
+            "PublicRelations", "Administration", "Content"
     );
 
     private static final List<String> DESCRIPTIONS = Arrays.asList(
