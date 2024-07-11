@@ -20,8 +20,8 @@
     <Button onAction="#generateDepartmentFinancialSummaryReport" text="Department Financial Summary Report" styleClass="report-button" focusTraversable="true" maxWidth="Infinity" />
     <Button onAction="#generateDepartmentPerformanceReport" text="Department Performance Report" styleClass="report-button" focusTraversable="true" maxWidth="Infinity" />
     <Button onAction="#generateDepartmentActionReport" text="Department Action Report" styleClass="report-button" focusTraversable="true" maxWidth="Infinity" />
+    <Button onAction="#generateEmployeesReport" text="Employees Report" styleClass="report-button" focusTraversable="true" maxWidth="Infinity" />
     <Button onAction="#generateManagersReport" text="Managers Report" styleClass="report-button" focusTraversable="true" maxWidth="Infinity" />
-    <!-- Add more department report buttons as needed -->
 
     <Button fx:id="backButton" onAction="#handleBack" text="Back" styleClass="back-button" focusTraversable="true" maxWidth="Infinity" />
 </VBox>

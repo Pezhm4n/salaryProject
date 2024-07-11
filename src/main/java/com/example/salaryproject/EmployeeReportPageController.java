@@ -8,11 +8,10 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class EmployeeReportPageController {
 
-    private ArrayList<Employee> employees;
+    private Employee employees;
 
     @FXML
     private void generateEmployeePerformanceReport() {
@@ -66,7 +65,7 @@ public class EmployeeReportPageController {
         }
     }
 
-    public void setEmployees(ArrayList<Employee> employees) {
-        this.employees = employees;
+    public void setEmployee(Employee employee) {
+        this.employees = employee;
     }
 }

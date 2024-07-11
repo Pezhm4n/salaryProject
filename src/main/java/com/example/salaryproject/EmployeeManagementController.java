@@ -9,6 +9,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -46,6 +48,14 @@ public class EmployeeManagementController {
                     return;
                 }
 
+                // بررسی اینکه آیا کارمند مدیر دپارتمان فعلی‌اش هست
+                Department currentDepartment = currentEmployee.getCurrentDepartment();
+                Employee currentManager = currentDepartment.getCurrentManager();
+                if (currentEmployee.equals(currentManager)) {
+                    showErrorAlert("The current employee is the manager of their department.\nThey cannot change departments.");
+                    return;
+                }
+
                 List<Department> availableDepartments = organization.getDepartments().stream()
                         .filter(department -> !department.equals(currentEmployee.getCurrentDepartment()))
                         .collect(Collectors.toList());
@@ -59,6 +69,19 @@ public class EmployeeManagementController {
                 departmentListView.setItems(FXCollections.observableArrayList(availableDepartments));
                 departmentListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
+                // Set a cell factory to display the name of the department
+                departmentListView.setCellFactory(param -> new ListCell<>() {
+                    @Override
+                    protected void updateItem(Department department, boolean empty) {
+                        super.updateItem(department, empty);
+                        if (empty || department == null) {
+                            setText(null);
+                        } else {
+                            setText(department.getName());
+                        }
+                    }
+                });
+
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Select New Department");
                 alert.setHeaderText("Select a new department for " + currentEmployee.getFirstName() + " " + currentEmployee.getLastName());
@@ -68,8 +91,6 @@ public class EmployeeManagementController {
                 if (result.isPresent() && result.get() == ButtonType.OK) {
                     Department selectedDepartment = departmentListView.getSelectionModel().getSelectedItem();
                     if (selectedDepartment != null) {
-                        Department currentDepartment = currentEmployee.getCurrentDepartment();
-
                         currentDepartment.removeEmployee(currentEmployee);
 
                         // Get salary records and remove all except the latest one
@@ -84,8 +105,8 @@ public class EmployeeManagementController {
                         }
                         currentEmployee.setDepartment(selectedDepartment);
 
-                        //  write the changes to file
-                        selectedDepartment.addEmployee(currentEmployee , true);
+                        // Write the changes to file
+                        selectedDepartment.addEmployee(currentEmployee, true);
 
                         showInformationAlert("Change Department", "Department changed successfully.");
                     } else {
@@ -99,8 +120,6 @@ public class EmployeeManagementController {
             showErrorAlert("An error occurred: " + e.getMessage());
         }
     }
-
-
 
     @FXML
     private void showEmployeeInfo() {
@@ -137,47 +156,43 @@ public class EmployeeManagementController {
         try {
             String input;
             if (currentRecord instanceof FixedSalary) {
-                input = getUserInput("New Fixed Salary Record", "Enter new base monthly salary, overTimeHours, and overTimeRate (comma separated):");
-                if (input != null) {
-                    String[] parts = validateAndParseInput(input, 3);
-                    double newBaseMonthlySalary = Double.parseDouble(parts[0]);
-                    double overTimeHours = Double.parseDouble(parts[1]);
-                    double overTimeRate = Double.parseDouble(parts[2]);
-                    currentEmployee.newFixedSalaryRecord(newDepartment, newStatus, newBaseMonthlySalary, overTimeHours, overTimeRate);
-                }
+                input = getUserInput("New Fixed Salary Record", "Enter new base monthly salary\noverTimeHours\noverTimeRate\n(comma separated):");
+                if (input == null) return;  // Exit if input is null (Cancel button clicked or window closed)
+                String[] parts = validateAndParseInput(input, 3);
+                double newBaseMonthlySalary = Double.parseDouble(parts[0]);
+                double overTimeHours = Double.parseDouble(parts[1]);
+                double overTimeRate = Double.parseDouble(parts[2]);
+                currentEmployee.newFixedSalaryRecord(newDepartment, newStatus, newBaseMonthlySalary, overTimeHours, overTimeRate);
             } else if (currentRecord instanceof CommissionSalary) {
-                input = getUserInput("New Commission Salary Record", "Enter new commission rate and total sales:");
-                if (input != null) {
-                    String[] parts = validateAndParseInput(input, currentRecord instanceof CommissionPlusFixedSalary ? 3 : 2);
-                    double newCommissionRate = Double.parseDouble(parts[0]);
-                    double newTotalSales = Double.parseDouble(parts[1]);
-                    if (currentRecord instanceof CommissionPlusFixedSalary) {
-                        double newFixedAmount = Double.parseDouble(parts[2]);
-                        currentEmployee.newCommissionPlusFixedSalaryRecord(newDepartment, newStatus, newCommissionRate, newTotalSales, newFixedAmount);
-                    } else {
-                        currentEmployee.newCommissionSalaryRecord(newDepartment, newStatus, newCommissionRate, newTotalSales);
-                    }
+                input = getUserInput("New Commission Salary Record", "Enter new commission rate and total sales\n(comma separated):");
+                if (input == null) return;
+                String[] parts = validateAndParseInput(input, currentRecord instanceof CommissionPlusFixedSalary ? 3 : 2);
+                double newCommissionRate = Double.parseDouble(parts[0]);
+                double newTotalSales = Double.parseDouble(parts[1]);
+                if (currentRecord instanceof CommissionPlusFixedSalary) {
+                    double newFixedAmount = Double.parseDouble(parts[2]);
+                    currentEmployee.newCommissionPlusFixedSalaryRecord(newDepartment, newStatus, newCommissionRate, newTotalSales, newFixedAmount);
+                } else {
+                    currentEmployee.newCommissionSalaryRecord(newDepartment, newStatus, newCommissionRate, newTotalSales);
                 }
             } else if (currentRecord instanceof HourlySalary) {
-                input = getUserInput("New Hourly Salary Record", "Enter new hourly rate and hours worked:");
-                if (input != null) {
-                    String[] parts = validateAndParseInput(input, 2);
-                    double newHourlyRate = Double.parseDouble(parts[0]);
-                    double newHoursWorked = Double.parseDouble(parts[1]);
-                    currentEmployee.newHourlySalaryRecord(newDepartment, newStatus, newHourlyRate, newHoursWorked);
-                }
+                input = getUserInput("New Hourly Salary Record", "Enter new hourly rate and hours worked\n(comma separated):");
+                if (input == null) return;
+                String[] parts = validateAndParseInput(input, 2);
+                double newHourlyRate = Double.parseDouble(parts[0]);
+                double newHoursWorked = Double.parseDouble(parts[1]);
+                currentEmployee.newHourlySalaryRecord(newDepartment, newStatus, newHourlyRate, newHoursWorked);
             } else if (currentRecord instanceof ManagerSalary) {
-                input = getUserInput("New Manager Salary Record", "Enter new base monthly salary, commission rate, net profit, shares granted, share price, and bonus:");
-                if (input != null) {
-                    String[] parts = validateAndParseInput(input, 6);
-                    double newBaseMonthlySalary = Double.parseDouble(parts[0]);
-                    double newCommissionRate = Double.parseDouble(parts[1]);
-                    double newNetProfit = Double.parseDouble(parts[2]);
-                    double newSharesGranted = Double.parseDouble(parts[3]);
-                    double newSharePrice = Double.parseDouble(parts[4]);
-                    double newBonus = Double.parseDouble(parts[5]);
-                    currentEmployee.newManagerSalaryRecord(newDepartment, newStatus, newBaseMonthlySalary, newCommissionRate, newNetProfit, newSharesGranted, newSharePrice, newBonus);
-                }
+                input = getUserInput("New Manager Salary Record", "Enter new base monthly salary\ncommission rate\nnet profit\nshares granted\nshare price\nand bonus\n(comma separated):");
+                if (input == null) return;
+                String[] parts = validateAndParseInput(input, 6);
+                double newBaseMonthlySalary = Double.parseDouble(parts[0]);
+                double newCommissionRate = Double.parseDouble(parts[1]);
+                double newNetProfit = Double.parseDouble(parts[2]);
+                double newSharesGranted = Double.parseDouble(parts[3]);
+                double newSharePrice = Double.parseDouble(parts[4]);
+                double newBonus = Double.parseDouble(parts[5]);
+                currentEmployee.newManagerSalaryRecord(newDepartment, newStatus, newBaseMonthlySalary, newCommissionRate, newNetProfit, newSharesGranted, newSharePrice, newBonus);
             }
             showInformationAlert("New Salary Record", "New salary record added successfully.");
         } catch (NumberFormatException e) {
@@ -193,7 +208,29 @@ public class EmployeeManagementController {
         for (SalaryRecord record : currentEmployee.getSalaryRecords()) {
             records.append(record.toString()).append("\n");
         }
-        showInformationAlert("All Salary Records", records.length() > 0 ? records.toString() : "No salary records found.");
+
+        String allRecords = records.length() > 0 ? records.toString() : "No salary records found.";
+
+        TextArea textArea = new TextArea(allRecords);
+        textArea.setEditable(false); // غیر قابل ویرایش
+        textArea.setWrapText(true); // پیچیدن متن در خطوط
+
+        ScrollPane scrollPane = new ScrollPane(textArea);
+        scrollPane.setFitToWidth(true); // تنظیم عرض اسکرول‌پن به اندازه محتوای آن
+        scrollPane.setFitToHeight(true); // تنظیم ارتفاع اسکرول‌پن به اندازه محتوای آن
+
+        scrollPane.setPrefSize(400, 555);
+
+        VBox vBox = new VBox(scrollPane);
+        vBox.setPrefSize(400, 555);
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("All Salary Records");
+        alert.setHeaderText(null);
+        alert.getDialogPane().setContent(vBox);
+        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+
+        alert.showAndWait();
     }
 
     @FXML
@@ -209,7 +246,7 @@ public class EmployeeManagementController {
     }
 
     @FXML
-    private void changeEmployeeType() {
+    public void changeEmployeeType() {
         Department currentDepartment = currentEmployee.getCurrentDepartment();
         Status currentStatus = currentEmployee.getCurrentStatus();
 
@@ -284,12 +321,12 @@ public class EmployeeManagementController {
         }
     }
 
-    private String getUserInput(String title, String headerText) {
+    private String getUserInput(String title, String content) {
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle(title);
-        dialog.setHeaderText(headerText);
+        dialog.setHeaderText(content);
         Optional<String> result = dialog.showAndWait();
-        return result.orElse(null);
+        return result.orElse(null);  // Return null if the dialog was canceled or closed
     }
 
     private String[] validateAndParseInput(String input, int expectedParts) throws IllegalArgumentException {

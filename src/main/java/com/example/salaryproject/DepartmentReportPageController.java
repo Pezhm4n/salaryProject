@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class DepartmentReportPageController {
 
-    private ArrayList<Department> departments;
+    private Department department;
 
     @FXML
     private void generateDepartmentFinancialSummaryReport() {
@@ -34,6 +34,12 @@ public class DepartmentReportPageController {
         // Implement the logic to generate the managers report
     }
 
+    @FXML
+    private void generateEmployeesReport() {
+        // Implement the logic to generate the Employees Report
+        //با نمودار نمایش داده شود
+    }
+
     // Add more department report methods as needed
 
     @FXML
@@ -51,7 +57,7 @@ public class DepartmentReportPageController {
         }
     }
 
-    public void setDepartments(ArrayList<Department> departments) {
-        this.departments = departments;
+    public void setDepartment(Department departments) {
+        this.department = departments;
     }
 }

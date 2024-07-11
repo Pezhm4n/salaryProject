@@ -274,6 +274,14 @@ public class DepartmentPageController {
             if (!employees.isEmpty()) {
                 Employee selectedEmployee = showEmployeeListDialog(employees);
                 if (selectedEmployee != null) {
+                    Employee currentManager = selectedDepartment.getCurrentManager();
+
+                    // چک کردن اینکه آیا کارمند انتخاب شده همان مدیر فعلی است یا نه
+                    if (selectedEmployee.equals(currentManager)) {
+                        showAlert("کارمند انتخاب شده مدیر فعلی است. اگر قصد تغییر اندازه حقوق او را دارید به بخش View and Manage Employees بروید.");
+                        return;
+                    }
+
                     TextInputDialog dialog = new TextInputDialog();
                     dialog.setTitle("Change Manager");
                     dialog.setHeaderText("Enter the required information for the new manager");
@@ -321,14 +329,36 @@ public class DepartmentPageController {
                             double currentSharePrice = Double.parseDouble(currentSharePriceField.getText());
                             double bonus = Double.parseDouble(bonusField.getText());
 
+                            // تغییر مدیر دپارتمان
                             selectedEmployee.newManagerSalaryRecord(selectedDepartment, selectedEmployee.getCurrentStatus(), baseMonthlySalary, commissionRate, netProfitOfDepartment, sharesGranted, currentSharePrice, bonus);
-                            showAlert("Manager changed successfully!");
 
-                            getEmployeesButton.setDisable(false);
-                            backButton.setDisable(false);
-                            currentManagerButton.setDisable(false);
+                            // فراخوانی متد changeEmployeeType برای مدیر قبلی
+                            if (currentManager != null) {
+                                FXMLLoader loader = new FXMLLoader(getClass().getResource("EmployeeManagement.fxml"));
+                                Parent root = loader.load();
+                                EmployeeManagementController controller = loader.getController();
+                                controller.setEmployee(currentManager);
+                                controller.setDepartment(selectedDepartment);
+                                controller.setOrganization(selectedDepartment.getOrganization());
+
+                                // غیرفعال کردن دسترسی به سایر اجزای برنامه
+                                getEmployeesButton.setDisable(true);
+                                backButton.setDisable(true);
+                                currentManagerButton.setDisable(true);
+
+                                controller.changeEmployeeType();
+
+                                // فعال کردن دسترسی به سایر اجزای برنامه
+                                getEmployeesButton.setDisable(false);
+                                backButton.setDisable(false);
+                                currentManagerButton.setDisable(false);
+                            }
+
+                            showAlert("Manager changed successfully!");
                         } catch (NumberFormatException e) {
                             showAlert("Invalid input. Please enter valid numbers.");
+                        } catch (IOException e) {
+                            showAlert("An error occurred while loading the employee management page.");
                         }
                     }
                 }
@@ -339,6 +369,7 @@ public class DepartmentPageController {
             showAlert("No department selected.");
         }
     }
+
 
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);

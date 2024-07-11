@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -17,9 +18,10 @@
         </font>
     </Label>
 
-    <Button onAction="#generateOrganizationReports" styleClass="report-button" text="Organization Reports" focusTraversable="true" maxWidth="Infinity" />
-    <Button onAction="#generateDepartmentReports" styleClass="report-button" text="Department Reports" focusTraversable="true" maxWidth="Infinity" />
-    <Button onAction="#generateEmployeeReports" styleClass="report-button" text="Employee Reports" focusTraversable="true" maxWidth="Infinity" />
+    <!-- ListView for displaying organizations -->
+    <ListView fx:id="organizationListView" maxHeight="200.0" maxWidth="Infinity" />
+
+    <Button onAction="#generateOrganizationReports" styleClass="report-button" text="Select" focusTraversable="true" maxWidth="Infinity" />
 
     <Button fx:id="backButton" onAction="#handleBack" styleClass="back-button" text="Back" maxWidth="Infinity" />
 </VBox>

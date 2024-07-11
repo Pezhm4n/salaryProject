@@ -191,4 +191,8 @@ public class Department {
         this.financialRecords = FXCollections.observableArrayList(financialRecords);
     }
 
+    @Override
+    public String toString() {
+        return this.name;
+    }
 }

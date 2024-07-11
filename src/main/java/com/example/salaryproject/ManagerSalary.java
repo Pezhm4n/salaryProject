@@ -92,7 +92,7 @@ public class ManagerSalary extends SalaryRecord{
 
     @Override
     public String toString() {
-        return super.toString() + String.format("\nBase Monthly Salary: %.2f\nCommission Rate: %.2f\nNet Profit of Department: %.2f\nShares Granted: %.2f\nCurrent Share Price: %.2f\nBonus: %.2f",
+        return super.toString() + String.format("\nBase Monthly Salary: %.2f\nCommission Rate: %.2f\nNet Profit of Department: %.2f\nShares Granted: %.2f\nCurrent Share Price: %.2f\nBonus: %.2f\n",
                 baseMonthlySalary, commissionRate, netProfitOfDepartment, sharesGranted, currentSharePrice, bonus);
     }
 }

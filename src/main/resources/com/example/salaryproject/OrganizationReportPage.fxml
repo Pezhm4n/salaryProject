@@ -21,6 +21,9 @@
             </Label>
 
             <Button maxWidth="Infinity" onAction="#generateOrganizationFinancialSummaryReport" styleClass="report-button" text="Organization Financial Summary Report" focusTraversable="true"/>
+            <Button maxWidth="Infinity" onAction="#showDepartments" styleClass="report-button" text="Departments" focusTraversable="true"/>
+            <Button maxWidth="Infinity" onAction="#generateDepartmentReport" styleClass="report-button" text="Department Report" focusTraversable="true"/>
+            <Button maxWidth="Infinity" onAction="#generateEmployeeReport" styleClass="report-button" text="Employee Report" focusTraversable="true"/>
             <!-- Add more organization report buttons as needed -->
 
             <Button fx:id="backButton" maxWidth="Infinity" onAction="#handleBack" styleClass="back-button" text="Back" focusTraversable="true"/>
