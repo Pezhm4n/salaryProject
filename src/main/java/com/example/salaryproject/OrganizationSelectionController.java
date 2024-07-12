@@ -48,7 +48,7 @@ public class OrganizationSelectionController {
 
     private void loadOrganizationsFromFiles() {
         organizations.clear();
-        Path resourceDirectory = Paths.get(WriteToCSV.RESOURCE_DIRECTORY);
+        Path resourceDirectory = Paths.get(FileHandler.RESOURCE_DIRECTORY);
         try {
             Files.list(resourceDirectory).forEach(path -> {
                 if (Files.isDirectory(path) && !path.endsWith("css")) {
@@ -74,7 +74,7 @@ public class OrganizationSelectionController {
     private Organization readOrganizationFromFile(Path organizationPath) {
         Path organizationInfoFile = organizationPath.resolve("organization_info.csv");
         if (Files.exists(organizationInfoFile)) {
-            List<String[]> data = WriteToCSV.readCSV(organizationInfoFile.toString(), true);
+            List<String[]> data = FileHandler.readCSV(organizationInfoFile.toString(), true);
             if (data.size() > 0) {
                 String[] organizationData = data.get(0);
                 if (organizationData.length >= 7) {
@@ -89,7 +89,7 @@ public class OrganizationSelectionController {
                     Organization organization = new Organization(name, industry, foundationYear, headquarters, ceo, totalShares, sharePrice);
 
                     // Load departments
-                    Organization updatedOrganization = WriteToCSV.createOrganizationAndDepartments(name);
+                    Organization updatedOrganization = FileHandler.createOrganizationAndDepartments(name);
                     updatedOrganization.getDepartments().forEach(organization::addDepartment);
 
                     return organization;
@@ -152,7 +152,7 @@ public class OrganizationSelectionController {
             Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
 
-                WriteToCSV.deleteOrganization(selectedOrganization);
+                FileHandler.deleteOrganization(selectedOrganization);
                 refreshOrganizationList();
                 statusLabel.setText("Organization " + selectedOrganization.getName() + " deleted successfully.");
             }

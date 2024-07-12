@@ -39,7 +39,7 @@ public class Department {
 
 
     public void saveToCSV() {
-        WriteToCSV.writeDepartmentDataToCsv(this);
+        FileHandler.writeDepartmentDataToCsv(this);
     }
 
     public String getName() {
@@ -109,7 +109,7 @@ public class Department {
         if (fromController) {
             incrementHeadCount();
             employees.add(employee);
-            WriteToCSV.addEmployeeToDepartment(this ,employee);
+            FileHandler.addEmployeeToDepartment(this ,employee);
         }
     }
 
@@ -118,8 +118,8 @@ public class Department {
         employees.remove(employee);
         decrementHeadCount();
         formerEmployees.add(employee);
-        WriteToCSV.removeEmployeeFromDepartment(this, employee);
-        WriteToCSV.addFormerEmployeeToDepartment(this, employee);
+        FileHandler.removeEmployeeFromDepartment(this, employee);
+        FileHandler.addFormerEmployeeToDepartment(this, employee);
     }
 
     public ObservableList<Employee> getEmployees() {

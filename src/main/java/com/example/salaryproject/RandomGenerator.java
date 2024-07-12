@@ -36,7 +36,6 @@ public class RandomGenerator {
             departments.add(createRandomDepartmentWithFinancialRecords(organization));
         }
         organization.getDepartments().addAll(departments);
-
         for(Department department : departments){
             // Adding Manager
             Employee manager = getRandomUniqueEmployee();
@@ -53,13 +52,14 @@ public class RandomGenerator {
                 employee.setSalaryRecords(salaryRecords);
             }
             department.setEmployees(employees);
+            department.addEmployee(manager);
         }
 
         organization.getDepartments().addAll(departments);
 
         adjustSalaryRecordsAcrossDepartments(organization);
 
-        WriteToCSV.creatOrganization(organization);
+        FileHandler.creatOrganization(organization);
         return organization;
     }
 
@@ -179,6 +179,7 @@ public class RandomGenerator {
             "Shokoufeh", "Nasim", "Sepideh", "Yasamin", "Taraneh", "Marjan", "Soraya", "Forough", "Bahar", "Nahid",
             "Hasti", "Mahsa", "Kimiya", "Yas", "Mahnaz", "Parichehr", "Roudabeh", "Mandana", "Tina", "Lida"
     );
+    static int firstNames_index = 0;
 
     private static final List<String> LAST_NAMES = Arrays.asList(
             "Ahmadi", "Mohammadi", "Hosseini", "Rahimi", "Ebrahimi", "Rezaei", "Alavi", "Sadeghi", "Karimi", "Mousavi",
@@ -192,28 +193,31 @@ public class RandomGenerator {
             "Azimi", "Sanaei", "Jalali", "Esmaeili", "Amiri", "Etemadi", "Shokri", "Amjad", "Kaviani", "Khoshkhoo",
             "Shadmehr", "Pirouz", "Daryanavard", "Kamrani", "Hemmat", "Rastegari", "Shirazi", "Shahriari", "Aslani", "Javan"
     );
+    static int lastNames_index = 0;
 
         private static final Set<String> USED_NAMES = new HashSet<>();
         private static final Set<String> USED_LAST_NAMES = new HashSet<>();
         private static final Set<String> USED_NATIONAL_IDS = new HashSet<>();
 
-        public static String getRandomUniqueFirstName() {
-            String firstName;
-            do {
-                firstName = FIRST_NAMES.get(RANDOM.nextInt(FIRST_NAMES.size()));
-            } while (USED_NAMES.contains(firstName));
-            USED_NAMES.add(firstName);
-            return firstName;
-        }
+    public static String getRandomUniqueFirstName() {
+        String firstName;
+        do {
+            firstName = FIRST_NAMES.get(firstNames_index);
+            firstNames_index = (firstNames_index + 1) % FIRST_NAMES.size(); // Increment and wrap around
+        } while (USED_NAMES.contains(firstName));
+        USED_NAMES.add(firstName);
+        return firstName;
+    }
 
-        public static String getRandomUniqueLastName() {
-            String lastName;
-            do {
-                lastName = LAST_NAMES.get(RANDOM.nextInt(LAST_NAMES.size()));
-            } while (USED_LAST_NAMES.contains(lastName));
-            USED_LAST_NAMES.add(lastName);
-            return lastName;
-        }
+    public static String getRandomUniqueLastName() {
+        String lastName;
+        do {
+            lastName = LAST_NAMES.get(lastNames_index);
+            lastNames_index = (lastNames_index + 1) % LAST_NAMES.size(); // Increment and wrap around
+        } while (USED_LAST_NAMES.contains(lastName));
+        USED_LAST_NAMES.add(lastName);
+        return lastName;
+    }
 
         public static String getRandomUniqueNationalId() {
             String nationalId;
@@ -239,7 +243,7 @@ public class RandomGenerator {
         }
 
     private static double generateRandomTwoDecimals() {
-        double roundedValue = 0;
+            double roundedValue = 0;
         int attempts = 0;
         while (roundedValue == 0 && attempts < 100) { // Limiting attempts to avoid infinite loop
             roundedValue = Math.round(RANDOM.nextDouble() * 100.0) / 100.0;
@@ -339,9 +343,9 @@ private static ObservableList<SalaryRecord> getRandomSalaryRecords(Organization 
     for (int i = 0; i < recordCount; i++) {
         do {
             status = getRandomStatus();
-        }while(i == 0 && status == Status.TERMINATED);
+        }while(status == Status.TERMINATED && (i == recordCount - 1 || i == 0));
         LocalDate endDate = null;
-        if (status != Status.TERMINATED){
+        if (status != Status.TERMINATED && (status != Status.ACTIVE || i != recordCount - 1)){
             if(i == recordCount - 1)
                 endDate = LocalDate.now().plusMonths(RANDOM.nextInt(3)).plusDays(RANDOM.nextInt(14));
             else
@@ -367,7 +371,7 @@ private static ObservableList<SalaryRecord> getRandomSalaryRecords(Organization 
         }
         salaryRecords.add(salaryRecord);
 
-        if (status == Status.TERMINATED) {
+        if (status == Status.TERMINATED || (status == Status.ACTIVE && i == recordCount - 1)) {
             break;
         }
         startDate = endDate.plusDays(1); // Next record's start date after end date of previous record
@@ -423,7 +427,7 @@ private static ObservableList<SalaryRecord> getRandomSalaryRecords(Organization 
     }
 
     public static void main(String[] args) {
-        Organization organization = createRandomOrganization(5, 10, 15);
+        Organization organization = createRandomOrganization(3, 29, 30);
     }
 }
 

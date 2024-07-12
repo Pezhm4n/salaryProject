@@ -1,6 +1,7 @@
 package com.example.salaryproject;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 public class CommissionSalary extends SalaryRecord {
     private double commissionRate;
@@ -10,7 +11,6 @@ public class CommissionSalary extends SalaryRecord {
         super(startDate, endDate, department, status);
         this.commissionRate = commissionRate;
         this.totalSales = totalSales;
-        department.setHeadCount(department.getHeadCount() + 1);
     }
 
     public double getCommissionRate() {
@@ -30,8 +30,18 @@ public class CommissionSalary extends SalaryRecord {
     }
 
     @Override
-    public double calculateTotalSalary() {
-        return commissionRate * totalSales;
+    public double calculateSalary(LocalDate periodStart, LocalDate periodEnd) {
+        if (getStartDate().isAfter(periodEnd) || getEffectiveEndDate().isBefore(periodStart)) {
+            return 0;
+        }
+
+        LocalDate start = getStartDate().isAfter(periodStart) ? getStartDate() : periodStart;
+        LocalDate end = getEffectiveEndDate().isBefore(periodEnd) ? getEffectiveEndDate() : periodEnd;
+
+        long totalDays = ChronoUnit.DAYS.between(getStartDate(), getEffectiveEndDate().plusDays(1));
+        long periodDays = ChronoUnit.DAYS.between(start, end.plusDays(1));
+
+        return ((double) periodDays / totalDays) * (commissionRate * totalSales);
     }
 
     @Override

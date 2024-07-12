@@ -1,6 +1,7 @@
 package com.example.salaryproject;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 public class FixedSalary extends SalaryRecord {
     private double baseMonthlySalary;
@@ -15,7 +16,6 @@ public class FixedSalary extends SalaryRecord {
         this.baseMonthlySalary = baseMonthlySalary;
         this.overTimeHours = overTimeHours;
         this.overTimeRate = overTimeRate;
-        department.setHeadCount(department.getHeadCount() + 1);
     }
 
     public double getBaseMonthlySalary() {
@@ -43,13 +43,24 @@ public class FixedSalary extends SalaryRecord {
     }
 
     @Override
-    public double calculateTotalSalary() {
-        return baseMonthlySalary + (overTimeHours * overTimeRate);
-    }
-
-    @Override
     public String toString() {
         return super.toString() + String.format("\nBase Monthly Salary: %.2f\nOver Time Hours: %.2f\nOver Time Rate: %.2f\n",
                 baseMonthlySalary, overTimeHours, overTimeRate);
     }
+
+    public double calculateSalary(LocalDate periodStart, LocalDate periodEnd) {
+        if (getStartDate().isAfter(periodEnd) || getEndDate().isBefore(periodStart)) {
+            return 0;
+        }
+
+        LocalDate start = getStartDate().isAfter(periodStart) ? getStartDate() : periodStart;
+        LocalDate end = getEffectiveEndDate().isBefore(periodEnd) ? getEffectiveEndDate() : periodEnd;
+
+        long totalDays = ChronoUnit.DAYS.between(getStartDate(), getEffectiveEndDate().plusDays(1));
+        long periodDays = ChronoUnit.DAYS.between(start, end.plusDays(1));
+
+        return ((double) periodDays / totalDays) * (baseMonthlySalary * (totalDays / 30.0));
+    }
+
+
 }

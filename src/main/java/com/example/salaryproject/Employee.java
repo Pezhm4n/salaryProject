@@ -92,7 +92,15 @@ public class Employee {
         if(salaryRecord != null) salaryRecords.remove(salaryRecord);
     }
     public double getCurrentSalary() {
-        return getCurrentSalaryRecord().calculateTotalSalary();
+        return getCurrentSalaryRecord().calculateSalary(getCurrentSalaryRecord().getStartDate(), LocalDate.now());
+    }
+
+    public double calculateTotalSalary(LocalDate start, LocalDate end){
+        double total = 0;
+        for(SalaryRecord record : this.salaryRecords){
+            total += record.calculateSalary(start, end);
+        }
+        return total;
     }
 
     public boolean isCurrentManager() {
@@ -125,6 +133,29 @@ public class Employee {
         }
         return null;
     }
+
+    public void changeStatus(Status newStatus) {
+        LocalDate start = null;
+        LocalDate end = null;
+        SalaryRecord lastRecord = getCurrentSalaryRecord();
+        if (lastRecord != null) {
+            if(lastRecord.getStatus() == Status.ACTIVE){
+                lastRecord.setEndDate(LocalDate.now());
+                start = LocalDate.now().plusDays(1);
+            }else {
+                end = lastRecord.getEndDate();
+                lastRecord.setEndDate(LocalDate.now());
+                start = LocalDate.now().plusDays(1);
+            }
+            if (lastRecord instanceof FixedSalary) addSalaryRecord(new FixedSalary(start, end, lastRecord.getDepartment(), newStatus, ((FixedSalary) lastRecord).getBaseMonthlySalary(), ((FixedSalary) lastRecord).getOverTimeHours(), ((FixedSalary) lastRecord).getOverTimeRate()));
+            else if (lastRecord instanceof CommissionPlusFixedSalary) addSalaryRecord(new CommissionPlusFixedSalary(start, end, lastRecord.getDepartment(), newStatus, ((CommissionPlusFixedSalary) lastRecord).getFixedAmount(), ((CommissionPlusFixedSalary) lastRecord).getCommissionRate(), ((CommissionPlusFixedSalary) lastRecord).getTotalSales()));
+            else if (lastRecord instanceof CommissionSalary) addSalaryRecord(new CommissionSalary(start, end, lastRecord.getDepartment(), newStatus, ((CommissionSalary) lastRecord).getCommissionRate(), ((CommissionSalary) lastRecord).getTotalSales()));
+            else if (lastRecord instanceof HourlySalary) addSalaryRecord(new HourlySalary(start, end, lastRecord.getDepartment(), newStatus, ((HourlySalary) lastRecord).getHourlyRate(), ((HourlySalary) lastRecord).getHoursWorked()));
+            else if (lastRecord instanceof ManagerSalary) addSalaryRecord(new ManagerSalary(start, end, lastRecord.getDepartment(), newStatus, ((ManagerSalary) lastRecord).getBaseMonthlySalary(), ((ManagerSalary) lastRecord).getCommissionRate(), ((ManagerSalary) lastRecord).getNetProfitOfDepartment(), ((ManagerSalary) lastRecord).getSharesGranted(), ((ManagerSalary) lastRecord).getCurrentSharePrice(), ((ManagerSalary) lastRecord).getBonus()));
+            else addSalaryRecord(new SalaryRecord(start, end, lastRecord.getDepartment(), newStatus));
+        }
+    }
+
 
     public String getFormattedDate() {
         LocalDate currentDate = LocalDate.now();
@@ -164,11 +195,11 @@ public class Employee {
         salaryRecords.add(newRecord);
 
         if(inSameDepartment) {
-            WriteToCSV.addSalaryRecordToEmployee(newDepartment, this, newRecord);
+            FileHandler.addSalaryRecordToEmployee(newDepartment, this, newRecord);
         }
         else{
             newDepartment.addEmployee(this);
-            WriteToCSV.addEmployeeToDepartment(newDepartment, this);
+            FileHandler.addEmployeeToDepartment(newDepartment, this);
         }
     }
 
@@ -205,11 +236,11 @@ public class Employee {
         salaryRecords.add(newRecord);
 
         if(inSameDepartment) {
-            WriteToCSV.addSalaryRecordToEmployee(newDepartment, this, newRecord);
+            FileHandler.addSalaryRecordToEmployee(newDepartment, this, newRecord);
         }
         else {
             newDepartment.addEmployee(this);
-            WriteToCSV.addEmployeeToDepartment(newDepartment, this);
+            FileHandler.addEmployeeToDepartment(newDepartment, this);
         }
     }
 
@@ -246,11 +277,11 @@ public class Employee {
         salaryRecords.add(newRecord);
 
         if(inSameDepartment) {
-            WriteToCSV.addSalaryRecordToEmployee(newDepartment, this, newRecord);
+            FileHandler.addSalaryRecordToEmployee(newDepartment, this, newRecord);
         }
         else {
             newDepartment.addEmployee(this);
-            WriteToCSV.addEmployeeToDepartment(newDepartment, this);
+            FileHandler.addEmployeeToDepartment(newDepartment, this);
         }
     }
 
@@ -288,10 +319,10 @@ public class Employee {
 
     if (newDepartment != null) {
         if (inSameDepartment) {
-            WriteToCSV.addSalaryRecordToEmployee(newDepartment, this, newRecord);
+            FileHandler.addSalaryRecordToEmployee(newDepartment, this, newRecord);
         } else {
             newDepartment.addEmployee(this);
-            WriteToCSV.addEmployeeToDepartment(newDepartment, this);
+            FileHandler.addEmployeeToDepartment(newDepartment, this);
         }
     }
     }
@@ -331,9 +362,9 @@ public class Employee {
             department.addFormerManager(formerManager);
 
         department.setCurrentManager(this);
-        WriteToCSV.changeManagerOfDepartment(this, formerManager, department, becameManagerInSameDepartment);
+        FileHandler.changeManagerOfDepartment(this, formerManager, department, becameManagerInSameDepartment);
 
-        WriteToCSV.writeDepartmentDataToCsv(department);
+        FileHandler.writeDepartmentDataToCsv(department);
     }
 
     public ObservableList<SalaryRecord> getSalaryRecords() {
@@ -341,7 +372,7 @@ public class Employee {
     }
 
     public void saveToCSV(Department newDepartment) {
-        WriteToCSV.addEmployeeToDepartment(newDepartment, this);
+        FileHandler.addEmployeeToDepartment(newDepartment, this);
     }
 
     public void setSalaryRecords(List<SalaryRecord> salaryRecords) {

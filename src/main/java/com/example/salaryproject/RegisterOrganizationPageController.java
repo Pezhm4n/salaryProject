@@ -59,7 +59,7 @@ public class RegisterOrganizationPageController {
                 Organization organization = new Organization(name, industry, foundationYear, headquarters, ceo, totalShares, sharePrice);
 
                 // Save organization to CSV file
-                WriteToCSV.creatOrganization(organization);
+                FileHandler.creatOrganization(organization);
 
                 // Optionally, add the organization to the static list
                 OrganizationSelectionController.organizations.add(organization);

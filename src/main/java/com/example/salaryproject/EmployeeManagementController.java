@@ -14,13 +14,11 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.example.salaryproject.WriteToCSV.addSalaryRecordToEmployee;
-import static com.example.salaryproject.WriteToCSV.updateFieldOfSalaryRecord;
+import static com.example.salaryproject.FileHandler.addSalaryRecordToEmployee;
 
 public class EmployeeManagementController {
 
@@ -394,15 +392,11 @@ public class EmployeeManagementController {
                 Department currentDepartment = currentEmployee.getCurrentDepartment();
 
                 // به‌روزرسانی وضعیت حقوقی کارمند
-                currentSalaryRecord.setStatus(newStatus);
+                currentEmployee.changeStatus(newStatus);
 
                 // ذخیره کردن تغییرات در فایل CSV
-                if (newStatus != Status.TERMINATED) {
-                    updateFieldOfSalaryRecord(currentDepartment, currentEmployee, currentSalaryRecord, 3, newStatus.toString());
-                } else {
-                    currentSalaryRecord.setEndDate(LocalDate.now());
-                    addSalaryRecordToEmployee(currentDepartment, currentEmployee, new SalaryRecord(LocalDate.now(), null, currentDepartment, Status.TERMINATED));
-                }
+                addSalaryRecordToEmployee(currentDepartment, currentEmployee, currentEmployee.getCurrentSalaryRecord());
+
 
                 // نمایش پیغام تایید
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);

@@ -15,7 +15,7 @@ import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.*;
 
-public class WriteToCSV {
+public class FileHandler {
     public static final String RESOURCE_DIRECTORY = "src/main/resources/com/example/salaryproject/";
 
     public static void creatOrganization(Organization organization){
@@ -420,13 +420,23 @@ public class WriteToCSV {
         boolean inSalaryRecordSection = false;
 
         for (int i = 0; i < data.size(); i++) {
-            if (data.get(i).length > 2 && data.get(i)[2].equals(String.valueOf(employee.getNationalId()))) {
-                inSalaryRecordSection = true;
-            }
-            else if (inSalaryRecordSection && data.get(i).length >= 4 && data.get(i)[0].equals(record.getStartDate().toString()) &&
-                    data.get(i)[2].equals(record.getDepartment().getName())) {
+            if(employee != null) {
+                if (data.get(i).length > 2 && data.get(i)[2].equals(String.valueOf(employee.getNationalId()))) {
+                    inSalaryRecordSection = true;
+                } else if (data.get(i).length == 1 && data.get(i)[0].trim().isEmpty())
+                    inSalaryRecordSection = false;
+                else if (inSalaryRecordSection && data.get(i).length >= 4 && data.get(i)[0].equals(record.getStartDate().toString()) &&
+                        data.get(i)[2].equals(record.getDepartment().getName())) {
 
-                data.get(i)[fieldIndex] = newValue;
+                    data.get(i)[fieldIndex] = newValue;
+                }
+            }
+            else{
+                if (data.get(i).length >= 4 && data.get(i)[0].equals(record.getStartDate().toString()) &&
+                        data.get(i)[2].equals(record.getDepartment().getName())) {
+
+                    data.get(i)[fieldIndex] = newValue;
+                }
             }
         }
         writeCSV(RESOURCE_DIRECTORY + department.getOrganization().getName() + "/" + department.getName() + ".csv", data);
@@ -463,22 +473,25 @@ public class WriteToCSV {
             }
             else if (!inCurrentManagerSection && data.get(i)[0].equals("Employees:")) {
                 inEmployeesSection = true;
-            } else if (inEmployeesSection && formerManager != null && data.get(i).length > 2 && data.get(i)[2].equals(String.valueOf(formerManager.getNationalId()))) {
+            } else if (inEmployeesSection && !becameManagerInSameDepartment && data.get(i)[0].startsWith("Former Managers:")) {
+                    List<String[]> employeeInfo = employeeInfoToCSVLines(newManager);
+                    if(data.get(i - 2)[0].startsWith("Employees:"))
+                        data.addAll(i - 1 , employeeInfo);
+                    else {
+                        employeeInfo.add(new String[]{""});
+                        data.addAll(i  , employeeInfo);
+                    }
+            }
+            else if (inEmployeesSection && becameManagerInSameDepartment && data.get(i).length > 2 && data.get(i)[2].equals(String.valueOf(newManager.getNationalId()))) {
+                // add manager salary record to new manager that already exist in employees section
                 int blankLineCounter = 0;
                 while (blankLineCounter < 1) {
+                    i++;
                     if (data.get(i).length == 1 && data.get(i)[0].trim().isEmpty()) {
                         blankLineCounter++;
                     }
-                    data.remove(i);
                 }
-            }else if(inEmployeesSection  && data.get(i).length > 2 && data.get(i)[2].equals(String.valueOf(newManager.getNationalId()))){
-                int blankLineCounter = 0;
-                while (blankLineCounter < 1) {
-                    if (data.get(i).length == 1 && data.get(i)[0].trim().isEmpty()) {
-                        blankLineCounter++;
-                    }
-                    data.remove(i);
-                }
+                data.add(i, salaryRecordToCSVLine(newManager.getCurrentSalaryRecord()));
             }
             else if (data.get(i)[0].equals("Former Managers:")) {
                 inEmployeesSection = false;

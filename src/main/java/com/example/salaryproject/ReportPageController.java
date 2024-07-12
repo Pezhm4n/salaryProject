@@ -51,7 +51,7 @@ public class ReportPageController {
 
     private void loadOrganizationsFromFiles() {
         organizations.clear();
-        Path resourceDirectory = Paths.get(WriteToCSV.RESOURCE_DIRECTORY);
+        Path resourceDirectory = Paths.get(FileHandler.RESOURCE_DIRECTORY);
         try {
             Files.list(resourceDirectory).forEach(path -> {
                 if (Files.isDirectory(path)) {
@@ -72,7 +72,7 @@ public class ReportPageController {
     private Organization readOrganizationFromFile(Path organizationPath) {
         Path organizationInfoFile = organizationPath.resolve("organization_info.csv");
         if (Files.exists(organizationInfoFile)) {
-            List<String[]> data = WriteToCSV.readCSV(organizationInfoFile.toString(), true);
+            List<String[]> data = FileHandler.readCSV(organizationInfoFile.toString(), true);
             if (data.size() > 0) {
                 String[] organizationData = data.get(0);
                 if (organizationData.length >= 7) {
@@ -87,7 +87,7 @@ public class ReportPageController {
                     Organization organization = new Organization(name, industry, foundationYear, headquarters, ceo, totalShares, sharePrice);
 
                     // Load departments
-                    Organization updatedOrganization = WriteToCSV.createOrganizationAndDepartments(name);
+                    Organization updatedOrganization = FileHandler.createOrganizationAndDepartments(name);
                     updatedOrganization.getDepartments().forEach(organization::addDepartment);
 
                     return organization;

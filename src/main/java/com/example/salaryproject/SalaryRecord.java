@@ -38,6 +38,7 @@ public class SalaryRecord {
 
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
+        FileHandler.updateFieldOfSalaryRecord(department, null, this, 1, endDate.toString());
     }
 
     public void setDepartment(Department department) {
@@ -74,8 +75,11 @@ public class SalaryRecord {
                 status != null ? status.toString() : "N/A");
     }
 
-    public double calculateTotalSalary() {
+    public double calculateSalary(LocalDate periodStart, LocalDate periodEnd) {
         return 0.0;
+    }
+    public LocalDate getEffectiveEndDate() {
+        return endDate == null ? LocalDate.now() : endDate;
     }
 }
 

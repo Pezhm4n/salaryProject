@@ -15,6 +15,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -229,6 +231,7 @@ public class DepartmentPageController {
             grid.setVgap(10);
             grid.setPadding(new Insets(20, 150, 10, 10));
 
+            DecimalFormat decimalFormat = new DecimalFormat("#,###.00");
             // Add manager information to the GridPane
             grid.add(new Label("First Name:"), 0, 0);
             grid.add(new Label(currentManager.getFirstName()), 1, 0);
@@ -241,19 +244,19 @@ public class DepartmentPageController {
             grid.add(new Label("Email:"), 0, 4);
             grid.add(new Label(currentManager.getEmail()), 1, 4);
             grid.add(new Label("Base Monthly Salary:"), 0, 5);
-            grid.add(new Label(String.valueOf(currentManagerSalary.getBaseMonthlySalary())), 1, 5);
+            grid.add(new Label(decimalFormat.format(currentManagerSalary.getBaseMonthlySalary())), 1, 5);
             grid.add(new Label("Commission Rate:"), 0, 6);
-            grid.add(new Label(String.valueOf(currentManagerSalary.getCommissionRate())), 1, 6);
+            grid.add(new Label(decimalFormat.format(currentManagerSalary.getCommissionRate())), 1, 6);
             grid.add(new Label("Net Profit of Department:"), 0, 7);
-            grid.add(new Label(String.valueOf(currentManagerSalary.getNetProfitOfDepartment())), 1, 7);
+            grid.add(new Label(decimalFormat.format(currentManagerSalary.getNetProfitOfDepartment())), 1, 7);
             grid.add(new Label("Shares Granted:"), 0, 8);
-            grid.add(new Label(String.valueOf(currentManagerSalary.getSharesGranted())), 1, 8);
+            grid.add(new Label(decimalFormat.format(currentManagerSalary.getSharesGranted())), 1, 8);
             grid.add(new Label("Current Share Price:"), 0, 9);
-            grid.add(new Label(String.valueOf(currentManagerSalary.getCurrentSharePrice())), 1, 9);
+            grid.add(new Label(decimalFormat.format(currentManagerSalary.getCurrentSharePrice())), 1, 9);
             grid.add(new Label("Bonus:"), 0, 10);
-            grid.add(new Label(String.valueOf(currentManagerSalary.getBonus())), 1, 10);
+            grid.add(new Label(decimalFormat.format(currentManagerSalary.getBonus())), 1, 10);
             grid.add(new Label("Total Salary: "), 0, 11);
-            grid.add(new Label(String.valueOf(currentManagerSalary.calculateTotalSalary())), 1, 11);
+            grid.add(new Label(decimalFormat.format(currentManagerSalary.calculateSalary(currentManagerSalary.getStartDate(), LocalDate.now()))), 1, 11);
 
             // Set the content of the dialog
             dialog.getDialogPane().setContent(grid);

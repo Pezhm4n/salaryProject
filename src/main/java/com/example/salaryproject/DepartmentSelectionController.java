@@ -91,7 +91,7 @@ public class DepartmentSelectionController {
             Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 // فراخوانی متد حذف دپارتمان
-                WriteToCSV.deleteDepartment(selectedDepartment);
+                FileHandler.deleteDepartment(selectedDepartment);
                 organization.getDepartments().remove(selectedDepartment);
                 refreshDepartmentList();
                 statusLabel.setText("Department " + selectedDepartment.getName() + " deleted successfully.");
