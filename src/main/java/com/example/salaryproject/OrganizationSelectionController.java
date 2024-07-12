@@ -51,7 +51,7 @@ public class OrganizationSelectionController {
         Path resourceDirectory = Paths.get(WriteToCSV.RESOURCE_DIRECTORY);
         try {
             Files.list(resourceDirectory).forEach(path -> {
-                if (Files.isDirectory(path)) {
+                if (Files.isDirectory(path) && !path.endsWith("css")) {
                     Path organizationInfoFile = path.resolve("organization_info.csv");
                     if (Files.exists(organizationInfoFile)) {
                         Organization organization = readOrganizationFromFile(path);

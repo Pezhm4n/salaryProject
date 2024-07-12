@@ -14,10 +14,12 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.example.salaryproject.WriteToCSV.addSalaryRecordToEmployee;
 import static com.example.salaryproject.WriteToCSV.updateFieldOfSalaryRecord;
 
 public class EmployeeManagementController {
@@ -368,22 +370,39 @@ public class EmployeeManagementController {
     @FXML
     private void changeStatus() {
         try {
+            SalaryRecord currentSalaryRecord = currentEmployee.getCurrentSalaryRecord();
+            Status currentStatus = currentSalaryRecord.getStatus();
+
+            if (currentStatus == Status.TERMINATED) {
+                // نمایش پیغام خطا
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Change Status");
+                alert.setHeaderText(null);
+                alert.setContentText("The employee is terminated and their status cannot be changed.");
+                alert.showAndWait();
+                return;
+            }
+
             // نمایش لیستی از وضعیت‌ها برای انتخاب
-            ChoiceDialog<Status> dialog = new ChoiceDialog<>(Status.ACTIVE, Status.values());
+            ChoiceDialog<Status> dialog = new ChoiceDialog<>(Status.ACTIVE, Status.PAID_LEAVE, Status.UNPAID_LEAVE, Status.TERMINATED);
             dialog.setTitle("Change Status");
             dialog.setHeaderText("Select a new status");
             dialog.setContentText("New status:");
 
             Optional<Status> result = dialog.showAndWait();
             result.ifPresent(newStatus -> {
-                SalaryRecord currentSalaryRecord = currentEmployee.getCurrentSalaryRecord();
                 Department currentDepartment = currentEmployee.getCurrentDepartment();
 
                 // به‌روزرسانی وضعیت حقوقی کارمند
                 currentSalaryRecord.setStatus(newStatus);
 
                 // ذخیره کردن تغییرات در فایل CSV
-                updateFieldOfSalaryRecord(currentDepartment, currentEmployee, currentSalaryRecord, 3, newStatus.toString());
+                if (newStatus != Status.TERMINATED) {
+                    updateFieldOfSalaryRecord(currentDepartment, currentEmployee, currentSalaryRecord, 3, newStatus.toString());
+                } else {
+                    currentSalaryRecord.setEndDate(LocalDate.now());
+                    addSalaryRecordToEmployee(currentDepartment, currentEmployee, new SalaryRecord(LocalDate.now(), null, currentDepartment, Status.TERMINATED));
+                }
 
                 // نمایش پیغام تایید
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);

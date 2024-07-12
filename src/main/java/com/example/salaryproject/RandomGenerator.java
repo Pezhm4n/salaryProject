@@ -3,14 +3,15 @@ package com.example.salaryproject;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.security.SecureRandom;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.*;
 
 public class RandomGenerator {
-    private static final Random RANDOM = new Random();
-    private static final List<String> ORGANIZATION_NAMES = List.of("TechCorp", "InnovaTech", "NextGenSolutions", "InfoMatrix", "FutureWorks");
-    private static final List<String> INDUSTRIES = List.of("Software", "Hardware", "ITServices", "Consulting", "Telecom");
+    private static final SecureRandom RANDOM = RandomUtil.getInstance();
+    private static final List<String> ORGANIZATION_NAMES = List.of("TechCorp", "InnovaTech", "NextGen_Solutions", "InfoMatrix", "FutureWorks");
+    private static final List<String> INDUSTRIES = List.of("Software", "Hardware", "IT_Services", "Consulting", "Telecom");
     private static final List<String> HEADQUARTERS = List.of("Tehran", "Mashhad", "Isfahan", "Shiraz", "Tabriz");
     private static final List<String> CEOS = List.of("Ali Rezaei", "Hossein Ahmadi", "Nima Yousefi", "Farhad Kamrani", "Parsa Tavakoli");
 
@@ -26,8 +27,8 @@ public class RandomGenerator {
         int foundationYear = 2010 + RANDOM.nextInt(6); // Random year between 2010 and 2016
         String headquarters = HEADQUARTERS.get(RANDOM.nextInt(HEADQUARTERS.size()));
         String CEO = CEOS.get(RANDOM.nextInt(CEOS.size()));
-        double totalShares = 100000 + roundToTwoDecimals(RANDOM.nextDouble()) * 900000; // Random between 100000 and 1000000
-        double sharePrice = 10 + roundToTwoDecimals(RANDOM.nextDouble()) * 90; // Random between 10 and 100
+        double totalShares = 100000 + generateRandomTwoDecimals() * 900000; // Random between 100000 and 1000000
+        double sharePrice = 10 + generateRandomTwoDecimals() * 90; // Random between 10 and 100
 
         Organization organization = new Organization(name, industry, foundationYear, headquarters, CEO, totalShares, sharePrice);
         ObservableList<Department> departments = FXCollections.observableArrayList();
@@ -42,10 +43,8 @@ public class RandomGenerator {
             ObservableList<SalaryRecord> mangerSalaryRecords = getRandomSalaryRecords(organization, department, true);
             manager.setSalaryRecords(mangerSalaryRecords);
             department.setCurrentManager(manager);
-
             // Adding Employees
             ObservableList<Employee> employees = FXCollections.observableArrayList();
-            employees.add(manager);
             int numEmployees = minEmployees + RANDOM.nextInt(maxEmployees - minEmployees + 1);
             for (int i = 0; i < numEmployees; i++) {
                 Employee employee = getRandomUniqueEmployee();
@@ -54,7 +53,6 @@ public class RandomGenerator {
                 employee.setSalaryRecords(salaryRecords);
             }
             department.setEmployees(employees);
-
         }
 
         organization.getDepartments().addAll(departments);
@@ -86,19 +84,23 @@ public class RandomGenerator {
             Department recordDepartment = record.getDepartment();
             if (!recordDepartment.equals(currentDepartment)) {
                 if (employee.equals(currentDepartment.getCurrentManager())) {
-                    recordDepartment.addFormerManager(employee);
+                    if (!recordDepartment.getFormerManagers().contains(employee)) {
+                        recordDepartment.addFormerManager(employee);
+                    }
                 } else {
-                    recordDepartment.addFormerEmployee(employee);
+                    if (!recordDepartment.getFormerEmployees().contains(employee)) {
+                        recordDepartment.addFormerEmployee(employee);
+                    }
                 }
             }
         }
     }
     private static final List<String> DEPARTMENTS = Arrays.asList(
-            "Engineering", "Product", "Marketing", "Sales", "HumanResources",
-            "Finance", "IT Support", "Design", "CustomerSupport", "Legal",
-            "Operations", "BusinessDevelopment", "Data Science", "DevOps",
-            "QualityAssurance", "ResearchAndDevelopment", "Security",
-            "PublicRelations", "Administration", "Content"
+            "Engineering", "Product", "Marketing", "Sales", "Human_Resources",
+            "Finance", "IT_Support", "Design", "Customer_Support", "Legal",
+            "Operations", "Business_Development", "Data_Science", "DevOps",
+            "Quality_Assurance", "Research_and_Development", "Security",
+            "Public_Relations", "Administration", "Content"
     );
 
     private static final List<String> DESCRIPTIONS = Arrays.asList(
@@ -132,19 +134,19 @@ public class RandomGenerator {
         // Adding Financial Records
         ObservableList<FinancialRecord> financialRecords = FXCollections.observableArrayList();
         LocalDate currentDate = LocalDate.now();
-        LocalDate startDate = currentDate.minusYears(7); // Starting from 7 years ago
-        LocalDate endDate = currentDate.plusYears(1); // Ensure the last end date is around one year after now
+        LocalDate startDate = currentDate.minusYears(5).minusDays(RANDOM.nextInt(14)); // Starting from 5 years ago
+        LocalDate endDate = currentDate.plusMonths(RANDOM.nextInt(4)).plusDays(RANDOM.nextInt(14)); // Ensure the last end date is around three months after now
 
         int n = 3 + RANDOM.nextInt(3); // 3 to 5 financial records
         for (int i = 0; i < n; i++) {
-            LocalDate tempEndDate = startDate.plusMonths(12 + RANDOM.nextInt(6)); // 12 to 18 months later
+            LocalDate tempEndDate = startDate.plusMonths(9 + RANDOM.nextInt(3)).plusDays(RANDOM.nextInt(14)); // 9 to 12 months later
             if (i == n - 1) { // For the last record, ensure it ends around one year after now
                 tempEndDate = endDate;
             }
             DecimalFormat decimalFormat = new DecimalFormat("#.00");
-            double budget = 150_000_000 + roundToTwoDecimals(RANDOM.nextDouble()) * 200_000_000; // Random budget between 150,000,000 and 300,000,000 Toman
-            double revenue = 300_000_000 + roundToTwoDecimals(RANDOM.nextDouble()) * 300_000_000; // Random revenue between 200,000,000 and 600,000,000 Toman
-            double costs = 150_000_000 + roundToTwoDecimals(RANDOM.nextDouble()) * 100_000_000; // Random costs between 150,000,000 and 250,000,000 Toman
+            double budget = 150_000_000 + generateRandomTwoDecimals() * 200_000_000; // Random budget between 150,000,000 and 300,000,000 Toman
+            double revenue = 300_000_000 + generateRandomTwoDecimals() * 300_000_000; // Random revenue between 200,000,000 and 600,000,000 Toman
+            double costs = 150_000_000 + generateRandomTwoDecimals() * 100_000_000; // Random costs between 150,000,000 and 250,000,000 Toman
             financialRecords.add(new FinancialRecord(startDate, tempEndDate, budget, revenue, costs));
             startDate = tempEndDate.plusDays(1); // Next record's start date after end date of previous record
         }
@@ -236,12 +238,16 @@ public class RandomGenerator {
             return firstName.toLowerCase() + "." + lastName.toLowerCase() + "@example.com";
         }
 
-    private static double roundToTwoDecimals(double value) {
-        double roundedValue;
-        do{
-            roundedValue = Math.round(value * 1000.0) / 1000.0;
+    private static double generateRandomTwoDecimals() {
+        double roundedValue = 0;
+        int attempts = 0;
+        while (roundedValue == 0 && attempts < 100) { // Limiting attempts to avoid infinite loop
+            roundedValue = Math.round(RANDOM.nextDouble() * 100.0) / 100.0;
+            attempts++;
         }
-        while (roundedValue == 0);
+        if (roundedValue == 0) {
+            return 0.45; // Fallback if all attempts fail
+        }
         return roundedValue;
     }
 
@@ -250,9 +256,9 @@ public class RandomGenerator {
         double overTimeHours = 0.0;
         double overTimeRate = 0.0;
         if (Status.UNPAID_LEAVE != status && Status.TERMINATED != status) {
-            baseMonthlySalary = 15_000_000 + roundToTwoDecimals(RANDOM.nextDouble()) * 25_000_000; // Random between 15,000,000 and 40,000,000 Toman
-            overTimeHours = 5 + roundToTwoDecimals(RANDOM.nextDouble()) * 10; // Random between 5 and 15 hours
-            overTimeRate = 100_000 + roundToTwoDecimals(RANDOM.nextDouble()) * 50_000; // Random between 100,000 and 150,000 Toman
+            baseMonthlySalary = 15_000_000 + generateRandomTwoDecimals() * 25_000_000; // Random between 15,000,000 and 40,000,000 Toman
+            overTimeHours = 5 + generateRandomTwoDecimals() * 10; // Random between 5 and 15 hours
+            overTimeRate = 100_000 + generateRandomTwoDecimals() * 50_000; // Random between 100,000 and 150,000 Toman
         } else if (Status.TERMINATED == status) {
             return new SalaryRecord(startDate, endDate, department, status);
         }
@@ -263,8 +269,8 @@ public class RandomGenerator {
         double commissionRate = 0.0;
         double totalSales = 0.0;
         if (Status.UNPAID_LEAVE != status && Status.TERMINATED != status) {
-            commissionRate =  5 + roundToTwoDecimals(RANDOM.nextDouble()) * 5; // Random between 5% and 10%
-            totalSales = 20_000_000 + roundToTwoDecimals(RANDOM.nextDouble()) * 70_000_000; // Random between 20,000,000 and 90,000,000 Toman
+            commissionRate =  5 + generateRandomTwoDecimals() * 5; // Random between 5% and 10%
+            totalSales = 20_000_000 + generateRandomTwoDecimals() * 70_000_000; // Random between 20,000,000 and 90,000,000 Toman
         } else if (Status.TERMINATED == status)
             return new SalaryRecord(startDate, endDate, department, status);
         return new CommissionSalary(startDate, endDate, department, status, commissionRate, totalSales);
@@ -275,9 +281,9 @@ public class RandomGenerator {
         double totalSales = 0.0;
         double fixedAmount = 0.0;
         if (Status.UNPAID_LEAVE != status && Status.TERMINATED != status) {
-            commissionRate = 5 + roundToTwoDecimals(RANDOM.nextDouble()) * 5; // Random between 5% and 10%
-            totalSales = 20_000_000 + roundToTwoDecimals(RANDOM.nextDouble()) * 70_000_000; // Random between 20,000,000 and 90,000,000 Toman
-            fixedAmount = 15_000_000 + roundToTwoDecimals(RANDOM.nextDouble()) * 15_000_000; // Random between 15,000,000 and 30,000,000 Toman
+            commissionRate = 5 + generateRandomTwoDecimals() * 5; // Random between 5% and 10%
+            totalSales = 20_000_000 + generateRandomTwoDecimals() * 70_000_000; // Random between 20,000,000 and 90,000,000 Toman
+            fixedAmount = 15_000_000 + generateRandomTwoDecimals() * 15_000_000; // Random between 15,000,000 and 30,000,000 Toman
         } else if (Status.TERMINATED == status)
             return new SalaryRecord(startDate, endDate, department, status);
         return new CommissionPlusFixedSalary(startDate, endDate, department, status, commissionRate, totalSales, fixedAmount);
@@ -287,8 +293,8 @@ public class RandomGenerator {
         double hourlyRate = 0.0;
         double hoursWorked = 0.0;
         if (Status.UNPAID_LEAVE != status && Status.TERMINATED != status) {
-            hourlyRate = 150_000 + roundToTwoDecimals(RANDOM.nextDouble()) * 100; // Random between 150,000 and 250,000 Toman
-            hoursWorked = 100 + roundToTwoDecimals(RANDOM.nextDouble()) * 200; // Random between 100 and 200 hours
+            hourlyRate = 150_000 + generateRandomTwoDecimals() * 100; // Random between 150,000 and 250,000 Toman
+            hoursWorked = 100 + generateRandomTwoDecimals() * 200; // Random between 100 and 200 hours
         } else if (Status.TERMINATED == status)
             return new SalaryRecord(startDate, endDate, department, status);
         return new HourlySalary(startDate, endDate, department, status, hourlyRate, hoursWorked);
@@ -302,12 +308,12 @@ public class RandomGenerator {
         double currentSharePrice = 0.0;
         double bonus = 0.0;
         if (Status.UNPAID_LEAVE != status && Status.TERMINATED != status) {
-            baseMonthlySalary = 40_000_000 + roundToTwoDecimals(RANDOM.nextDouble()) * 30_000_000; // Random between 40,000,000 and 70,000,000 Toman
-            commissionRate = 5 + roundToTwoDecimals(RANDOM.nextDouble()) * 10; // Random between 5% and 15%
-            netProfitOfDepartment = 400_000_000 + roundToTwoDecimals(RANDOM.nextDouble()) * 700_000_000; // Random between 400,000,000 and 700,000,000 Toman
-            sharesGranted = 100 + roundToTwoDecimals(RANDOM.nextDouble()) * 900; // Random between 100 and 1000 shares
-            currentSharePrice = 10 + roundToTwoDecimals(RANDOM.nextDouble()) * 90; // Random between 10 and 100 Toman per share
-            bonus = 5_000_000 + roundToTwoDecimals(RANDOM.nextDouble()) * 5_000_000; // Random between 5_000,000 and 10,000,000 Toman
+            baseMonthlySalary = 40_000_000 + generateRandomTwoDecimals() * 30_000_000; // Random between 40,000,000 and 70,000,000 Toman
+            commissionRate = 5 + generateRandomTwoDecimals() * 10; // Random between 5% and 15%
+            netProfitOfDepartment = 400_000_000 + generateRandomTwoDecimals() * 700_000_000; // Random between 400,000,000 and 700,000,000 Toman
+            sharesGranted = 100 + generateRandomTwoDecimals() * 900; // Random between 100 and 1000 shares
+            currentSharePrice = 10 + generateRandomTwoDecimals() * 90; // Random between 10 and 100 Toman per share
+            bonus = 5_000_000 + generateRandomTwoDecimals() * 5_000_000; // Random between 5_000,000 and 10,000,000 Toman
         } else if (Status.TERMINATED == status)
             return new SalaryRecord(startDate, endDate, department, status);
         return new ManagerSalary(startDate, endDate, department, status, baseMonthlySalary, commissionRate, netProfitOfDepartment, sharesGranted, currentSharePrice, bonus);
@@ -327,17 +333,22 @@ public class RandomGenerator {
     }
 private static ObservableList<SalaryRecord> getRandomSalaryRecords(Organization organization, Department department, boolean isManager) {
     ObservableList<SalaryRecord> salaryRecords = FXCollections.observableArrayList();
-    LocalDate startDate = getRandomBirthdate().plusYears(18  + RANDOM.nextInt(12)); // Starting work date after 18 years old
-    int recordCount = 1 + RANDOM.nextInt(3); // Between 1 to 3 salary records
+    LocalDate startDate = LocalDate.now().minusYears(3).minusDays(RANDOM.nextInt(14)); // Start 3  years ago
+    int recordCount = 2 + RANDOM.nextInt(2); // Between 2 to 3 salary records
     Status status = null;
     for (int i = 0; i < recordCount; i++) {
-        status = getRandomStatus();
+        do {
+            status = getRandomStatus();
+        }while(i == 0 && status == Status.TERMINATED);
         LocalDate endDate = null;
-        if (status != Status.TERMINATED)
-            endDate = startDate.plusMonths(9 + RANDOM.nextInt(15)); // Random end date between 9 to 24 months
-
+        if (status != Status.TERMINATED){
+            if(i == recordCount - 1)
+                endDate = LocalDate.now().plusMonths(RANDOM.nextInt(3)).plusDays(RANDOM.nextInt(14));
+            else
+                endDate = startDate.plusMonths(9 + RANDOM.nextInt(6)).plusDays(RANDOM.nextInt(14));; // Random end date between 9 to 15 months
+        }
         Department recordDepartment;
-        if (i == recordCount - 1) {
+        if (i == recordCount - 1 || status == Status.TERMINATED || isManager) {
             // Last record should be from the given department
             recordDepartment = department;
         } else {
@@ -348,7 +359,6 @@ private static ObservableList<SalaryRecord> getRandomSalaryRecords(Organization 
                 recordDepartment = getRandomDepartmentFromOrganization(organization, department);
             }
         }
-
         SalaryRecord salaryRecord;
         if (i == recordCount - 1 && isManager) {
             salaryRecord = getRandomManagerSalary(startDate, endDate, recordDepartment, status);
@@ -412,16 +422,8 @@ private static ObservableList<SalaryRecord> getRandomSalaryRecords(Organization 
         return new Employee(firstName, lastName, nationalId, dateOfBirth, email, phoneNumber);
     }
 
-    public static int numberOfDigits(double number) {
-
-        String numberAsString = Double.toString(Math.abs(number));
-        int indexOfDecimal = numberAsString.indexOf('.');
-
-        return indexOfDecimal != -1 ? indexOfDecimal : numberAsString.length();
-    }
-
     public static void main(String[] args) {
-        //Organization organization = createRandomOrganization(5, 10, 15);
+        Organization organization = createRandomOrganization(5, 10, 15);
     }
 }
 

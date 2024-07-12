@@ -121,6 +121,7 @@ public class Employee {
             else if (lastRecord instanceof CommissionSalary) return EmployeeType.COMMISSION_SALARY;
             else if (lastRecord instanceof HourlySalary) return EmployeeType.HOURLY_SALARY;
             else if (lastRecord instanceof ManagerSalary) return EmployeeType.MANAGER;
+            else return EmployeeType.TERMINATED;
         }
         return null;
     }

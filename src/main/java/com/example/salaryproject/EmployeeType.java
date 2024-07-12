@@ -5,6 +5,7 @@ public enum EmployeeType {
     FIXED_SALARY,
     COMMISSION_SALARY,
     COMMISSION_FIXED_SALARY,
-    HOURLY_SALARY
+    HOURLY_SALARY,
+    TERMINATED
 
 }

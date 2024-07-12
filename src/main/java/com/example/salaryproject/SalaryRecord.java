@@ -58,7 +58,7 @@ public class SalaryRecord {
             return EmployeeType.HOURLY_SALARY;
         else if (this instanceof ManagerSalary)
             return EmployeeType.MANAGER;
-        return null;
+        else return EmployeeType.TERMINATED;
     }
 
     @Override

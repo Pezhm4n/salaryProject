@@ -404,10 +404,8 @@ public class WriteToCSV {
             else if (data.get(i).length > 2 && data.get(i)[2].equals(String.valueOf(employee.getNationalId()))) {
                 inSalaryRecordSection = true;
             }
-            else if (inSalaryRecordSection && data.get(i).length > 4 && data.get(i)[0].equals(record.getStartDate().toString()) &&
-                    data.get(i)[2].equals(record.getDepartment().getName()) &&
-                    data.get(i)[3].equals(record.getStatus().toString()) &&
-                    data.get(i)[4].equals(record.getType().toString())) {
+            else if (inSalaryRecordSection && data.get(i).length >= 4 && data.get(i)[0].equals(record.getStartDate().toString()) &&
+                    data.get(i)[2].equals(record.getDepartment().getName())) {
                 data.remove(i);
                 inSalaryRecordSection = false;
                 if(!inCurrentManagerSection)
@@ -420,18 +418,15 @@ public class WriteToCSV {
     public static void updateFieldOfSalaryRecord(Department department, Employee employee, SalaryRecord record, int fieldIndex, String newValue) {
         ArrayList<String[]> data = readCSV(RESOURCE_DIRECTORY + department.getOrganization().getName() + "/" + department.getName() + ".csv");
         boolean inSalaryRecordSection = false;
-        boolean inCurrentManagerSection = false;
 
         for (int i = 0; i < data.size(); i++) {
             if (data.get(i).length > 2 && data.get(i)[2].equals(String.valueOf(employee.getNationalId()))) {
                 inSalaryRecordSection = true;
             }
-            else if (inSalaryRecordSection && data.get(i).length > 4 && data.get(i)[0].equals(record.getStartDate().toString()) &&
-                    data.get(i)[2].equals(record.getDepartment().getName()) &&
-                    data.get(i)[3].equals(record.getStatus().toString()) &&
-                    data.get(i)[4].equals(record.getType().toString())) {
+            else if (inSalaryRecordSection && data.get(i).length >= 4 && data.get(i)[0].equals(record.getStartDate().toString()) &&
+                    data.get(i)[2].equals(record.getDepartment().getName())) {
+
                 data.get(i)[fieldIndex] = newValue;
-                break;
             }
         }
         writeCSV(RESOURCE_DIRECTORY + department.getOrganization().getName() + "/" + department.getName() + ".csv", data);
@@ -634,20 +629,23 @@ public class WriteToCSV {
                         }
                         else
                             dept = departmentMap.get(data.get(i)[2]);
-                        if(data.get(i)[4].equals(String.valueOf(EmployeeType.FIXED_SALARY))){
+                        if(data.get(i).length > 4 && data.get(i)[4].equals(String.valueOf(EmployeeType.FIXED_SALARY))){
                             employee.addSalaryRecord(new FixedSalary(LocalDate.parse(data.get(i)[0]), data.get(i)[1].isEmpty() ? null: LocalDate.parse(data.get(i)[1]), dept, Status.valueOf(data.get(i)[3]),  Double.parseDouble(data.get(i)[5]), Double.parseDouble(data.get(i)[6]), Double.parseDouble(data.get(i)[7])));
                         }
-                        else if(data.get(i)[4].equals(String.valueOf(EmployeeType.COMMISSION_FIXED_SALARY))){
+                        else if(data.get(i).length > 4 && data.get(i)[4].equals(String.valueOf(EmployeeType.COMMISSION_FIXED_SALARY))){
                             employee.addSalaryRecord(new CommissionPlusFixedSalary(LocalDate.parse(data.get(i)[0]), data.get(i)[1].isEmpty() ? null: LocalDate.parse(data.get(i)[1]), dept, Status.valueOf(data.get(i)[3]), Double.parseDouble(data.get(i)[5]), Double.parseDouble(data.get(i)[6]), Double.parseDouble(data.get(i)[7])));
                         }
-                        else if(data.get(i)[4].equals(String.valueOf(EmployeeType.COMMISSION_SALARY))){
+                        else if(data.get(i).length > 4 && data.get(i)[4].equals(String.valueOf(EmployeeType.COMMISSION_SALARY))){
                             employee.addSalaryRecord(new CommissionSalary(LocalDate.parse(data.get(i)[0]), data.get(i)[1].isEmpty() ? null: LocalDate.parse(data.get(i)[1]), dept, Status.valueOf(data.get(i)[3]), Double.parseDouble(data.get(i)[5]), Double.parseDouble(data.get(i)[6])));
                         }
-                        else if(data.get(i)[4].equals(String.valueOf(EmployeeType.HOURLY_SALARY))){
+                        else if(data.get(i).length > 4 && data.get(i)[4].equals(String.valueOf(EmployeeType.HOURLY_SALARY))){
                             employee.addSalaryRecord(new HourlySalary(LocalDate.parse(data.get(i)[0]), data.get(i)[1].isEmpty() ? null: LocalDate.parse(data.get(i)[1]), dept, Status.valueOf(data.get(i)[3]), Double.parseDouble(data.get(i)[5]), Double.parseDouble(data.get(i)[6])));
                         }
-                        else if(data.get(i)[4].equals(String.valueOf(EmployeeType.MANAGER))){
+                        else if(data.get(i).length > 4 && data.get(i)[4].equals(String.valueOf(EmployeeType.MANAGER))){
                             employee.addSalaryRecord(new ManagerSalary(LocalDate.parse(data.get(i)[0]), data.get(i)[1].isEmpty() ? null: LocalDate.parse(data.get(i)[1]), dept, Status.valueOf(data.get(i)[3]), Double.parseDouble(data.get(i)[5]), Double.parseDouble(data.get(i)[6]), Double.parseDouble(data.get(i)[7]), Double.parseDouble(data.get(i)[8]), Double.parseDouble(data.get(i)[9]), Double.parseDouble(data.get(i)[10])));
+                        }
+                        else if(data.get(i).length == 4){
+                            employee.addSalaryRecord(new SalaryRecord(LocalDate.parse(data.get(i)[0]), data.get(i)[1].isEmpty() ? null: LocalDate.parse(data.get(i)[1]), dept, Status.valueOf(data.get(i)[3])));
                         }
                         i++;
                     }
@@ -668,20 +666,23 @@ public class WriteToCSV {
                         }
                         else
                             dept = departmentMap.get(data.get(i)[2]);
-                        if(data.get(i)[4].equals(String.valueOf(EmployeeType.FIXED_SALARY))){
+                        if(data.get(i).length > 4 && data.get(i)[4].equals(String.valueOf(EmployeeType.FIXED_SALARY))){
                             employee.addSalaryRecord(new FixedSalary(LocalDate.parse(data.get(i)[0]), data.get(i)[1].isEmpty() ? null: LocalDate.parse(data.get(i)[1]), dept, Status.valueOf(data.get(i)[3]),  Double.parseDouble(data.get(i)[5]), Double.parseDouble(data.get(i)[6]), Double.parseDouble(data.get(i)[7])));
                         }
-                        else if(data.get(i)[4].equals(String.valueOf(EmployeeType.COMMISSION_FIXED_SALARY))){
+                        else if(data.get(i).length > 4 && data.get(i)[4].equals(String.valueOf(EmployeeType.COMMISSION_FIXED_SALARY))){
                             employee.addSalaryRecord(new CommissionPlusFixedSalary(LocalDate.parse(data.get(i)[0]), data.get(i)[1].isEmpty() ? null: LocalDate.parse(data.get(i)[1]), dept, Status.valueOf(data.get(i)[3]), Double.parseDouble(data.get(i)[5]), Double.parseDouble(data.get(i)[6]), Double.parseDouble(data.get(i)[7])));
                         }
-                        else if(data.get(i)[4].equals(String.valueOf(EmployeeType.COMMISSION_SALARY))){
+                        else if(data.get(i).length > 4 && data.get(i)[4].equals(String.valueOf(EmployeeType.COMMISSION_SALARY))){
                             employee.addSalaryRecord(new CommissionSalary(LocalDate.parse(data.get(i)[0]), data.get(i)[1].isEmpty() ? null: LocalDate.parse(data.get(i)[1]), dept, Status.valueOf(data.get(i)[3]), Double.parseDouble(data.get(i)[5]), Double.parseDouble(data.get(i)[6])));
                         }
-                        else if(data.get(i)[4].equals(String.valueOf(EmployeeType.HOURLY_SALARY))){
+                        else if(data.get(i).length > 4 && data.get(i)[4].equals(String.valueOf(EmployeeType.HOURLY_SALARY))){
                             employee.addSalaryRecord(new HourlySalary(LocalDate.parse(data.get(i)[0]), data.get(i)[1].isEmpty() ? null: LocalDate.parse(data.get(i)[1]), dept, Status.valueOf(data.get(i)[3]), Double.parseDouble(data.get(i)[5]), Double.parseDouble(data.get(i)[6])));
                         }
-                        else if(data.get(i)[4].equals(String.valueOf(EmployeeType.MANAGER))){
+                        else if(data.get(i).length > 4 && data.get(i)[4].equals(String.valueOf(EmployeeType.MANAGER))){
                             employee.addSalaryRecord(new ManagerSalary(LocalDate.parse(data.get(i)[0]), data.get(i)[1].isEmpty() ? null: LocalDate.parse(data.get(i)[1]), dept, Status.valueOf(data.get(i)[3]), Double.parseDouble(data.get(i)[5]), Double.parseDouble(data.get(i)[6]), Double.parseDouble(data.get(i)[7]), Double.parseDouble(data.get(i)[8]), Double.parseDouble(data.get(i)[9]), Double.parseDouble(data.get(i)[10])));
+                        }
+                        else if(data.get(i).length == 4){
+                            employee.addSalaryRecord(new SalaryRecord(LocalDate.parse(data.get(i)[0]), data.get(i)[1].isEmpty() ? null: LocalDate.parse(data.get(i)[1]), dept, Status.valueOf(data.get(i)[3])));
                         }
                         i++;
                     }
@@ -702,20 +703,23 @@ public class WriteToCSV {
                         }
                         else
                             dept = departmentMap.get(data.get(i)[2]);
-                        if(data.get(i)[4].equals(String.valueOf(EmployeeType.FIXED_SALARY))){
+                        if(data.get(i).length > 4 && data.get(i)[4].equals(String.valueOf(EmployeeType.FIXED_SALARY))){
                             employee.addSalaryRecord(new FixedSalary(LocalDate.parse(data.get(i)[0]), data.get(i)[1].isEmpty() ? null: LocalDate.parse(data.get(i)[1]), dept, Status.valueOf(data.get(i)[3]),  Double.parseDouble(data.get(i)[5]), Double.parseDouble(data.get(i)[6]), Double.parseDouble(data.get(i)[7])));
                         }
-                        else if(data.get(i)[4].equals(String.valueOf(EmployeeType.COMMISSION_FIXED_SALARY))){
+                        else if(data.get(i).length > 4 && data.get(i)[4].equals(String.valueOf(EmployeeType.COMMISSION_FIXED_SALARY))){
                             employee.addSalaryRecord(new CommissionPlusFixedSalary(LocalDate.parse(data.get(i)[0]), data.get(i)[1].isEmpty() ? null: LocalDate.parse(data.get(i)[1]), dept, Status.valueOf(data.get(i)[3]), Double.parseDouble(data.get(i)[5]), Double.parseDouble(data.get(i)[6]), Double.parseDouble(data.get(i)[7])));
                         }
-                        else if(data.get(i)[4].equals(String.valueOf(EmployeeType.COMMISSION_SALARY))){
+                        else if(data.get(i).length > 4 && data.get(i)[4].equals(String.valueOf(EmployeeType.COMMISSION_SALARY))){
                             employee.addSalaryRecord(new CommissionSalary(LocalDate.parse(data.get(i)[0]), data.get(i)[1].isEmpty() ? null: LocalDate.parse(data.get(i)[1]), dept, Status.valueOf(data.get(i)[3]), Double.parseDouble(data.get(i)[5]), Double.parseDouble(data.get(i)[6])));
                         }
-                        else if(data.get(i)[4].equals(String.valueOf(EmployeeType.HOURLY_SALARY))){
+                        else if(data.get(i).length > 4 && data.get(i)[4].equals(String.valueOf(EmployeeType.HOURLY_SALARY))){
                             employee.addSalaryRecord(new HourlySalary(LocalDate.parse(data.get(i)[0]), data.get(i)[1].isEmpty() ? null: LocalDate.parse(data.get(i)[1]), dept, Status.valueOf(data.get(i)[3]), Double.parseDouble(data.get(i)[5]), Double.parseDouble(data.get(i)[6])));
                         }
-                        else if(data.get(i)[4].equals(String.valueOf(EmployeeType.MANAGER))){
+                        else if(data.get(i).length > 4 && data.get(i)[4].equals(String.valueOf(EmployeeType.MANAGER))){
                             employee.addSalaryRecord(new ManagerSalary(LocalDate.parse(data.get(i)[0]), data.get(i)[1].isEmpty() ? null: LocalDate.parse(data.get(i)[1]), dept, Status.valueOf(data.get(i)[3]), Double.parseDouble(data.get(i)[5]), Double.parseDouble(data.get(i)[6]), Double.parseDouble(data.get(i)[7]), Double.parseDouble(data.get(i)[8]), Double.parseDouble(data.get(i)[9]), Double.parseDouble(data.get(i)[10])));
+                        }
+                        else if(data.get(i).length == 4){
+                            employee.addSalaryRecord(new SalaryRecord(LocalDate.parse(data.get(i)[0]), data.get(i)[1].isEmpty() ? null: LocalDate.parse(data.get(i)[1]), dept, Status.valueOf(data.get(i)[3])));
                         }
                         i++;
                     }
@@ -736,20 +740,23 @@ public class WriteToCSV {
                         }
                         else
                             dept = departmentMap.get(data.get(i)[2]);
-                        if(data.get(i)[4].equals(String.valueOf(EmployeeType.FIXED_SALARY))){
+                        if(data.get(i).length > 4 && data.get(i)[4].equals(String.valueOf(EmployeeType.FIXED_SALARY))){
                             employee.addSalaryRecord(new FixedSalary(LocalDate.parse(data.get(i)[0]), data.get(i)[1].isEmpty() ? null: LocalDate.parse(data.get(i)[1]), dept, Status.valueOf(data.get(i)[3]),  Double.parseDouble(data.get(i)[5]), Double.parseDouble(data.get(i)[6]), Double.parseDouble(data.get(i)[7])));
                         }
-                        else if(data.get(i)[4].equals(String.valueOf(EmployeeType.COMMISSION_FIXED_SALARY))){
+                        else if(data.get(i).length > 4 && data.get(i)[4].equals(String.valueOf(EmployeeType.COMMISSION_FIXED_SALARY))){
                             employee.addSalaryRecord(new CommissionPlusFixedSalary(LocalDate.parse(data.get(i)[0]), data.get(i)[1].isEmpty() ? null: LocalDate.parse(data.get(i)[1]), dept, Status.valueOf(data.get(i)[3]), Double.parseDouble(data.get(i)[5]), Double.parseDouble(data.get(i)[6]), Double.parseDouble(data.get(i)[7])));
                         }
-                        else if(data.get(i)[4].equals(String.valueOf(EmployeeType.COMMISSION_SALARY))){
+                        else if(data.get(i).length > 4 && data.get(i)[4].equals(String.valueOf(EmployeeType.COMMISSION_SALARY))){
                             employee.addSalaryRecord(new CommissionSalary(LocalDate.parse(data.get(i)[0]), data.get(i)[1].isEmpty() ? null: LocalDate.parse(data.get(i)[1]), dept, Status.valueOf(data.get(i)[3]), Double.parseDouble(data.get(i)[5]), Double.parseDouble(data.get(i)[6])));
                         }
-                        else if(data.get(i)[4].equals(String.valueOf(EmployeeType.HOURLY_SALARY))){
+                        else if(data.get(i).length > 4 && data.get(i)[4].equals(String.valueOf(EmployeeType.HOURLY_SALARY))){
                             employee.addSalaryRecord(new HourlySalary(LocalDate.parse(data.get(i)[0]), data.get(i)[1].isEmpty() ? null: LocalDate.parse(data.get(i)[1]), dept, Status.valueOf(data.get(i)[3]), Double.parseDouble(data.get(i)[5]), Double.parseDouble(data.get(i)[6])));
                         }
-                        else if(data.get(i)[4].equals(String.valueOf(EmployeeType.MANAGER))){
+                        else if(data.get(i).length > 4 && data.get(i)[4].equals(String.valueOf(EmployeeType.MANAGER))){
                             employee.addSalaryRecord(new ManagerSalary(LocalDate.parse(data.get(i)[0]), data.get(i)[1].isEmpty() ? null: LocalDate.parse(data.get(i)[1]), dept, Status.valueOf(data.get(i)[3]), Double.parseDouble(data.get(i)[5]), Double.parseDouble(data.get(i)[6]), Double.parseDouble(data.get(i)[7]), Double.parseDouble(data.get(i)[8]), Double.parseDouble(data.get(i)[9]), Double.parseDouble(data.get(i)[10])));
+                        }
+                        else if(data.get(i).length == 4){
+                            employee.addSalaryRecord(new SalaryRecord(LocalDate.parse(data.get(i)[0]), data.get(i)[1].isEmpty() ? null: LocalDate.parse(data.get(i)[1]), dept, Status.valueOf(data.get(i)[3])));
                         }
                         i++;
                     }
