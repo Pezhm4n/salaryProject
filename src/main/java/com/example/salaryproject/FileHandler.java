@@ -584,7 +584,7 @@ public class FileHandler {
             return false;
         }
     }
-    public static Organization createOrganizationAndDepartments(String organizationName){
+    public static Organization readOrganizationAndDepartments(String organizationName){
 
         ArrayList<String[]> organization_info = readCSV(RESOURCE_DIRECTORY + organizationName + "/organization_info.csv");
         Organization organization = new Organization(organization_info.get(1)[0], organization_info.get(1)[1], Integer.parseInt(organization_info.get(1)[2]), organization_info.get(1)[3], organization_info.get(1)[4], Double.parseDouble(organization_info.get(1)[5]), Double.parseDouble(organization_info.get(1)[6]));

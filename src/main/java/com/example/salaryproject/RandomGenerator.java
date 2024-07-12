@@ -273,7 +273,7 @@ public class RandomGenerator {
         double commissionRate = 0.0;
         double totalSales = 0.0;
         if (Status.UNPAID_LEAVE != status && Status.TERMINATED != status) {
-            commissionRate =  5 + generateRandomTwoDecimals() * 5; // Random between 5% and 10%
+            commissionRate =  (5 + generateRandomTwoDecimals() * 10) / 100; // Random between 5% an 15%
             totalSales = 20_000_000 + generateRandomTwoDecimals() * 70_000_000; // Random between 20,000,000 and 90,000,000 Toman
         } else if (Status.TERMINATED == status)
             return new SalaryRecord(startDate, endDate, department, status);
@@ -285,9 +285,9 @@ public class RandomGenerator {
         double totalSales = 0.0;
         double fixedAmount = 0.0;
         if (Status.UNPAID_LEAVE != status && Status.TERMINATED != status) {
-            commissionRate = 5 + generateRandomTwoDecimals() * 5; // Random between 5% and 10%
+            commissionRate = (5 + generateRandomTwoDecimals() * 5) / 100; // Random between 5% and 10%
             totalSales = 20_000_000 + generateRandomTwoDecimals() * 70_000_000; // Random between 20,000,000 and 90,000,000 Toman
-            fixedAmount = 15_000_000 + generateRandomTwoDecimals() * 15_000_000; // Random between 15,000,000 and 30,000,000 Toman
+            fixedAmount = 15_000_000 + generateRandomTwoDecimals() * 10_000_000; // Random between 15,000,000 and 25,000,000 Toman
         } else if (Status.TERMINATED == status)
             return new SalaryRecord(startDate, endDate, department, status);
         return new CommissionPlusFixedSalary(startDate, endDate, department, status, commissionRate, totalSales, fixedAmount);
@@ -297,7 +297,7 @@ public class RandomGenerator {
         double hourlyRate = 0.0;
         double hoursWorked = 0.0;
         if (Status.UNPAID_LEAVE != status && Status.TERMINATED != status) {
-            hourlyRate = 150_000 + generateRandomTwoDecimals() * 100; // Random between 150,000 and 250,000 Toman
+            hourlyRate = 150_000 + generateRandomTwoDecimals() * 100_000; // Random between 150,000 and 250,000 Toman
             hoursWorked = 100 + generateRandomTwoDecimals() * 200; // Random between 100 and 200 hours
         } else if (Status.TERMINATED == status)
             return new SalaryRecord(startDate, endDate, department, status);
@@ -312,12 +312,12 @@ public class RandomGenerator {
         double currentSharePrice = 0.0;
         double bonus = 0.0;
         if (Status.UNPAID_LEAVE != status && Status.TERMINATED != status) {
-            baseMonthlySalary = 40_000_000 + generateRandomTwoDecimals() * 30_000_000; // Random between 40,000,000 and 70,000,000 Toman
-            commissionRate = 5 + generateRandomTwoDecimals() * 10; // Random between 5% and 15%
+            baseMonthlySalary = 40_000_000 + generateRandomTwoDecimals() * 20_000_000; // Random between 40,000,000 and 60,000,000 Toman
+            commissionRate = (5 + generateRandomTwoDecimals() * 10) / 100; // Random between 5% and 15%
             netProfitOfDepartment = 400_000_000 + generateRandomTwoDecimals() * 700_000_000; // Random between 400,000,000 and 700,000,000 Toman
             sharesGranted = 100 + generateRandomTwoDecimals() * 900; // Random between 100 and 1000 shares
             currentSharePrice = 10 + generateRandomTwoDecimals() * 90; // Random between 10 and 100 Toman per share
-            bonus = 5_000_000 + generateRandomTwoDecimals() * 5_000_000; // Random between 5_000,000 and 10,000,000 Toman
+            bonus = 5_000_000 + generateRandomTwoDecimals() * 15_000_000; // Random between 5_000,000 and 20,000,000 Toman
         } else if (Status.TERMINATED == status)
             return new SalaryRecord(startDate, endDate, department, status);
         return new ManagerSalary(startDate, endDate, department, status, baseMonthlySalary, commissionRate, netProfitOfDepartment, sharesGranted, currentSharePrice, bonus);
@@ -427,7 +427,7 @@ private static ObservableList<SalaryRecord> getRandomSalaryRecords(Organization 
     }
 
     public static void main(String[] args) {
-        Organization organization = createRandomOrganization(3, 29, 30);
+
     }
 }
 

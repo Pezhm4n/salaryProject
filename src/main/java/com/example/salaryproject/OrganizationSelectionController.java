@@ -89,7 +89,7 @@ public class OrganizationSelectionController {
                     Organization organization = new Organization(name, industry, foundationYear, headquarters, ceo, totalShares, sharePrice);
 
                     // Load departments
-                    Organization updatedOrganization = FileHandler.createOrganizationAndDepartments(name);
+                    Organization updatedOrganization = FileHandler.readOrganizationAndDepartments(name);
                     updatedOrganization.getDepartments().forEach(organization::addDepartment);
 
                     return organization;

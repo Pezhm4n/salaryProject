@@ -1,7 +1,9 @@
 package com.example.salaryproject;
 
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 public class SalaryRecord {
     private LocalDate startDate;
@@ -80,6 +82,13 @@ public class SalaryRecord {
     }
     public LocalDate getEffectiveEndDate() {
         return endDate == null ? LocalDate.now() : endDate;
+    }
+
+    public String formatNumber(double number) {
+        NumberFormat formatter = NumberFormat.getInstance(Locale.US);
+        formatter.setMaximumFractionDigits(2);
+        formatter.setMinimumFractionDigits(2);
+        return formatter.format(number);
     }
 }
 

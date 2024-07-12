@@ -3,6 +3,8 @@ package com.example.salaryproject;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.util.ArrayList;
+
 public class Organization {
     private String name;
     private String industry;
@@ -136,5 +138,12 @@ public class Organization {
             }
         }
         return null;
+    }
+    public ArrayList<Employee> getAllEmployees(){
+        ArrayList<Employee> employees = new ArrayList<>();
+        for(Department department : departments){
+            employees.addAll(department.getEmployees());
+        }
+        return employees;
     }
 }

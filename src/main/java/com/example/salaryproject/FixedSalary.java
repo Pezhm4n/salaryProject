@@ -44,12 +44,12 @@ public class FixedSalary extends SalaryRecord {
 
     @Override
     public String toString() {
-        return super.toString() + String.format("\nBase Monthly Salary: %.2f\nOver Time Hours: %.2f\nOver Time Rate: %.2f\n",
-                baseMonthlySalary, overTimeHours, overTimeRate);
+        return super.toString() + String.format("\nBase Monthly Salary: %s\nOver Time Hours: %.2f\nOver Time Rate: %.2f\n",
+                formatNumber(baseMonthlySalary), overTimeHours, overTimeRate);
     }
 
     public double calculateSalary(LocalDate periodStart, LocalDate periodEnd) {
-        if (getStartDate().isAfter(periodEnd) || getEndDate().isBefore(periodStart)) {
+        if (getStartDate().isAfter(periodEnd) || getEffectiveEndDate().isBefore(periodStart)) {
             return 0;
         }
 

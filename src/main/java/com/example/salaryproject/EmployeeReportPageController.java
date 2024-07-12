@@ -17,6 +17,8 @@ import javafx.scene.control.ScrollPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 public class EmployeeReportPageController {
 
@@ -156,8 +158,8 @@ public class EmployeeReportPageController {
         titleLabel.setPadding(new Insets(10, 0, 10, 0));
 
         Label infoLabel = new Label(String.format(
-                "Total Salary: %.2f\nTotal Hours Worked: %d\nTotal Sales: %d",
-                totalSalary, totalHoursWorked, totalSales));
+                "Total Salary: %s\nTotal Hours Worked: %d\nTotal Sales: %s",
+                formatNumber(totalSalary), totalHoursWorked, formatNumber(totalSales)));
         infoLabel.setPadding(new Insets(10));
 
         VBox vBox = new VBox();
@@ -226,5 +228,12 @@ public class EmployeeReportPageController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private String formatNumber(double number) {
+        NumberFormat formatter = NumberFormat.getInstance(Locale.US);
+        formatter.setMaximumFractionDigits(2);
+        formatter.setMinimumFractionDigits(2);
+        return formatter.format(number);
     }
 }

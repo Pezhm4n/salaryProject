@@ -22,6 +22,8 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 
 public class DepartmentReportPageController {
@@ -128,11 +130,11 @@ public class DepartmentReportPageController {
 
         // Information Labels
         Label infoLabel = new Label(String.format(
-                "Fixed Salary employees: %d\nCommission Plus Fixed Salary employees: %d\nTotal Sales (Commission Salary): %d\n"
-                        + "Total Sales (Commission Plus Fixed Salary): %d\nTotal Hours (Hourly Salary): %d\n"
+                "Fixed Salary employees: %d\nCommission Plus Fixed Salary employees: %d\nTotal Sales (Commission Salary): %s\n"
+                        + "Total Sales (Commission Plus Fixed Salary): %s\nTotal Hours (Hourly Salary): %d\n"
                         + "Active Employees Count: %d\nPaid Leave Employees Count: %d\nUnpaid Leave Employees Count: %d\nTerminated Employees Count: %d",
-                fixedSalaryCount, commissionPlusFixedSalaryCount, commissionSalaryTotalSales,
-                commissionPlusFixedSalaryTotalSales, hourlySalaryTotalHours, activeCount, paidLeaveCount, unpaidLeaveCount,
+                fixedSalaryCount, commissionPlusFixedSalaryCount, formatNumber(commissionSalaryTotalSales),
+                formatNumber(commissionPlusFixedSalaryTotalSales), hourlySalaryTotalHours, activeCount, paidLeaveCount, unpaidLeaveCount,
                 terminatedCount));
         infoLabel.setPadding(new Insets(10));
 
@@ -403,4 +405,12 @@ public class DepartmentReportPageController {
     public void setDepartment(Department departments) {
         this.department = departments;
     }
+
+    private String formatNumber(double number) {
+        NumberFormat formatter = NumberFormat.getInstance(Locale.US);
+        formatter.setMaximumFractionDigits(2);
+        formatter.setMinimumFractionDigits(2);
+        return formatter.format(number);
+    }
 }
+

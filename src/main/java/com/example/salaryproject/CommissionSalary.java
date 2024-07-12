@@ -46,8 +46,8 @@ public class CommissionSalary extends SalaryRecord {
 
     @Override
     public String toString() {
-        return super.toString() + String.format("\nCommission Rate: %.2f\nTotal Sales: %.2f\n",
-                commissionRate, totalSales);
+        return super.toString() + String.format("\nCommission Rate: %.2f\nTotal Sales: %s\n",
+                commissionRate, formatNumber(totalSales));
     }
 }
 

@@ -85,11 +85,24 @@ public class Employee {
     }
 
     public void addSalaryRecord(SalaryRecord salaryRecord){
-        if(salaryRecord != null) salaryRecords.add(salaryRecord);
+        if(salaryRecord != null){
+            SalaryRecord lastRecord = getCurrentSalaryRecord();
+            if(lastRecord != null) {
+                if (lastRecord.getDepartment() != salaryRecord.getDepartment()) {
+                    lastRecord.getDepartment().decrementHeadCount();
+                    salaryRecord.getDepartment().incrementHeadCount();
+                }
+            }else
+                salaryRecord.getDepartment().incrementHeadCount();
+            salaryRecords.add(salaryRecord);
+        }
     }
 
     public void removeSalaryRecord(SalaryRecord salaryRecord){
-        if(salaryRecord != null) salaryRecords.remove(salaryRecord);
+        if(salaryRecord != null) {
+            salaryRecords.remove(salaryRecord);
+            salaryRecord.getDepartment().decrementHeadCount();
+        }
     }
     public double getCurrentSalary() {
         return getCurrentSalaryRecord().calculateSalary(getCurrentSalaryRecord().getStartDate(), LocalDate.now());
@@ -192,7 +205,7 @@ public class Employee {
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = null; // This should be set to null for new records
         FixedSalary newRecord = new FixedSalary(startDate, endDate, newDepartment, newStatus, baseMonthlySalary, overTimeHours, overTimeRate);
-        salaryRecords.add(newRecord);
+        addSalaryRecord(newRecord);
 
         if(inSameDepartment) {
             FileHandler.addSalaryRecordToEmployee(newDepartment, this, newRecord);
@@ -233,7 +246,7 @@ public class Employee {
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = null; // This should be set to null for new records
         CommissionSalary newRecord = new CommissionSalary(startDate, endDate, newDepartment, newStatus, commissionRate, totalSales);
-        salaryRecords.add(newRecord);
+        addSalaryRecord(newRecord);
 
         if(inSameDepartment) {
             FileHandler.addSalaryRecordToEmployee(newDepartment, this, newRecord);
@@ -274,7 +287,7 @@ public class Employee {
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = null; // This should be set to null for new records
         CommissionPlusFixedSalary newRecord = new CommissionPlusFixedSalary(startDate, endDate, newDepartment, newStatus, commissionRate, totalSales, fixedAmount);
-        salaryRecords.add(newRecord);
+        addSalaryRecord(newRecord);
 
         if(inSameDepartment) {
             FileHandler.addSalaryRecordToEmployee(newDepartment, this, newRecord);
@@ -315,7 +328,7 @@ public class Employee {
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = null; // This should be set to null for new records
         HourlySalary newRecord = new HourlySalary(startDate, endDate, newDepartment, newStatus, hourlyRate, hoursWorked);
-        salaryRecords.add(newRecord);
+        addSalaryRecord(newRecord);
 
     if (newDepartment != null) {
         if (inSameDepartment) {
@@ -355,7 +368,7 @@ public class Employee {
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = null;
         ManagerSalary newRecord = new ManagerSalary(startDate, endDate, department, newStatus, baseMonthlySalary, commissionRate, netProfitOfDepartment, sharesGranted, currentSharePrice, bonus);
-        salaryRecords.add(newRecord);
+        addSalaryRecord(newRecord);
 
         Employee formerManager = department.getCurrentManager();
         if (formerManager != null)
@@ -377,6 +390,9 @@ public class Employee {
 
     public void setSalaryRecords(List<SalaryRecord> salaryRecords) {
         this.salaryRecords = (ObservableList<SalaryRecord>) salaryRecords;
+        if(!salaryRecords.isEmpty()){
+            getCurrentSalaryRecord().getDepartment().incrementHeadCount();
+        }
     }
 
     public void setDepartment(Department selectedDepartment) {

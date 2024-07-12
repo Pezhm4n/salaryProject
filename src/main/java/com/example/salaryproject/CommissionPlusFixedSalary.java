@@ -35,6 +35,6 @@ public class CommissionPlusFixedSalary extends CommissionSalary{
     }
     @Override
     public String toString() {
-        return super.toString() + String.format("Fixed Amount: %.2f\n", fixedAmount);
+        return super.toString() + String.format("Fixed Amount: %s\n", formatNumber(fixedAmount));
     }
 }

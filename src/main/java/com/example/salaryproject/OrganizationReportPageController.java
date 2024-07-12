@@ -25,8 +25,10 @@ import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -58,14 +60,14 @@ public class OrganizationReportPageController {
         addTextToReport(report, "CEO: " + organization.getCEO() + "\n\n");
 
         // Adding bold text for totalShares and sharePrice
-        addBoldTextToReport(report, "Total Shares: " + organization.getTotalShares() + "\n\n");
-        addBoldTextToReport(report, "Share Price: " + organization.getSharePrice() + "\n\n");
+        addTextToReport(report, "Total Shares: " + formatNumber(organization.getTotalShares()) + "\n\n");
+        addTextToReport(report, "Share Price: " + formatNumber(organization.getSharePrice()) + "\n\n");
 
-        addTextToReport(report, "Market Capitalization: " + organization.calculateMarketCapitalization() + "\n\n");
-        addTextToReport(report, "Total Revenue: " + organization.calculateTotalRevenue() + "\n\n");
+        addTextToReport(report, "Market Capitalization: " + formatNumber(organization.calculateMarketCapitalization()) + "\n\n");
+        addBoldTextToReport(report, "Total Revenue: " + formatNumber(organization.calculateTotalRevenue()) + "\n\n");
 
-        addBoldTextToReport(report, "Total Costs: " + organization.calculateTotalCosts() + "\n\n");
-        addBoldTextToReport(report, "Total Budget: " + organization.calculateTotalBudget() + "\n\n");
+        addBoldTextToReport(report, "Total Costs: " + formatNumber(organization.calculateTotalCosts()) + "\n\n");
+        addBoldTextToReport(report, "Total Budget: " + formatNumber(organization.calculateTotalBudget()) + "\n\n");
 
         showScrollableInformationAlert("Organization Financial Summary Report", report);
     }
@@ -355,5 +357,12 @@ public class OrganizationReportPageController {
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+    private String formatNumber(double number) {
+        NumberFormat formatter = NumberFormat.getInstance(Locale.US);
+        formatter.setMaximumFractionDigits(2);
+        formatter.setMinimumFractionDigits(2);
+        return formatter.format(number);
     }
 }
