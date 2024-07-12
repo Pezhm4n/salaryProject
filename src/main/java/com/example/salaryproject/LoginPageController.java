@@ -82,17 +82,6 @@ public class LoginPageController {
         passwordIcon.setOnMouseEntered(event -> handleMouseEntered(passwordIcon));
         passwordIcon.setOnMouseExited(event -> handleMouseExited(passwordIcon));
 
-        darkThemeRadioButton.setOnAction(event -> {
-            Scene scene = ((Node) event.getSource()).getScene();
-            scene.getStylesheets().remove(getClass().getResource("css/login-light.css").toExternalForm());
-            scene.getStylesheets().add(getClass().getResource("css/login.css").toExternalForm());
-        });
-
-        lightThemeRadioButton.setOnAction(event -> {
-            Scene scene = ((Node) event.getSource()).getScene();
-            scene.getStylesheets().remove(getClass().getResource("css/login.css").toExternalForm());
-            scene.getStylesheets().add(getClass().getResource("css/login-light.css").toExternalForm());
-        });
     }
 
     private void handleMouseEntered(ImageView icon) {

@@ -23,7 +23,7 @@
             <Button onAction="#generateEmployeePerformanceReport" text="Employee Performance Report" styleClass="report-button" maxWidth="Infinity" focusTraversable="true" />
             <Button onAction="#employeeSalaryRecordsReport" text="Employee Salary Records Report" styleClass="report-button" maxWidth="Infinity" focusTraversable="true" />
             <Button onAction="#generateEmployeeTypeReport" text="Employee Type Report" styleClass="report-button" maxWidth="Infinity" focusTraversable="true" />
-            <Button onAction="#generateEmplyeeTypeChangeReport" text="Employee Type Change Report" styleClass="report-button" maxWidth="Infinity" focusTraversable="true" />
+            <Button onAction="#generateEmployeeTypeChangeReport" text="Employee Type Change Report" styleClass="report-button" maxWidth="Infinity" focusTraversable="true" />
             <Button onAction="#generateEmployeeStatusReport" text="Employee Status Report" styleClass="report-button" maxWidth="Infinity" focusTraversable="true" />
             <Button onAction="#generateEmployeeStatusChangeReport" text="Employee Status Change Report" styleClass="report-button" maxWidth="Infinity" focusTraversable="true" />
             <Button onAction="#generateEmployeePromotionReport" text="Employee Promotion Report" styleClass="report-button" maxWidth="Infinity" focusTraversable="true" />

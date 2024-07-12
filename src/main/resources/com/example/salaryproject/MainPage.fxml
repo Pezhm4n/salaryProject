@@ -13,7 +13,7 @@
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
 
-    <Label text="MAIN MENU" styleClass="title">
+    <Label fx:id="titleLabel" text="MAIN MENU" styleClass="title">
         <font>
             <Font name="System Bold" size="24.0" />
         </font>

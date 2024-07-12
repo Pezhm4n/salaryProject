@@ -16,8 +16,7 @@
             <Font name="System Bold" size="24.0" />
         </font>
     </Label>
-
-    <Button onAction="#generateDepartmentFinancialSummaryReport" text="Department Financial Summary Report" styleClass="report-button" focusTraversable="true" maxWidth="Infinity" />
+    
     <Button onAction="#generateDepartmentPerformanceReport" text="Department Performance Report" styleClass="report-button" focusTraversable="true" maxWidth="Infinity" />
     <Button onAction="#generateDepartmentActionReport" text="Department Action Report" styleClass="report-button" focusTraversable="true" maxWidth="Infinity" />
     <Button onAction="#generateEmployeesReport" text="Employees Report" styleClass="report-button" focusTraversable="true" maxWidth="Infinity" />

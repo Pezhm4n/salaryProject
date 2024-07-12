@@ -42,14 +42,6 @@
 
     <Button focusTraversable="true" onAction="#handleExit" styleClass="exit-button" text="Exit" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="7" />
 
-    <fx:define>
-        <ToggleGroup fx:id="themeToggleGroup" />
-    </fx:define>
-
-    <HBox alignment="CENTER" prefHeight="25.0" prefWidth="252.0" spacing="10" GridPane.columnSpan="2" GridPane.rowIndex="5">
-        <RadioButton fx:id="darkThemeRadioButton" prefHeight="20.0" prefWidth="116.0" selected="true" text="Dark Theme" toggleGroup="${themeToggleGroup}" />
-        <RadioButton fx:id="lightThemeRadioButton" prefHeight="20.0" prefWidth="131.0" text="Light Theme" toggleGroup="${themeToggleGroup}" />
-    </HBox>
 
     <Label fx:id="messageLabel" styleClass="message-label" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="8" />
 

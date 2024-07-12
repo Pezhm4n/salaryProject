@@ -10,14 +10,28 @@
             </Attribute>
           </value>
         </entry>
-        <entry key="\src\main\resources\com\example\salaryproject\FutureWorks\Human Resources.csv">
+        <entry key="\src\main\resources\com\example\salaryproject\FutureWorks\Customer_Support.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="\src\main\resources\com\example\salaryproject\FutureWorks\Sales.csv">
+        <entry key="\src\main\resources\com\example\salaryproject\FutureWorks\Data_Science.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\src\main\resources\com\example\salaryproject\FutureWorks\IT_Support.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\src\main\resources\com\example\salaryproject\FutureWorks\Operations.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
@@ -31,77 +45,42 @@
             </Attribute>
           </value>
         </entry>
-        <entry key="\src\main\resources\com\example\salaryproject\InfoMatrix\Administration.csv">
+        <entry key="\src\main\resources\com\example\salaryproject\InnovaTech\Content.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="\src\main\resources\com\example\salaryproject\InfoMatrix\Design.csv">
+        <entry key="\src\main\resources\com\example\salaryproject\InnovaTech\Customer_Support.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="\src\main\resources\com\example\salaryproject\InfoMatrix\IT Support.csv">
+        <entry key="\src\main\resources\com\example\salaryproject\InnovaTech\Design.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="\src\main\resources\com\example\salaryproject\InfoMatrix\Marketing.csv">
+        <entry key="\src\main\resources\com\example\salaryproject\InnovaTech\Engineering.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="\src\main\resources\com\example\salaryproject\InfoMatrix\Quality Assurance.csv">
+        <entry key="\src\main\resources\com\example\salaryproject\InnovaTech\Public_Relations.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="\src\main\resources\com\example\salaryproject\InfoMatrix\organization_info.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="\src\main\resources\com\example\salaryproject\InnovaTech\IT Support.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="\src\main\resources\com\example\salaryproject\InnovaTech\Marketing.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="\src\main\resources\com\example\salaryproject\InnovaTech\Public Relations.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="\src\main\resources\com\example\salaryproject\InnovaTech\Sales.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="\src\main\resources\com\example\salaryproject\InnovaTech\organization_info.csv">
+        <entry key="\src\main\resources\com\example\salaryproject\InnovaTech\Research_and_Development.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
@@ -129,56 +108,77 @@
             </Attribute>
           </value>
         </entry>
-        <entry key="\src\main\resources\com\example\salaryproject\NextGen Solutions\Administration.csv">
+        <entry key="\src\main\resources\com\example\salaryproject\NextGen_Solutions\Content.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="\src\main\resources\com\example\salaryproject\NextGen Solutions\Design.csv">
+        <entry key="\src\main\resources\com\example\salaryproject\NextGen_Solutions\Customer_Support.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="\src\main\resources\com\example\salaryproject\NextGen Solutions\Finance.csv">
+        <entry key="\src\main\resources\com\example\salaryproject\NextGen_Solutions\DevOps.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="\src\main\resources\com\example\salaryproject\NextGen Solutions\Public Relations.csv">
+        <entry key="\src\main\resources\com\example\salaryproject\NextGen_Solutions\IT_Support.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="\src\main\resources\com\example\salaryproject\NextGen Solutions\Security.csv">
+        <entry key="\src\main\resources\com\example\salaryproject\NextGen_Solutions\Legal.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="\src\main\resources\com\example\salaryproject\NextGen Solutions\organization_info.csv">
+        <entry key="\src\main\resources\com\example\salaryproject\NextGen_Solutions\Operations.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="\src\main\resources\com\example\salaryproject\TechCorp\Customer Support.csv">
+        <entry key="\src\main\resources\com\example\salaryproject\NextGen_Solutions\Quality_Assurance.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="\src\main\resources\com\example\salaryproject\TechCorp\IT Support.csv">
+        <entry key="\src\main\resources\com\example\salaryproject\NextGen_Solutions\Security.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\src\main\resources\com\example\salaryproject\NextGen_Solutions\organization_info.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\src\main\resources\com\example\salaryproject\TechCorp\Design.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\src\main\resources\com\example\salaryproject\TechCorp\DevOps.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
@@ -192,35 +192,7 @@
             </Attribute>
           </value>
         </entry>
-        <entry key="\src\main\resources\com\example\salaryproject\TechCorp\Research and Development.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="\src\main\resources\com\example\salaryproject\TechCorp\Security.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
         <entry key="\src\main\resources\com\example\salaryproject\TechCorp\organization_info.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="\src\main\resources\com\example\salaryproject\asdasd\adasd.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="\src\main\resources\com\example\salaryproject\asdasd\organization_info.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />

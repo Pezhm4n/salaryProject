@@ -9,12 +9,19 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -36,27 +43,41 @@ public class OrganizationReportPageController {
 
     @FXML
     private void generateOrganizationFinancialSummaryReport() {
-        // Implement the logic to generate the organization financial summary report
-    }
-
-    @FXML
-    private void showDepartments() {
         if (organization == null) {
             showErrorAlert("Organization is not set. Please set the organization first.");
             return;
         }
 
-        StringBuilder report = new StringBuilder("Organization Department Report:\n\n");
-        for (Department department : organization.getDepartments()) {
-            report.append("Department Name: ").append(department.getName()).append("\n");
-            report.append("Number of Employees: ").append(department.getEmployees().size()).append("\n");
-            report.append("Current Manager: ").append(department.getCurrentManager() != null ? department.getCurrentManager().getFirstName() + " " + department.getCurrentManager().getLastName() : "None").append("\n\n");
-        }
+        TextFlow report = new TextFlow();
+        report.setPadding(new Insets(20));
 
-        showScrollableInformationAlert("Department Report", report.toString());
+        addTextToReport(report, "Organization Name: " + organization.getName() + "\n\n\n");
+        addTextToReport(report, "Industry: " + organization.getIndustry() + "\n\n");
+        addTextToReport(report, "Foundation Year: " + organization.getFoundationYear() + "\n\n");
+        addTextToReport(report, "Headquarters: " + organization.getHeadquarters() + "\n\n");
+        addTextToReport(report, "CEO: " + organization.getCEO() + "\n\n");
+
+        // Adding bold text for totalShares and sharePrice
+        addBoldTextToReport(report, "Total Shares: " + organization.getTotalShares() + "\n\n");
+        addBoldTextToReport(report, "Share Price: " + organization.getSharePrice() + "\n\n");
+
+        addTextToReport(report, "Market Capitalization: " + organization.calculateMarketCapitalization() + "\n\n");
+        addTextToReport(report, "Total Revenue: " + organization.calculateTotalRevenue() + "\n\n");
+
+        addBoldTextToReport(report, "Total Costs: " + organization.calculateTotalCosts() + "\n\n");
+        addBoldTextToReport(report, "Total Budget: " + organization.calculateTotalBudget() + "\n\n");
+
+        showScrollableInformationAlert("Organization Financial Summary Report", report);
     }
 
-    private void showScrollableInformationAlert(String title, String content) {
+
+    private void addBoldTextToReport(TextFlow report, String text) {
+        Text boldText = new Text(text);
+        boldText.setFont(Font.font("Arial", FontWeight.BOLD, 12));
+        report.getChildren().add(boldText);
+    }
+
+    private void showScrollableInformationAlert(String title, TextFlow content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(null);
@@ -66,19 +87,11 @@ public class OrganizationReportPageController {
         titleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 16));
         titleLabel.setPadding(new Insets(10, 0, 10, 0));
 
-        // Content TextArea
-        TextArea textArea = new TextArea(content);
-        textArea.setWrapText(true);
-        textArea.setEditable(false);
-        textArea.setPrefWidth(400);
-        textArea.setPrefHeight(400);
-
         // ScrollPane
-        ScrollPane scrollPane = new ScrollPane(textArea);
+        ScrollPane scrollPane = new ScrollPane(content);
         scrollPane.setFitToWidth(true);
         scrollPane.setPrefViewportWidth(400);
         scrollPane.setPrefViewportHeight(440);
-        scrollPane.setContent(textArea);
 
         // VBox Layout
         VBox vBox = new VBox();
@@ -90,6 +103,86 @@ public class OrganizationReportPageController {
         alert.getDialogPane().setPrefSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
         alert.showAndWait();
     }
+
+
+
+    @FXML
+    private void showDepartments() {
+        if (organization == null) {
+            showErrorAlert("Organization is not set. Please set the organization first.");
+            return;
+        }
+
+        int totalEmployees = organization.getDepartments().stream().mapToInt(dept -> dept.getEmployees().size()).sum();
+        int totalDepartments = organization.getDepartments().size();
+
+        // Create the X and Y axes
+        CategoryAxis xAxis = new CategoryAxis();
+        xAxis.setLabel("Departments");
+
+        NumberAxis yAxis = new NumberAxis();
+        yAxis.setLabel("Number of Employees");
+
+        // Create the BarChart
+        BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
+        barChart.setTitle("Number of Employees in Departments");
+
+        // Create the data series
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName("Employees");
+
+        for (Department department : organization.getDepartments()) {
+            series.getData().add(new XYChart.Data<>(department.getName(), department.getEmployees().size()));
+        }
+
+        // Add the data series to the chart
+        barChart.getData().add(series);
+
+        // Show the bar chart in an alert
+        showBarChartAlert("Organization Departments Report", barChart, totalEmployees, totalDepartments);
+    }
+
+    private void showBarChartAlert(String title, BarChart<String, Number> barChart, int totalEmployees, int totalDepartments) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+
+        // Title Label
+        Label titleLabel = new Label(title);
+        titleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+        titleLabel.setPadding(new Insets(10, 0, 10, 0));
+
+        // Create a VBox to hold the chart and the summary text
+        VBox vBox = new VBox();
+        vBox.setPadding(new Insets(10));
+        vBox.setSpacing(10);
+
+        // Add the summary text with green bold style
+        TextFlow summaryText = new TextFlow();
+        addGreenBoldTextToReport(summaryText, "Total Employees: " + totalEmployees + "\n");
+        addGreenBoldTextToReport(summaryText, "Total Departments: " + totalDepartments + "\n\n");
+
+        // Add the chart and the summary text to the VBox
+        vBox.getChildren().addAll(titleLabel, summaryText, barChart);
+
+        // Set the VBox as the content of the alert
+        alert.getDialogPane().setContent(vBox);
+        alert.getDialogPane().setPrefSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
+        alert.showAndWait();
+    }
+
+    private void addTextToReport(TextFlow report, String text) {
+        Text regularText = new Text(text);
+        report.getChildren().add(regularText);
+    }
+
+    private void addGreenBoldTextToReport(TextFlow report, String text) {
+        Text greenBoldText = new Text(text);
+        greenBoldText.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+        greenBoldText.setFill(Color.GREEN);
+        report.getChildren().add(greenBoldText);
+    }
+
 
     @FXML
     private void generateDepartmentReport(ActionEvent event) {
@@ -254,14 +347,6 @@ public class OrganizationReportPageController {
         for (Department department : organization.getDepartments()) {
             allEmployees.addAll(department.getEmployees());
         }
-    }
-
-    private void showInformationAlert(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
     }
 
     private void showErrorAlert(String content) {
